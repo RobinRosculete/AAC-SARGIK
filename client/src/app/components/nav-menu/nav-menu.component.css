@@ -1,0 +1,33 @@
+/* Add styling for the header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0; /* Change the background color as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+/* Style the buttons */
+button {
+  margin-right: 10px; /* Adjust spacing between buttons as needed */
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* Style the flat buttons */
+mat-flat-button {
+  background-color: #2196f3; /* Set button background color */
+  color: #fff; /* Set button text color */
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+}
+
+mat-flat-button:hover {
+  background-color: #1565c0; /* Change the background color on hover */
+}
+
+/* Optional: Add more specific styling for the routerLink buttons if needed */
+[routerLink] {
+  text-decoration: none;
+  color: inherit;
+}
