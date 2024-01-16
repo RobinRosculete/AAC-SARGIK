@@ -1,3 +1,10 @@
-<div class="container">
-  <h1>Interactive Keyboard Works!</h1>
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align: center">
+  <input
+    (input)="onInputChange($event)"
+    class="input"
+    value="{{ value }}"
+    placeholder="Tap on the virtual keyboard to start"
+  />
+  <div class="simple-keyboard"></div>
 </div>
