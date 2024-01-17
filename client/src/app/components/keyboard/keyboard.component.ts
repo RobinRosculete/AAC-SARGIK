@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import Keyboard from 'simple-keyboard';
+import { TextPredictionApiService } from 'src/app/services/text-prediction-api.service';
 // KeyboardComponent
 @Component({
   selector: 'app-keyboard',
@@ -10,8 +11,26 @@ import Keyboard from 'simple-keyboard';
 export class KeyboardComponent {
   value = '';
   keyboard!: Keyboard;
+  userInput: string = '';
+  predictedText: string = '';
 
-  ngAfterViewInit() {
+  constructor(private textPredictionApi: TextPredictionApiService) {}
+
+  //Function Used to get API response for GPT Text prediction
+  makeTextPrediction() {
+    this.textPredictionApi.getTextPrediction(this.userInput).subscribe(
+      (response: any) => {
+        console.log('API Response:', response);
+        this.predictedText = response;
+      },
+      (error) => {
+        console.error('Error making text prediction', error);
+      }
+    );
+  }
+  textToSpeech() {}
+
+  ngAfterViewInit(): void {
     this.keyboard = new Keyboard({
       onChange: (input) => this.onChange(input),
       onKeyPress: (button) => this.onKeyPress(button),
