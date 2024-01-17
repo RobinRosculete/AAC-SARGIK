@@ -28,7 +28,13 @@ export class KeyboardComponent {
       }
     );
   }
-  textToSpeech() {}
+
+  //Simple Function for text to speech
+  textToSpeech() {
+    const utterance = new SpeechSynthesisUtterance();
+    utterance.text = this.predictedText;
+    speechSynthesis.speak(utterance);
+  }
 
   ngAfterViewInit(): void {
     this.keyboard = new Keyboard({
