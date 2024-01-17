@@ -9,11 +9,8 @@ import { TextPredictionApiService } from 'src/app/services/text-prediction-api.s
   styleUrls: ['./keyboard.component.css'],
 })
 export class KeyboardComponent {
-  value = '';
   keyboard!: Keyboard;
   userInput: string = '';
-  predictedText: string = '';
-
   constructor(private textPredictionApi: TextPredictionApiService) {}
 
   //Function Used to get API response for GPT Text prediction
@@ -21,7 +18,7 @@ export class KeyboardComponent {
     this.textPredictionApi.getTextPrediction(this.userInput).subscribe(
       (response: any) => {
         console.log('API Response:', response);
-        this.predictedText = response;
+        this.userInput = response; // Updating user input to the predicted text
       },
       (error) => {
         console.error('Error making text prediction', error);
@@ -32,7 +29,7 @@ export class KeyboardComponent {
   //Simple Function for text to speech
   textToSpeech() {
     const utterance = new SpeechSynthesisUtterance();
-    utterance.text = this.predictedText;
+    utterance.text = this.userInput;
     speechSynthesis.speak(utterance);
   }
 
@@ -84,13 +81,10 @@ export class KeyboardComponent {
   }
 
   onChange = (input: string) => {
-    this.value = input;
-    console.log('Input changed', input);
+    this.userInput = input;
   };
 
   onKeyPress = (button: string) => {
-    console.log('Button pressed', button);
-
     /**
      * Handle toggles
      */
