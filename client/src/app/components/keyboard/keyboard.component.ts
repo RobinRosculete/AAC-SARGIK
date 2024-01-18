@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text-prediction-api.service';
+import { TextToSpeech } from '@capacitor-community/text-to-speech';
 // KeyboardComponent
 @Component({
   selector: 'app-keyboard',
@@ -13,6 +14,20 @@ export class KeyboardComponent {
   userInput: string = '';
   constructor(private textPredictionApi: TextPredictionApiService) {}
 
+  //Simple Function for text to speech
+  speakText() {
+    const speak = async () => {
+      await TextToSpeech.speak({
+        text: this.userInput,
+        lang: 'en',
+        rate: 1.0,
+        pitch: 1.0,
+        volume: 1.0,
+        category: 'ambient',
+      });
+    };
+    speak();
+  }
   //Function Used to get API response for GPT Text prediction
   makeTextPrediction() {
     this.textPredictionApi.getTextPrediction(this.userInput).subscribe(
@@ -24,13 +39,6 @@ export class KeyboardComponent {
         console.error('Error making text prediction', error);
       }
     );
-  }
-
-  //Simple Function for text to speech
-  textToSpeech() {
-    const utterance = new SpeechSynthesisUtterance();
-    utterance.text = this.userInput;
-    speechSynthesis.speak(utterance);
   }
 
   ngAfterViewInit(): void {

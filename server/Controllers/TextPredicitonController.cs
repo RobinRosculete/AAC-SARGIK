@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using OpenAI_API;
 using OpenAI_API.Models;
 
-
 namespace server.Controllers;
 
     [Route("api/[controller]")]
@@ -31,9 +30,7 @@ namespace server.Controllers;
             " 5. If a word is not complete you can complete is with what you think the user was trying to say"+
              "Initial Input:" + query;
 
-        string GPT_API_KEY = _configuration.GetConnectionString("GPT_API_KEY");
-
-        OpenAIAPI api = new OpenAIAPI(GPT_API_KEY);
+        OpenAIAPI api = new OpenAIAPI();
         var chat = api.Chat.CreateConversation();
         chat.AppendUserInput(basePrompt);
         chat.Model = Model.GPT4_Turbo;

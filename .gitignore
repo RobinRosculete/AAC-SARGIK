@@ -9,6 +9,9 @@ environments/
 environment.ts
 environment.prod.ts
 
+#Open AI API 
+.openai
+
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # User-specific files

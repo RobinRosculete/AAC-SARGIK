@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   webDir: 'dist/client',
   bundledWebRuntime: false,
   server: {
-    url: environment.SERVER_URL,
+    url: environment.ANGULAR_SERVER_URL,
     cleartext: true,
   },
 };
