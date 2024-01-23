@@ -547,3 +547,4 @@ baseline.json
 aio/content/examples/.DS_Store
 
 CustomerCartClient/.angular/cache/16.2.6
+server/Controllers/TextPredicitonController.cs
