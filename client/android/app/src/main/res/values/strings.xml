@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">AAC SARGIK</string>
     <string name="title_activity_main">AAC SARGIK</string>
-    <string name="package_name">com.aacsargik.app</string>
-    <string name="custom_url_scheme">com.aacsargik.app</string>
+    <string name="package_name">com.sargik.angular</string>
+    <string name="custom_url_scheme">com.sargik.angular</string>
 </resources>
