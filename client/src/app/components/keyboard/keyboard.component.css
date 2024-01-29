@@ -11,7 +11,6 @@ input {
   font-size: 24px;
   border: none;
   box-sizing: border-box;
-  position: relative;
 }
 
 .simple-keyboard {
@@ -53,4 +52,13 @@ button:hover {
   background-color: #ffffff;
   color: #61c6d1;
   transform: scale(1.05);
+}
+
+.ghost-text {
+  position: absolute;
+  margin-top: 20px;
+  font-size: 24px;
+  margin-left: 20px;
+  opacity: 0.5;
+  color: #888;
 }

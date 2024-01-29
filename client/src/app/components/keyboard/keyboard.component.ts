@@ -13,6 +13,7 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 export class KeyboardComponent {
   keyboard!: Keyboard;
   userInput: string = '';
+  ghostText: string = '';
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(private typewise:TypewiseAPIService){}
@@ -32,10 +33,9 @@ export class KeyboardComponent {
     speak();
   }
   //Function Used to get API response for GPT Text prediction
-  makeTextPrediction() {
-    this.typewise.getData(this.userInput).subscribe(
-      (response: any) => {
-        let prediction = response.predictions[0].text;
+  CompletePrediction() {
+        let predSentence = this.ghostText.split(' ')
+        let prediction = predSentence[predSentence.length - 1];
         const words = this.userInput.split(' ');
         let joinWords;
 
@@ -45,13 +45,6 @@ export class KeyboardComponent {
           this.userInput = joinWords;
           this.keyboard.setInput(this.userInput);
         }
-
-        console.log('API Response:', response);
-      },
-      (error) => {
-        console.error('Error making text prediction', error);
-      }
-    );
   }
 
   ngAfterViewInit(): void {
@@ -119,17 +112,31 @@ export class KeyboardComponent {
   //Handles any press on keyboard
   onChange = (input: string) => {
       this.userInput = input;
-    /* this.prediction;
+      this.updateGhostText();
+      /* const words = this.userInput.split(' ');
+      let lastWord = words[words.length - 1];
 
-    this.typewise.getData(this.userInput).subscribe(
-      (response: any) => {
-        this.prediction = response.predictions[0].text; // Updating user input to the predicted text
-        console.log('API Response:', this.prediction);
-      },
-      (error) => {
-        console.error('Error making text prediction', error);
-      }
-    ); */
+      if (lastWord.length == 1){
+        this.typewise.getData(this.userInput).subscribe(
+          (response: any) => {
+            let prediction = response.predictions[0].text;
+            const words = this.userInput.split(' ');
+            let joinWords;
+    
+            if (words){
+              words[words.length - 1] = prediction;
+              joinWords = words.join(' ');
+              this.userInput = joinWords;
+              this.keyboard.setInput(this.userInput);
+            }
+    
+            console.log('API Response:', response);
+          },
+          (error) => {
+            console.error('Error making text prediction', error);
+          }
+        );
+      } */
   };
 
   //Handles Key Commands
@@ -139,6 +146,9 @@ export class KeyboardComponent {
      */
     if (button.includes('{') && button.includes('}')) {
       this.handleLayoutChange(button);
+    }
+    if (button.includes('{enter}')) {
+      this.CompletePrediction();
     }
   };
   handleLayoutChange = (button: string) => {
@@ -191,4 +201,33 @@ export class KeyboardComponent {
       layoutName: shiftToggle,
     });
   };
+
+  updateGhostText() {
+    const words = this.userInput.split(' ');
+    const lastWord = words[words.length - 1];
+
+    if (lastWord.length > 0) {
+      this.typewise.getData(this.userInput).subscribe(
+        (response: any) => {
+          let prediction = response.predictions[0].text;
+          const words = this.userInput.split(' ');
+          let joinWords;
+  
+          if (words){
+            words[words.length - 1] = prediction;
+            joinWords = words.join(' ');
+            this.ghostText = joinWords;
+          }
+
+          this.keyboard.setOptions({ ghostText: prediction }); // Set ghost text in simple-keyboard
+        },
+        (error) => {
+          console.error('Error making text prediction', error);
+        }
+      );
+    } else {
+      this.ghostText = ''; // Clear ghost text when last word is longer than 1 character
+      this.keyboard.setOptions({ ghostText: '' }); // Clear ghost text in simple-keyboard
+    }
+  }
 }
