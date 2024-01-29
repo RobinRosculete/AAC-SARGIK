@@ -1,4 +1,4 @@
-package com.aacsargik.app;
+package com.sargik.angular;
 
 import com.getcapacitor.BridgeActivity;
 

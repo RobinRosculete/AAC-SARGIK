@@ -1,4 +1,6 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<!-- Display ghost text -->
+<div class="ghost-text">{{ ghostText }}</div>
+
 <div style="text-align: center">
   <input
     (input)="onInputChange($event)"
@@ -10,7 +12,7 @@
     [(ngModel)]="userInput"
     [value]="userInput"
   />
-  <button (click)="makeTextPrediction()" class="button" type="submit">
+  <button (click)="CompletePrediction()" class="button" type="submit">
     Predict
   </button>
   <button (click)="speakText()">Speak</button>
