@@ -43,6 +43,7 @@ export class KeyboardComponent {
           words[words.length - 1] = prediction;
           joinWords = words.join(' ');
           this.userInput = joinWords;
+          this.keyboard.setInput(this.userInput);
         }
 
         console.log('API Response:', response);
@@ -117,7 +118,7 @@ export class KeyboardComponent {
 
   //Handles any press on keyboard
   onChange = (input: string) => {
-    this.userInput = input;
+      this.userInput = input;
     /* this.prediction;
 
     this.typewise.getData(this.userInput).subscribe(
