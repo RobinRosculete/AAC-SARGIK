@@ -111,32 +111,9 @@ export class KeyboardComponent {
 
   //Handles any press on keyboard
   onChange = (input: string) => {
+      this.ghostText = '';
       this.userInput = input;
       this.updateGhostText();
-      /* const words = this.userInput.split(' ');
-      let lastWord = words[words.length - 1];
-
-      if (lastWord.length == 1){
-        this.typewise.getData(this.userInput).subscribe(
-          (response: any) => {
-            let prediction = response.predictions[0].text;
-            const words = this.userInput.split(' ');
-            let joinWords;
-    
-            if (words){
-              words[words.length - 1] = prediction;
-              joinWords = words.join(' ');
-              this.userInput = joinWords;
-              this.keyboard.setInput(this.userInput);
-            }
-    
-            console.log('API Response:', response);
-          },
-          (error) => {
-            console.error('Error making text prediction', error);
-          }
-        );
-      } */
   };
 
   //Handles Key Commands
@@ -206,28 +183,22 @@ export class KeyboardComponent {
     const words = this.userInput.split(' ');
     const lastWord = words[words.length - 1];
 
-    if (lastWord.length > 0) {
+    
       this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-          let prediction = response.predictions[0].text;
-          const words = this.userInput.split(' ');
-          let joinWords;
-  
-          if (words){
+          if (lastWord.length > 0 && lastWord != '') {
+            let prediction = response.predictions[0].text;
+    
             words[words.length - 1] = prediction;
-            joinWords = words.join(' ');
-            this.ghostText = joinWords;
-          }
+            this.ghostText = words.join(' ');
 
-          this.keyboard.setOptions({ ghostText: prediction }); // Set ghost text in simple-keyboard
+          } else {
+            this.ghostText = ''; // Clear ghost text when last word is longer than 1 character
+          }
         },
         (error) => {
           console.error('Error making text prediction', error);
         }
       );
-    } else {
-      this.ghostText = ''; // Clear ghost text when last word is longer than 1 character
-      this.keyboard.setOptions({ ghostText: '' }); // Clear ghost text in simple-keyboard
-    }
   }
 }
