@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import Keyboard from 'simple-keyboard';
-import { TextPredictionApiService } from 'src/app/services/text-prediction-api.service';
-import {TypewiseAPIService} from '../../services/text_predict/typewise-api.service';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 // KeyboardComponent
 @Component({
@@ -16,7 +16,7 @@ export class KeyboardComponent {
   ghostText: string = '';
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
-  constructor(private typewise:TypewiseAPIService){}
+  constructor(private typewise: TypewiseAPIService) {}
 
   //Simple Function for text to speech
   speakText() {
@@ -34,17 +34,17 @@ export class KeyboardComponent {
   }
   //Function Used to get API response for GPT Text prediction
   CompletePrediction() {
-        let predSentence = this.ghostText.split(' ')
-        let prediction = predSentence[predSentence.length - 1];
-        const words = this.userInput.split(' ');
-        let joinWords;
+    let predSentence = this.ghostText.split(' ');
+    let prediction = predSentence[predSentence.length - 1];
+    const words = this.userInput.split(' ');
+    let joinWords;
 
-        if (words){
-          words[words.length - 1] = prediction;
-          joinWords = words.join(' ');
-          this.userInput = joinWords;
-          this.keyboard.setInput(this.userInput);
-        }
+    if (words) {
+      words[words.length - 1] = prediction;
+      joinWords = words.join(' ');
+      this.userInput = joinWords;
+      this.keyboard.setInput(this.userInput);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -104,16 +104,16 @@ export class KeyboardComponent {
         '{space}': ' ',
         '{default}': 'ABC',
         '{back}': '⇦',
-        '{QWERTY}': 'QWERTY'
+        '{QWERTY}': 'QWERTY',
       },
     });
   }
 
   //Handles any press on keyboard
   onChange = (input: string) => {
-      this.userInput = input;
-      this.updateGhostText();
-      /* const words = this.userInput.split(' ');
+    this.userInput = input;
+    this.updateGhostText();
+    /* const words = this.userInput.split(' ');
       let lastWord = words[words.length - 1];
 
       if (lastWord.length == 1){
@@ -178,8 +178,6 @@ export class KeyboardComponent {
         layoutName = currentLayout === 'ABC' ? 'ABC_shift' : 'ABC';
         break;
 
-      
-
       default:
         break;
     }
@@ -212,8 +210,8 @@ export class KeyboardComponent {
           let prediction = response.predictions[0].text;
           const words = this.userInput.split(' ');
           let joinWords;
-  
-          if (words){
+
+          if (words) {
             words[words.length - 1] = prediction;
             joinWords = words.join(' ');
             this.ghostText = joinWords;

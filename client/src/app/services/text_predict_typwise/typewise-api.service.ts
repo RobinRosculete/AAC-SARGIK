@@ -3,14 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TypewiseAPIService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getData(inputText: string): Observable<any> {
-    let url = "https://api.typewise.ai/latest/completion/complete";
+    let url = 'https://api.typewise.ai/latest/completion/complete';
 
     // Request body
     let body = { text: inputText };

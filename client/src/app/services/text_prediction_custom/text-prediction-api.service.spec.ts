@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TextPredictionApiService } from './text-prediction-api.service';
+import { TextPredictionApiService } from './text_prediction_custom/text-prediction-api.service';
 
 describe('TextPredictionApiService', () => {
   let service: TextPredictionApiService;
