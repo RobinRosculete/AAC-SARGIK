@@ -1,19 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TypewiseAPIService {
+  private apiUrl =
+    'https://api.typewise.ai/latest/completion/sentence_complete';
+
   constructor(private http: HttpClient) {}
 
   getData(inputText: string): Observable<any> {
-    let url = 'https://api.typewise.ai/latest/completion/complete';
+    // Request headers
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
 
     // Request body
-    let body = { text: inputText };
+    const body = {
+      languages: ['en', 'es'],
+      maxNumberOfPredictions: 5,
+      text: inputText,
+    };
 
-    return this.http.post(url, body);
+    return this.http.post(this.apiUrl, body, { headers });
   }
 }
