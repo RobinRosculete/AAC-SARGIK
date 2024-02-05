@@ -100,12 +100,12 @@ export class KeyboardComponent {
     this.userInput = input;
     this.updateGhostText();
   };
-  //Function Used to to update user input with ghost text if it exists
   CompletePrediction() {
     if (this.ghostText) {
-      this.keyboard.setInput(this.ghostText);
-      // Adding a space at the end of the added sentence
+      // Add a space at the end of the added sentence
       this.userInput = this.ghostText + ' ';
+      this.keyboard.setInput(this.userInput);
+
       this.restartGhostText();
     } else {
       console.log('No ghost text');
