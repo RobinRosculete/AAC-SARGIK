@@ -14,12 +14,12 @@ export class KeyboardComponent {
   private keyboard!: Keyboard;
   protected userInput: string = '';
   protected ghostText: string = '';
-  private capsLockActivated: boolean = false;
-  private shiftClickCount: number = 0;
-  private shiftClickTimer: any;
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
-  constructor(private typewise: TypewiseAPIService) {}
+  constructor(
+    private typewise: TypewiseAPIService,
+    private gpt: TextPredictionApiService
+  ) {}
 
   //Simple Function for text to speech
   speakText() {
@@ -112,14 +112,8 @@ export class KeyboardComponent {
   CompletePrediction() {
     if (this.ghostText) {
       // Set input to ghost text
-      this.keyboard.setInput(this.ghostText);
-
       this.userInput = this.ghostText;
-      this.keyboard.setInput('');
-
       this.ghostText = '';
-
-      this.keyboard.setInput(this.userInput);
     } else {
       console.log('No ghost text');
     }
@@ -135,8 +129,9 @@ export class KeyboardComponent {
     if (button.includes('{enter}')) {
       this.CompletePrediction();
     }
-    if (button.includes('{bksp}}')) {
+    if (button.includes('{bksp}')) {
       this.ghostText = '';
+      //this.keyboard.setInput('');
     }
   };
   handleLayoutChange = (button: string) => {
@@ -180,23 +175,11 @@ export class KeyboardComponent {
   };
 
   updateGhostText() {
-    const words = this.userInput.split(' ');
-    const lastWord = words[words.length - 1];
-
-    if (lastWord.length > 0) {
-      this.typewise.getData(this.userInput).subscribe(
+    this.ghostText = '';
+    if (this.userInput) {
+      this.gpt.getData(this.userInput).subscribe(
         (response: any) => {
-          const predictions = response?.predictions;
-
-          if (predictions?.length > 0 && predictions[0]?.text) {
-            const prediction = predictions[0].text;
-            this.ghostText = words.slice(0, -1).concat(prediction).join(' ');
-            this.keyboard.setOptions({ ghostText: prediction });
-          } else {
-            console.error(
-              'Invalid response format or no predictions available.'
-            );
-          }
+          this.ghostText = response?.prediction;
         },
         (error) => console.error('Error making text prediction', error)
       );
