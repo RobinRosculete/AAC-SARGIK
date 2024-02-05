@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import Keyboard from 'simple-keyboard';
-//import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 // KeyboardComponent
@@ -31,23 +31,6 @@ export class KeyboardComponent {
       });
     };
     speak();
-  }
-  //Function Used to get API response for GPT Text prediction
-  CompletePrediction() {
-    const predSentence = this.ghostText.split(' ');
-    const prediction = predSentence.join(' ');
-    const words = this.userInput.split(' ');
-
-    if (words.length > 0) {
-      words[words.length - 1] = prediction;
-      const updatedInput = words.join(' ');
-      this.userInput = updatedInput;
-      this.keyboard.setInput(this.userInput);
-
-      // Clear ghost text after user accepts the predicted text
-      this.ghostText = '';
-      this.keyboard.setOptions({ ghostText: '' });
-    }
   }
 
   ngAfterViewInit(): void {
@@ -116,14 +99,18 @@ export class KeyboardComponent {
   onChange = (input: string) => {
     this.userInput = input;
     this.updateGhostText();
-
-    // If the last character is a space, reset ghost text to get new updates
-    if (input.endsWith(' ')) {
-      this.ghostText = '';
-      this.keyboard.setOptions({ ghostText: '' });
-    }
   };
-
+  //Function Used to to update user input with ghost text if it exists
+  CompletePrediction() {
+    if (this.ghostText) {
+      this.keyboard.setInput(this.ghostText);
+      // Adding a space at the end of the added sentence
+      this.userInput = this.ghostText + ' ';
+      this.restartGhostText();
+    } else {
+      console.log('No ghost text');
+    }
+  }
   //Handles Key Commands
   onKeyPress = (button: string) => {
     /**
@@ -134,6 +121,9 @@ export class KeyboardComponent {
     }
     if (button.includes('{enter}')) {
       this.CompletePrediction();
+    }
+    if (button.includes('{bksp}}')) {
+      this.restartGhostText();
     }
   };
   handleLayoutChange = (button: string) => {
@@ -184,6 +174,12 @@ export class KeyboardComponent {
       layoutName: shiftToggle,
     });
   };
+
+  //Function to restart the ghost text
+  restartGhostText() {
+    this.ghostText = '';
+  }
+
   updateGhostText() {
     const words = this.userInput.split(' ');
     const lastWord = words[words.length - 1];
@@ -191,27 +187,23 @@ export class KeyboardComponent {
     if (lastWord.length > 0) {
       this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-          console.log('API Response:', response);
+          const predictions = response?.predictions;
 
-          if (
-            response.predictions &&
-            response.predictions.length > 0 &&
-            response.predictions[0].text
-          ) {
-            const prediction = response.predictions[0].text;
-            this.ghostText = prediction;
-            this.keyboard.setOptions({ ghostText: prediction }); // Set ghost text in simple-keyboard
+          if (predictions?.length > 0 && predictions[0]?.text) {
+            const prediction = predictions[0].text;
+            this.ghostText = words.slice(0, -1).concat(prediction).join(' ');
+            this.keyboard.setOptions({ ghostText: prediction });
           } else {
-            console.error('Invalid response format from the API');
+            console.error(
+              'Invalid response format or no predictions available.'
+            );
           }
         },
-        (error) => {
-          console.error('Error making text prediction', error);
-        }
+        (error) => console.error('Error making text prediction', error)
       );
     } else {
-      this.ghostText = ''; // Clear ghost text when the last word is longer than 1 character
-      this.keyboard.setOptions({ ghostText: '' }); // Clear ghost text in simple-keyboard
+      this.ghostText = '';
+      this.keyboard.setOptions({ ghostText: '' });
     }
   }
 }
