@@ -11,9 +11,12 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
   styleUrls: ['./keyboard.component.css'],
 })
 export class KeyboardComponent {
-  keyboard!: Keyboard;
-  userInput: string = '';
-  ghostText: string = '';
+  private keyboard!: Keyboard;
+  protected userInput: string = '';
+  protected ghostText: string = '';
+  private capsLockActivated: boolean = false;
+  private shiftClickCount: number = 0;
+  private shiftClickTimer: any;
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(private typewise: TypewiseAPIService) {}
@@ -95,18 +98,28 @@ export class KeyboardComponent {
     });
   }
 
+  clearInput() {
+    this.userInput = '';
+    this.ghostText = '';
+    this.keyboard.setInput(''); // Clear the input on the keyboard
+  }
   //Handles any press on keyboard
   onChange = (input: string) => {
     this.userInput = input;
     this.updateGhostText();
   };
+  //Funciton to complete prediciton to update real text
   CompletePrediction() {
     if (this.ghostText) {
-      // Add a space at the end of the added sentence
-      this.userInput = this.ghostText + ' ';
-      this.keyboard.setInput(this.userInput);
+      // Set input to ghost text
+      this.keyboard.setInput(this.ghostText);
 
-      this.restartGhostText();
+      this.userInput = this.ghostText;
+      this.keyboard.setInput('');
+
+      this.ghostText = '';
+
+      this.keyboard.setInput(this.userInput);
     } else {
       console.log('No ghost text');
     }
@@ -123,7 +136,7 @@ export class KeyboardComponent {
       this.CompletePrediction();
     }
     if (button.includes('{bksp}}')) {
-      this.restartGhostText();
+      this.ghostText = '';
     }
   };
   handleLayoutChange = (button: string) => {
@@ -165,20 +178,6 @@ export class KeyboardComponent {
   onInputChange = (event: any) => {
     this.keyboard.setInput(event.target.value);
   };
-
-  handleShift = () => {
-    let currentLayout = this.keyboard.options.layoutName;
-    let shiftToggle = currentLayout === 'default' ? 'shift' : 'default';
-
-    this.keyboard.setOptions({
-      layoutName: shiftToggle,
-    });
-  };
-
-  //Function to restart the ghost text
-  restartGhostText() {
-    this.ghostText = '';
-  }
 
   updateGhostText() {
     const words = this.userInput.split(' ');
