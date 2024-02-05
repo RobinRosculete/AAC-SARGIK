@@ -113,6 +113,7 @@ export class KeyboardComponent {
     if (this.ghostText) {
       // Set input to ghost text
       this.userInput = this.ghostText;
+      this.keyboard.setInput(this.ghostText);
       this.ghostText = '';
     } else {
       console.log('No ghost text');
@@ -131,7 +132,6 @@ export class KeyboardComponent {
     }
     if (button.includes('{bksp}')) {
       this.ghostText = '';
-      //this.keyboard.setInput('');
     }
   };
   handleLayoutChange = (button: string) => {
@@ -175,7 +175,6 @@ export class KeyboardComponent {
   };
 
   updateGhostText() {
-    this.ghostText = '';
     if (this.userInput) {
       this.gpt.getData(this.userInput).subscribe(
         (response: any) => {
