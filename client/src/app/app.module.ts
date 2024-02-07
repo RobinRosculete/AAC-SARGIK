@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { HttpClientModule } from '@angular/common/http';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
-  declarations: [AppComponent, NavMenuComponent, KeyboardComponent],
+  declarations: [AppComponent, NavMenuComponent, KeyboardComponent, GalleryComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
