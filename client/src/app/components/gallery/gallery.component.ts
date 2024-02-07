@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {ImageService} from './image/image.service';
 //import { Router } from '@angular/router';
 @Component({
   selector: 'app-gallery',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./gallery.component.css']
 })
 export class GalleryComponent {
-  title = 'Gallery';
-
+  //title = 'Gallery';
+  //constructor(private imageService: ImageService){}  
  
 }
