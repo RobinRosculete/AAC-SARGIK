@@ -30,7 +30,7 @@ namespace server.Controllers;
             {
                 Model = Model.ChatGPTTurbo,
                 Temperature = 0.1,
-                MaxTokens = 5, // Adjust max tokens based on your requirements
+                MaxTokens = 5,
                 Messages = new ChatMessage[]
                 {
                 new ChatMessage(ChatMessageRole.User, $"Predict the possible next word or sentence that starts with: {query.text}"),
