@@ -49,3 +49,10 @@ button:hover {
   color: #61c6d1;
   transform: scale(1.05);
 }
+
+
+::ng-deep .cdk-overlay-pane.custom-dialog .mat-dialog-container {
+  border-radius: 50px; 
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
