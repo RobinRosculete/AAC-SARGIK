@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI_API;
 using OpenAI_API.Chat;
@@ -19,7 +20,7 @@ namespace server.Controllers;
         }
 
     // post: api/TextPrediciton
-    // post: api/TextPrediciton
+    //[Authorize]
     [HttpPost]
     public async Task<IActionResult> UseChatGPT([FromBody] TextPredictionBody query)
     {
@@ -33,15 +34,16 @@ namespace server.Controllers;
                 MaxTokens = 5,
                 Messages = new ChatMessage[]
                 {
-                new ChatMessage(ChatMessageRole.User, $"Predict the possible next word or sentence that starts with: {query.text}"),
-                new ChatMessage(ChatMessageRole.System, "You can continue the input without introducing new information.")
+                new ChatMessage(ChatMessageRole.User, $"Compose exactly the next part of your message: {query.text}"),
+
                 }
             });
 
-            return Ok(new { prediction = result.ToString() });
+            return Ok(new { predictions = result.ToString() });
         }
         return Ok("");
     }
+
 
 
 

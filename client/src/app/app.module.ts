@@ -9,7 +9,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
-  declarations: [AppComponent, NavMenuComponent, KeyboardComponent, GalleryComponent],
+  declarations: [
+    AppComponent,
+    NavMenuComponent,
+    KeyboardComponent,
+    GalleryComponent,
+  ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

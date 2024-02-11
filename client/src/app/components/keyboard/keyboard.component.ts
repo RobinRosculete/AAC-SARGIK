@@ -178,7 +178,7 @@ export class KeyboardComponent {
     if (this.userInput) {
       this.gpt.getData(this.userInput).subscribe(
         (response: any) => {
-          this.ghostText = response?.prediction;
+          this.ghostText = this.userInput + response?.predictions;
         },
         (error) => console.error('Error making text prediction', error)
       );
