@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI_API;
 using OpenAI_API.Chat;
@@ -8,8 +8,10 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace server.Controllers;
 
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TextPredictionController : ControllerBase
     {
         private readonly IConfiguration _configuration;
