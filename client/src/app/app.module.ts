@@ -16,7 +16,6 @@ import {
 } from '@azure/msal-angular';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { environment } from 'src/environments/environment.development';
-import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { HomeComponent } from './components/home/home.component';
     NavmenuComponent,
     KeyboardComponent,
     GalleryComponent,
-    HomeComponent,
   ],
   imports: [
     BrowserModule,

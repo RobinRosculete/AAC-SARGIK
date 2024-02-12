@@ -47,15 +47,6 @@ export class NavmenuComponent implements OnInit, OnDestroy {
     this._destroy.next(undefined);
     this._destroy.complete();
   }
-  login() {
-    if (this.msalGuardConfig.authRequest) {
-      this.authService.loginRedirect({
-        ...this.msalGuardConfig.authRequest,
-      } as RedirectRequest);
-    } else {
-      this.authService.loginRedirect();
-    }
-  }
 
   logout() {
     this.authService.logoutRedirect({
