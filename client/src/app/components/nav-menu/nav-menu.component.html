@@ -5,8 +5,13 @@
   </div>
   <div class="buttons-container">
     <button mat-flat-button [routerLink]="['/gallery']">Gallery</button>
-    <button mat-flat-button [routerLink]="['/']">Keyboard</button>
+    <button mat-flat-button [routerLink]="['/keyboard']">Keyboard</button>
     <button mat-flat-button [routerLink]="['/']">Visual Scene Display</button>
-    <button mat-flat-button [routerLink]="['/']">Favorite Words</button>
+    <button mat-raised-button *ngIf="!isUserLoggedIn" (click)="login()">
+      Login
+    </button>
+    <button mat-raised-button *ngIf="isUserLoggedIn" (click)="logout()">
+      Logout
+    </button>
   </div>
 </header>
