@@ -8,6 +8,7 @@ import {
 import { InteractionStatus, RedirectRequest } from '@azure/msal-browser';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-navmenu',
@@ -24,6 +25,12 @@ export class NavmenuComponent implements OnInit, OnDestroy {
     private msalBroadCastService: MsalBroadcastService,
     private authService: MsalService
   ) {}
+
+  openCapacitorSite = async () => {
+    await Browser.open({
+      url: 'https://aacsargik.b2clogin.com/aacsargik.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_SingUpSingin&client_id=b40581ac-97a6-4c8a-bba8-2f2a199c9a5c&nonce=defaultNonce&redirect_uri=msauth%3A%2F%2Fcom.aacsargik.app%2FVzSiQcXRmi2kyjzcA%252BmYLEtbGVs%253D&scope=openid&response_type=code&prompt=login',
+    });
+  };
 
   ngOnInit(): void {
     this.msalBroadCastService.inProgress$
