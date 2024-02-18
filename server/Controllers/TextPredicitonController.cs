@@ -11,7 +11,6 @@ namespace server.Controllers;
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TextPredictionController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -22,7 +21,6 @@ namespace server.Controllers;
         }
 
     // post: api/TextPrediciton
-    //[Authorize]
     [HttpPost]
     public async Task<IActionResult> UseChatGPT([FromBody] TextPredictionBody query)
     {

@@ -3,8 +3,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//Azure AD B2C
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAdB2C");
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
@@ -39,7 +37,7 @@ app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/", () => "Hello From AAC SARGIK!🫡");
-app.MapControllers().RequireAuthorization(); 
+app.MapControllers(); 
 
 app.Run();
 
