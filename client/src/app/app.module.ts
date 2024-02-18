@@ -8,12 +8,6 @@ import { AppComponent } from './app.component';
 import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
-import {
-  MsalInterceptor,
-  MsalGuard,
-  MsalRedirectComponent,
-} from '@azure/msal-angular';
-import { AuthModule } from './modules/auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -22,17 +16,8 @@ import { AuthModule } from './modules/auth/auth.module';
     KeyboardComponent,
     GalleryComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    AuthModule, // Import AuthModule here
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
-    MsalGuard,
-  ],
-  bootstrap: [AppComponent, MsalRedirectComponent],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

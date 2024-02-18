@@ -5,8 +5,8 @@ import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
-  { path: '', component: KeyboardComponent, canActivate: [MsalGuard] }, // Route for KeyboardComponent with MsalGuard
-  { path: 'gallery', component: GalleryComponent, canActivate: [MsalGuard] }, // Route for GalleryComponent with MsalGuard
+  { path: '', component: KeyboardComponent },
+  { path: 'gallery', component: GalleryComponent },
 ];
 
 @NgModule({
