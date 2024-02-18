@@ -6,36 +6,23 @@ section {
     padding: 10px;
   }
   
-  h1 {
-    font-size: 25px; /* Adjust the font size as needed */
-    margin: 0; /* Remove default margin */
-  }
-  
   /* Style the buttons container */
-  .buttons-container {
+  .icon-container {
     display: flex;
     margin-top: 10px; /* Adjust the margin as needed */
   }
   
   /* Style the buttons */
-  button {
-    margin-right: 20px;
-    font-size: 18px;
-    max-width: 300px;
-    max-height: 100px;
-    text-transform: uppercase;
-    padding: 12px 24px;
-    border: 2px solid #61c6d1;
-    border-radius: 25px;
-    background-color: #61c6d1;
-    color: #ffffff;
+  a {
+    margin-left: 125px;
+    margin-right: 125px;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    font-size: 28px;
   }
-  
-  button:hover {
-    background-color: #ffffff;
-    color: #61c6d1;
-    transform: scale(1.05);
+
+  img {
+    margin-bottom: 28px;
   }
   
