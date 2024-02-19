@@ -10,6 +10,7 @@ import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { HomeComponent } from './components/home/home.component';
 import { IonicModule } from '@ionic/angular';
+import { FeaturesComponent } from './components/features/features.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { IonicModule } from '@ionic/angular';
     NavmenuComponent,
     KeyboardComponent,
     GalleryComponent,
+    FeaturesComponent,
   ],
   imports: [
     BrowserModule,
