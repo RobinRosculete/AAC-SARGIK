@@ -1,5 +1,6 @@
 <!-- Display ghost text -->
 <div class="ghost-text">{{ ghostText }}</div>
+<button class="speaker" (click)="speakText()"><img src="../assets/images/speaker.png" alt="speaker logo"></button>
 
 <div style="text-align: center">
   <input
@@ -12,10 +13,10 @@
     [(ngModel)]="userInput"
     [value]="userInput"
   />
-  <button (click)="CompletePrediction()" class="button" type="submit">
+  <br>
+  <button (click)="CompletePrediction()" class="predict-button" type="submit">
     Predict
   </button>
-  <button (click)="speakText()">Speak</button>
 
   <div class="simple-keyboard"></div>
 </div>
