@@ -1,6 +1,29 @@
-<div class="camera-container">
-  <video #video autoplay></video>
-  <div class="camera-actions">
-    <button (click)="captureImage()">Capture</button>
+<div class="buttons-container">
+  <button #openModalBtn class="open-modal">Visual Scene Display</button>
+</div>
+<div #modal class="modal" [ngClass]="{ 'mobile-modal': isMobile }">
+  <div class="modal-content">
+    <div class="webcam-and-captured-container">
+      <div *ngIf="!imageSrc" class="webcam-container">
+        <video #videoElement autoplay></video>
+      </div>
+      <div *ngIf="imageSrc" class="captured-image-container">
+        <img [src]="imageSrc" class="captured-image" />
+      </div>
+      <div class="buttons-container">
+        <button
+          (click)="captureImage()"
+          *ngIf="!imageSrc"
+          class="capture-button"
+        >
+          Capture
+        </button>
+        <button (click)="retakeImage()" *ngIf="imageSrc" class="retake-button">
+          Retake Photo
+        </button>
+        <button class="upload-button">Upload</button>
+        <button #closeModalBtn class="close-modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>

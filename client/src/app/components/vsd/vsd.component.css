@@ -1,20 +1,90 @@
-.camera-container {
-    position: relative;
-    width: 640px;
-    border: 2px solid #000;
-    border-radius: 15px;
-    overflow: hidden;
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Style the buttons */
+button {
+  margin-right: 20px;
+  font-size: 18px;
+  max-width: 300px;
+  max-height: 100px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border: 2px solid #61c6d1;
+  border-radius: 25px;
+  background-color: #61c6d1;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #61c6d1;
+  transform: scale(1.05);
+}
+
+.modal {
+  display: none; /* Initially hidden */
+  position: fixed; /* Positioned relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 1000; /* High enough to be on top of other content */
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 480px) {
+  .modal {
+    width: 90%; /* Larger percentage for smaller screens */
+    /* Adjust other styles as needed */
   }
-  
-  video {
-    width: 100%;
-    height: auto;
-  }
-  
-  .camera-actions {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  
+}
+.modal-content {
+  z-index: 1001; /* Ensure the content is above the modal background */
+  background-color: #fff; /* Solid background color */
+  padding: 20px;
+  border-radius: 5px;
+
+}
+/* Styles for the webcam and captured image container */
+.webcam-and-captured-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content vertically */
+}
+
+.webcam-container video {
+  max-width: 100%;
+  height: 360px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.captured-image-container {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.captured-image {
+  max-width: 100%;
+  display: block; /* This ensures it doesn't inline with other content */
+  margin-top: 5px; /* Add space between the webcam feed and the captured image */
+}
+
+.button-group {
+  position: absolute;
+  bottom: 20px; /* Adjust as needed */
+  left: 0;
+  right: 0;
+  display: flex; /* Use flexbox to lay out children in a line */
+  justify-content: center; /* Center children along the main axis */
+  align-items: center; /* Align children along the cross axis */
+  gap: 10px; /* Space between each button */
+  flex-wrap: wrap; /* Allows buttons to wrap onto the next line if needed */
+  margin-top: 15px; /* Optional: adds some space above the button row */
+}
+
+.webcam-container, .captured-image-container {
+  text-align: center; /* Center inline or inline-block elements */
+  margin-bottom: 20px; /* Space for buttons, ensure it's the same as above */
+}

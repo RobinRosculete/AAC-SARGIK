@@ -9,28 +9,5 @@ import { MatDialog,MatDialogRef, MatDialogConfig } from '@angular/material/dialo
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  title = 'modal';
-  private dialogRef: MatDialogRef<any> | null = null;
 
-  constructor(private dialog: MatDialog){}
-
-    openDialog(){
-
-      if (this.dialogRef && this.dialogRef.componentInstance) {
-        return;
-      }
-      const dialogConfig = new MatDialogConfig();
-
-      this.dialogRef = this.dialog.open(VsdComponent, {
-        height: '400px',
-        width: '600px',
-        panelClass: 'custom-dialog'
-      });
-
-      this.dialogRef.afterClosed().subscribe(() => {
-        this.dialogRef = null;
-      });
-
-    }
-   
 }

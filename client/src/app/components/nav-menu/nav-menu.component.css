@@ -1,3 +1,5 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 /* Add styling for the header */
 header {
   display: flex;
@@ -22,12 +24,6 @@ h1 {
   margin: 0; /* Remove default margin */
 }
 
-/* Style the buttons container */
-.buttons-container {
-  display: flex;
-  margin-top: 10px; /* Adjust the margin as needed */
-}
-
 /* Style the buttons */
 button {
   margin-right: 20px;
@@ -50,9 +46,9 @@ button:hover {
   transform: scale(1.05);
 }
 
-
-::ng-deep .cdk-overlay-pane.custom-dialog .mat-dialog-container {
-  border-radius: 50px; 
-  border: 1px solid #333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
