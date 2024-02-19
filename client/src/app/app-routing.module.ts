@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
-import { MsalGuard } from '@azure/msal-angular';
+
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: KeyboardComponent },
+  { path: '', component: HomeComponent },
+  { path: 'keyboard', component: KeyboardComponent },
   { path: 'gallery', component: GalleryComponent },
 ];
 

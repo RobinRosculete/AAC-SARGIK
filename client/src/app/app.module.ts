@@ -8,10 +8,12 @@ import { AppComponent } from './app.component';
 import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     NavmenuComponent,
     KeyboardComponent,
     GalleryComponent,
