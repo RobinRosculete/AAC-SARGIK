@@ -1,0 +1,48 @@
+/* Add styling for the header */
+section {
+    display: flex;
+    flex-direction: column; /* Display items vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 10px;
+  }
+  
+  /* Style the buttons container */
+  .icon-container {
+    display: flex;
+    margin-top: 10px; /* Adjust the margin as needed */
+  }
+  
+  /* Style the buttons */
+  a {
+    margin-left: 125px;
+    margin-right: 125px;
+    margin-top: 30px;
+    margin-bottom: 100px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 28px;
+  }
+
+  /* visited link */
+  a:visited {
+    color: #3e3d3d;
+  }
+
+  /* selected link */
+  a:active {
+    color: #3e3d3d;
+  }
+
+  img {
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+
+  img:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    margin-bottom: 28px;
+  }
+  

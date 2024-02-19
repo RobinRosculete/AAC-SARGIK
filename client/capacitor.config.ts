@@ -4,7 +4,7 @@ import { environment } from './src/environments/environment.development';
 const config: CapacitorConfig = {
   appId: 'com.sargik.angular',
   appName: 'AAC SARGIK',
-  webDir: 'dist/client',
+  webDir: '../client/src',
   bundledWebRuntime: false,
   server: {
     url: environment.ANGULAR_SERVER_URL,
