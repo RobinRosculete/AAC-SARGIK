@@ -9,6 +9,7 @@ import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { HomeComponent } from './components/home/home.component';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,13 @@ import { HomeComponent } from './components/home/home.component';
     KeyboardComponent,
     GalleryComponent,
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    IonicModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
