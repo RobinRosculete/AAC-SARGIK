@@ -27,6 +27,7 @@ import { FeaturesComponent } from './components/features/features.component';
     HttpClientModule,
     AppRoutingModule,
     IonicModule,
+    IonicModule.forRoot({}),
   ],
   providers: [],
   bootstrap: [AppComponent],

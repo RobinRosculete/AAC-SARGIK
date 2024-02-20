@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import {ImageService} from './image/image.service';
-//import { Router } from '@angular/router';
+import { ImageService } from './image/image.service';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.css']
+  styleUrls: ['./gallery.component.css'],
 })
-export class GalleryComponent {
-  //title = 'Gallery';
-  //constructor(private imageService: ImageService){}  
- 
-}
+export class GalleryComponent {}
