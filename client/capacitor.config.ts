@@ -1,5 +1,5 @@
 import { CapacitorConfig } from '@capacitor/cli';
-import { environment } from './src/environments/environment';
+import { environment } from './src/environments/environment.development';
 
 const config: CapacitorConfig = {
   appId: 'com.aacsargik.app',
