@@ -1,0 +1,25 @@
+{
+	"appId": "com.sargik.angular",
+	"appName": "AAC SARGIK",
+	"webDir": "../client/src",
+	"bundledWebRuntime": false,
+	"server": {
+		"url": "http://10.40.132.73:4200",
+		"cleartext": true,
+		"androidScheme": "https"
+	},
+	"plugins": {
+		"GoogleAuth": {
+			"scopes": [
+				"profile",
+				"email"
+			],
+			"clientId": "836222128097-2mjck1areo72934lgihnv6q2l8k82852.apps.googleusercontent.com",
+			"serverClientId": "836222128097-2mjck1areo72934lgihnv6q2l8k82852.apps.googleusercontent.com",
+			"androidClientId": "836222128097-2mjck1areo72934lgihnv6q2l8k82852.apps.googleusercontent.com"
+		},
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}

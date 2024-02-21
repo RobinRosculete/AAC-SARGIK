@@ -1,0 +1,29 @@
+/* Add styling for the header */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Style the logo container */
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  max-width: 100px;
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+h1 {
+  font-size: 32px; /* Adjust the font size as needed */
+  margin: 0; /* Remove default margin */
+  font-weight: bold;
+}
+
+.profile {
+  align-self: flex-start;
+  margin: 30px;
+}

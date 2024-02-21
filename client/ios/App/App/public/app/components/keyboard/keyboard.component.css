@@ -1,0 +1,86 @@
+@import "simple-keyboard/build/css/index.css";
+
+ul {
+  text-align: center;
+}
+
+input {
+  width: 90%;
+  height: 100%;
+  padding: 20px;
+  font-size: 32px;
+  margin: 20px;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  border: 3px solid #555;
+  background-color: rgb(246, 246, 246);
+}
+
+input::placeholder {
+  opacity: 0.5;
+}
+
+.speaker {
+  position: absolute;
+  margin-top: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  right: 150px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.speaker:hover {
+  transform: scale(1.05);
+}
+
+.simple-keyboard {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  font-size: 40px;
+  transform: translateX(-50%);
+}
+
+.simple-keyboard.hg-theme-ios {
+  border: 3px solid #61c6d1;
+  width: calc(100% - 5px);
+}
+
+.simple-keyboard.hg-theme-ios .hg-button {
+  width: 80px;
+  height: 80px;
+}
+
+.predict-button {
+  margin: 20px;
+  font-size: 32px;
+  text-transform: uppercase;
+  padding: 30px;
+  border: 2px solid #61c6d1;
+  border-radius: 16px;
+  background-color: #61c6d1;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.predict-button:hover {
+  background-color: #ffffff;
+  color: #61c6d1;
+  transform: scale(1.05);
+}
+
+.ghost-text {
+  position: absolute;
+  margin-top: 45px;
+  font-size: 32px;
+  margin-left: 151px;
+  opacity: 0.5;
+  color: #888;
+}
