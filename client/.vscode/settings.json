@@ -1,3 +1,4 @@
 {
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
 }

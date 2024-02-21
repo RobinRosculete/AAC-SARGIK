@@ -1,7 +1,13 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<!-- Display ghost text -->
+<div class="ghost-text">{{ ghostText }}</div>
+<button class="speaker" (click)="speakText()">
+  <img src="../assets/images/speaker.png" alt="speaker logo" />
+</button>
+
 <div style="text-align: center">
   <input
     (input)="onInputChange($event)"
+    inputmode="none"
     class="input"
     value="{{ userInput }}"
     placeholder="Tap on the virtual keyboard to start"
@@ -10,10 +16,18 @@
     [(ngModel)]="userInput"
     [value]="userInput"
   />
-  <button (click)="makeTextPrediction()" class="button" type="submit">
+  <br />
+  <ion-button
+    (click)="CompletePrediction()"
+    shape="round"
+    size="large"
+    type="submit"
+  >
     Predict
-  </button>
-  <button (click)="speakText()">Speak</button>
+  </ion-button>
+  <ion-button (click)="clearInput()" shape="round" size="large" type="submit">
+    Clear
+  </ion-button>
 
   <div class="simple-keyboard"></div>
 </div>

@@ -1,11 +1,27 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.Identity.Web;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowSpecificOrigins",
+            builder => builder.WithOrigins("https://localhost:7239")
+                             .AllowAnyHeader()
+                             .AllowAnyMethod());
+    });
+}
+
 
 var app = builder.Build();
 
@@ -18,9 +34,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.MapGet("/", () => "Hello From AAC SARGIK!🫡");
+app.MapControllers(); 
 
 app.Run();
 

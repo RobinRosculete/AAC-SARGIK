@@ -1,26 +1,33 @@
+// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
-import { HttpClientModule } from '@angular/common/http';
+import { GalleryComponent } from './components/gallery/gallery.component';
+import { HomeComponent } from './components/home/home.component';
+import { IonicModule } from '@ionic/angular';
 import { VsdComponent } from './components/vsd/vsd.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
+    HomeComponent,
+    NavmenuComponent,
     KeyboardComponent,
+    GalleryComponent,
     VsdComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
     FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    IonicModule.forRoot(),
     MatDialogModule,
   ],
   providers: [],

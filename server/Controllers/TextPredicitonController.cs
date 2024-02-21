@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI_API;
+using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using server.DTOs;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace server.Controllers;
+
 
     [Route("api/[controller]")]
     [ApiController]
@@ -15,30 +20,31 @@ namespace server.Controllers;
             _configuration = configuration;
         }
 
-     // GET: api/TextPrediciton
-    [HttpGet]
-    public async Task<String> UseChatGPT(string query)
+    // post: api/TextPrediciton
+    [HttpPost]
+    public async Task<IActionResult> UseChatGPT([FromBody] TextPredictionBody query)
     {
-        // Base Prompt, not complete
-        string basePrompt ="Plese continue the initial input obeing the following rules, even if just one word or not even a complete word" +
-            "and don't say anything else:(" +
-            "Response rules: " +
-            " 1. Use all the given input as the start off your output" +
-            " 2. Do not add more than 10 words to the output respnse" +
-            " 3. Predict what the user is trying to say."+
-            " 4. Keep all the words in your output"+
-            " 5. If a word is not complete you can complete is with what you think the user was trying to say"+
-             "Initial Input:" + query;
+        if (!(string.IsNullOrEmpty(query.text)))
+        {
+            OpenAIAPI api = new OpenAIAPI();
+            var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
+            {
+                Model = Model.ChatGPTTurbo,
+                Temperature = 0.1,
+                MaxTokens = 5,
+                Messages = new ChatMessage[]
+                {
+                new ChatMessage(ChatMessageRole.User, $"Compose exactly the next part of your message: {query.text}"),
 
-        OpenAIAPI api = new OpenAIAPI();
-        var chat = api.Chat.CreateConversation();
-        chat.AppendUserInput(basePrompt);
-        chat.Model = Model.GPT4_Turbo;
-        string response = await chat.GetResponseFromChatbotAsync();
+                }
+            });
 
-        return response;
-
+            return Ok(new { predictions = result.ToString() });
+        }
+        return Ok("");
     }
+
+
 
 
 }

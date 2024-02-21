@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavMenuComponent } from './nav-menu.component';
+import { NavmenuComponent } from './nav-menu.component';
 
 describe('NavMenuComponent', () => {
-  let component: NavMenuComponent;
-  let fixture: ComponentFixture<NavMenuComponent>;
+  let component: NavmenuComponent;
+  let fixture: ComponentFixture<NavmenuComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NavMenuComponent]
+      declarations: [NavmenuComponent],
     });
-    fixture = TestBed.createComponent(NavMenuComponent);
+    fixture = TestBed.createComponent(NavmenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
