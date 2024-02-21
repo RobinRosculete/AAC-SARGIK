@@ -13,5 +13,9 @@ import { NavController } from '@ionic/angular';
 export class GalleryComponent {
   //title = 'Gallery';
   //constructor(private imageService: ImageService){}  
+  //image: number = 1;//declear for image number
+  constructor(){
+    }
+
  
 }
