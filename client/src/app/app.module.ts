@@ -25,6 +25,7 @@ import { IonicModule } from '@ionic/angular';
     HttpClientModule,
     AppRoutingModule,
     IonicModule,
+    IonicModule.forRoot({}),
   ],
   providers: [],
   bootstrap: [AppComponent],
