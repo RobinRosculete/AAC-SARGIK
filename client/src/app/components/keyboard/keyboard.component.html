@@ -17,10 +17,17 @@
     [value]="userInput"
   />
   <br />
-  <button (click)="CompletePrediction()" class="predict-button" type="submit">
+  <ion-button
+    (click)="CompletePrediction()"
+    shape="round"
+    size="large"
+    type="submit"
+  >
     Predict
-  </button>
-  <button (click)="clearInput()">Clear</button>
+  </ion-button>
+  <ion-button (click)="clearInput()" shape="round" size="large" type="submit">
+    Clear
+  </ion-button>
 
   <div class="simple-keyboard"></div>
 </div>

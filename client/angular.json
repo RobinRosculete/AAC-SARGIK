@@ -207,6 +207,30 @@
               "browserTarget": "client:build:production"
             }
           }
+        },
+        "ionic-cordova-serve": {
+          "builder": "@ionic/angular-toolkit:cordova-serve",
+          "options": {
+            "cordovaBuildTarget": "client:ionic-cordova-build",
+            "devServerTarget": "client:serve"
+          },
+          "configurations": {
+            "production": {
+              "cordovaBuildTarget": "client:ionic-cordova-build:production",
+              "devServerTarget": "client:serve:production"
+            }
+          }
+        },
+        "ionic-cordova-build": {
+          "builder": "@ionic/angular-toolkit:cordova-build",
+          "options": {
+            "browserTarget": "client:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "client:build:production"
+            }
+          }
         }
       }
     }
