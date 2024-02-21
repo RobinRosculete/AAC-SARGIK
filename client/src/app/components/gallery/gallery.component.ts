@@ -7,4 +7,10 @@ import { OverlayEventDetail } from '@ionic/core/components';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
 })
-export class GalleryComponent {}
+export class GalleryComponent {
+  images: string[] = [
+    '../assets/images/Gallery Test Images/1.jpg',
+    '../assets/images/Gallery Test Images/2.jpg',
+    '../assets/images/Gallery Test Images/3.jpg',
+  ];
+}
