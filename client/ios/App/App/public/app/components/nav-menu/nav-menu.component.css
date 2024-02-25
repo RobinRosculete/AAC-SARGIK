@@ -23,6 +23,23 @@ h1 {
   font-weight: bold;
 }
 
+/* Style for the section containing the buttons */
+section {
+  display: flex;
+  justify-content: center; /* Center the button container */
+}
+
+.icon-container {
+  display: flex; /* Allow buttons to sit side-by-side */
+  flex-wrap: wrap; /* Wrap buttons if they don't fit in a line */
+  justify-content: center; /* Center the buttons within their row*/
+}
+
+/* Styling for individual buttons */
+ion-button {
+  margin: 0 15px 15px 0; /* Add space between buttons horizontally and vertically */
+}
+
 .profile {
   align-self: flex-start;
   margin: 30px;

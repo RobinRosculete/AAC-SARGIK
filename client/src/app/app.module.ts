@@ -8,13 +8,13 @@ import { AppComponent } from './app.component';
 import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
-import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    LoginComponent,
     NavmenuComponent,
     KeyboardComponent,
     GalleryComponent,

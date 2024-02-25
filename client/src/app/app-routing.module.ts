@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { KeyboardComponent } from './components/keyboard/keyboard.component';
 
-import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LoginComponent },
   { path: 'keyboard', component: KeyboardComponent },
   { path: 'gallery', component: GalleryComponent },
   { path: '', component: KeyboardComponent }, // Route for KeyboardComponent with MsalGuard

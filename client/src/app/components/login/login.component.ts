@@ -11,10 +11,10 @@ GoogleAuth.initialize({
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
-export class HomeComponent {
+export class LoginComponent {
   user: any;
 
   constructor() {

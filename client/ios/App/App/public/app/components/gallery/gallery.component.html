@@ -1,32 +1,18 @@
-<ion-title>
-    Image Gallery
-</ion-title>
-<h1>
-  <div class="buttons-container">
-    <button mat-flat-button [routerLink]="['/']">Menu</button>
-  </div>
-</h1>
-
-<ion-content padding>
-  <ion-segment [(ngModel)]="galleryType">
-    <ion-segment-button value="regular">
-        Regular
-    </ion-segment-button>
-    <ion-segment-button value="pinterest">
-      Pinterest
-    </ion-segment-button>
-  </ion-segment>
-
-  <div [ngSwitch]="galleryType">
-    <ion-grid *ngSwitchCase = "'regular'">
-      <ion-row>
-        <ion-col *ngFor = "let image of[1,2,3,4,5,6,7]">
-          <div class="image-container" [style.background-image]="'url(assets/images/'+image+'.jpg)'">
-
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-</ion-content>
-
+<div style="min-height: 100vh; overflow-y: auto">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Gallery</ion-title>
+      <!--ion-button routerLink="/" fill="clear">Home</ion-button-->
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="3" size-md="3" *ngFor="let image of images">
+        <ion-img
+          src="assets/images/GalleryTestImages/{{ image }}.jpg"
+          alt="Image{{ image }}"
+        ></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

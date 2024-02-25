@@ -1,9 +1,10 @@
 ﻿using Microsoft.Identity.Web;
+using Google.Apis.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(); 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
