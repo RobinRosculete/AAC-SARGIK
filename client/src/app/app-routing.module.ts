@@ -6,12 +6,13 @@ import { authGuardGuard } from './services/auth/auth-guard.guard';
 import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
   {
-    path: 'keyboard',
+    path: '',
     component: KeyboardComponent,
     canActivate: [authGuardGuard],
   },
+
   {
     path: 'gallery',
     component: GalleryComponent,
