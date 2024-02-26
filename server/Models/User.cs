@@ -1,11 +1,8 @@
 ﻿using System;
-namespace server.Models
+namespace server.Models;
+public class User
 {
-	public class User
-	{
-		public User()
-		{
-		}
-	}
+    public required string UserId { get; set; }
+
 }
 
