@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { isPlatform } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/environments/environment.development';
 
 GoogleAuth.initialize({
@@ -17,7 +18,7 @@ GoogleAuth.initialize({
 export class LoginComponent {
   user: any;
 
-  constructor() {
+  constructor(protected authService: AuthService) {
     if (isPlatform('capacitor')) this.initializeApp();
   }
 
@@ -29,7 +30,17 @@ export class LoginComponent {
   async googleSignIn() {
     try {
       this.user = await GoogleAuth.signIn();
-      console.log(this.user);
+      console.log(this.user); // Save token to local storage
+      if (
+        this.user &&
+        this.user.authentication &&
+        this.user.authentication.accessToken
+      ) {
+        localStorage.setItem(
+          this.authService.tokenKey,
+          this.user.authentication.accessToken
+        );
+      }
     } catch (error) {
       console.error(error);
     }
@@ -49,6 +60,7 @@ export class LoginComponent {
     try {
       await GoogleAuth.signOut();
       this.user = null;
+      localStorage.removeItem(this.authService.tokenKey);
     } catch (error) {
       console.error(error);
     }

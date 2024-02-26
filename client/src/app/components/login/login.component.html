@@ -4,7 +4,7 @@
     expand="block"
     (click)="googleSignIn()"
     color="danger"
-    *ngIf="!user"
+    *ngIf="!authService.isAuthenticated()"
   >
     <ion-icon slot="start" name="logo-google"></ion-icon>
     LogIn with Google
@@ -14,7 +14,7 @@
     expand="block"
     (click)="googleSignOut()"
     color="danger"
-    *ngIf="user"
+    *ngIf="authService.isAuthenticated()"
   >
     <ion-icon slot="start" name="logo-google"></ion-icon>
     SignOut
