@@ -14,7 +14,7 @@ namespace server.Controllers;
         public void Post([FromBody]string value)
         {
 
-        }              
+        }                                    
 
         
     }

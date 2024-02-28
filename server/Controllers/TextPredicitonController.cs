@@ -31,7 +31,7 @@ namespace server.Controllers;
             {
                 Model = Model.ChatGPTTurbo,
                 Temperature = 0.1,
-                MaxTokens = 5,
+                MaxTokens = 1,
                 Messages = new ChatMessage[]
                 {
                 new ChatMessage(ChatMessageRole.User, $"Compose exactly the next part of your message: {query.text}"),
