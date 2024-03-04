@@ -17,12 +17,9 @@ GoogleAuth.initialize({
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  user: any;
-
   constructor(private authService: AuthService) {}
 
   async googleSignIn() {
-    this.user = await this.authService.googleSignIn();
-    console.log(this.user);
+    await this.authService.googleSignIn();
   }
 }
