@@ -12,10 +12,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AacSargikDbContext>(optionsBuilder =>
 optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
 serverVersion));
 
+// Allowing all Origins to acces API for development
+// Change in production environment for security reasons.
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddCors(options =>

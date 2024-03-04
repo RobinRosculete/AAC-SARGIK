@@ -1,4 +1,5 @@
 ﻿using System;
+//DTO used to create object to store Login Information from Client sides Google Login
 namespace server.DTOs;
 	public class LoginDTO
 	{

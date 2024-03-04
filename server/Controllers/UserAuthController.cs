@@ -1,18 +1,17 @@
 ﻿
+//Controller Class to manage User Authenthification (Only using Google Login)
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.DTOs;
 using server.Models;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+namespace server.Controllers;
 
-namespace server.Controllers
-{
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -26,20 +25,24 @@ namespace server.Controllers
             _configuration = configuration;
         }
 
+        // API to store new Users in DB and return JWT token 
         [HttpPost("[action]")]
         public async Task<IActionResult> LoginWithGoogle([FromBody] LoginDTO userdata)
         {
+            
             if (userdata == null)
             {
                 return BadRequest("Invalid user data.");
             }
 
             try
-            {
+            {   //Checking if user already exists in the database based on Google ID
                 var alreadySavedData = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == userdata.googleId);
 
+                
                 if (alreadySavedData != null)
                 {
+                    //If the user already exists in the database we return requierd user data and generated JWT Token
                     return Ok(new
                     {
                         id = alreadySavedData.Id,
@@ -52,6 +55,7 @@ namespace server.Controllers
                     });
                 }
 
+                // If new user, we create a new user with requierd data
                 var newUser = new User
                 {
                     UserGoogleId = userdata.googleId,
@@ -61,9 +65,11 @@ namespace server.Controllers
                     Email = userdata.EmailAddress,
                 };
 
+                // Storing new user in database
                 await _db.Users.AddAsync(newUser);
                 await _db.SaveChangesAsync();
 
+                //Return new user information and JWT token
                 return Ok(new
                 {
                     id = newUser.Id,
@@ -82,6 +88,7 @@ namespace server.Controllers
         }
 
 
+ // Function to generate JWT token to be returned for user session.
         private string GenerateJwtToken(User user)
         {
             var encryptionKey = _configuration["AppSettings:EncryptionKey"];
@@ -106,4 +113,4 @@ namespace server.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-}
+
