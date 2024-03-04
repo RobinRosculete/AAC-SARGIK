@@ -20,10 +20,12 @@ if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("AllowSpecificOrigins",
-            builder => builder.WithOrigins("https://localhost:7239")
-                             .AllowAnyHeader()
-                             .AllowAnyMethod());
+        options.AddPolicy("AllowAll", builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
     });
 }
 
