@@ -32,16 +32,19 @@ export class AuthService {
     });
   }
 
+  //Function to check if token is stored in local storage
   isAuthenticated(): boolean {
     return this.getToken() !== null;
   }
 
+  //Function to return token if stored in local storage
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
+  //Function Used to make http request to the server to login and retrieve JWT token
   login(item: UserModel): Observable<UserLoginResponse> {
-    var url = environment.SERVER_URL + '/api/User/LoginWithGoogle'; //Change path after setting up backend
+    var url = environment.SERVER_URL + '/api/User/LoginWithGoogle';
     return this.http.post<UserLoginResponse>(url, item);
   }
 
@@ -50,10 +53,12 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  //Method used to SingIn users with google
   async googleSignIn() {
     try {
       const user = await GoogleAuth.signIn();
       if (user && user.authentication && user.authentication.accessToken) {
+        //if successful login create a new user model to send to API server
         this.userModel = {
           googleId: user.id,
           EmailAddress: user.email,
@@ -61,13 +66,13 @@ export class AuthService {
           LastName: user.familyName,
           PictureUrl: user.imageUrl,
         };
+        //Calling login method to send data to API server
         this.login(this.userModel).subscribe((response: UserLoginResponse) => {
-          this.userResponse = response;
-          localStorage.setItem(this.tokenKey, response.token);
+          this.userResponse = response; //Return user successfully authenticated data
+          localStorage.setItem(this.tokenKey, response.token); //Store the token in local storage from server
           this.router.navigate(['/']);
         });
-
-        return user;
+        return 'Successfully Singed in with Googe!';
       }
     } catch (error) {
       console.error(error);

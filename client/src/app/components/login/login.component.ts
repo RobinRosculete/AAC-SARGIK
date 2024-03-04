@@ -19,6 +19,7 @@ GoogleAuth.initialize({
 export class LoginComponent {
   constructor(private authService: AuthService) {}
 
+  // method used to call google Sing In service on button click
   async googleSignIn() {
     await this.authService.googleSignIn();
   }
