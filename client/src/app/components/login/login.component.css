@@ -18,18 +18,11 @@ ion-card {
   box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.1);
 }
 
-/* Style for the logo */
-.logo {
-  width: 20vw;
-  height: 20vw;
-  margin-bottom: 5vw;
-}
-
 /* Style for the title */
 ion-title {
   font-size: 4vw;
   font-weight: bold;
-  color: #333;
+  color: #000000;
 }
 
 /* Style for the content area */
@@ -58,9 +51,8 @@ ion-icon {
   }
 
   .logo {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 30px;
+    width: 500px;
+    height: 200px;
   }
 
   ion-title {
