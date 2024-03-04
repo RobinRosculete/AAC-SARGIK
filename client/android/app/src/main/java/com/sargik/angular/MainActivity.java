@@ -1,5 +1,5 @@
 package com.sargik.angular;
-
+import com.ahm.capacitor.camera.preview.CameraPreview;
 import android.os.Bundle; 
 import com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth;
 import com.getcapacitor.BridgeActivity;
@@ -11,5 +11,6 @@ public class MainActivity extends BridgeActivity {
         this.registerPlugin(GoogleAuth.class);
 
         super.onCreate(savedInstanceState);
+        add(CameraPreview.class);
     }
 }

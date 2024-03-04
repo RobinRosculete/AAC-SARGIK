@@ -1,29 +1,27 @@
-<div class="buttons-container">
-  <button #openModalBtn class="open-modal">Visual Scene Display</button>
-</div>
-<div #modal class="modal" [ngClass]="{ 'mobile-modal': isMobile }">
-  <div class="modal-content">
-    <div class="webcam-and-captured-container">
-      <div *ngIf="!imageSrc" class="webcam-container">
-        <video #videoElement autoplay></video>
-      </div>
-      <div *ngIf="imageSrc" class="captured-image-container">
-        <img [src]="imageSrc" class="captured-image" />
-      </div>
-      <div class="buttons-container">
-        <button
-          (click)="captureImage()"
-          *ngIf="!imageSrc"
-          class="capture-button"
-        >
+<button id="open-modal" expand="block">Open Modal</button>
+<ion-modal
+  trigger="open-modal"
+  (willDismiss)="onWillDismiss($event)"
+  (ionModalDidPresent)="startCamera()"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Visual Scene Display</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <div class="camera-container">
+      <div id="cameraPreview" class="cameraPreview"></div>
+      <div class="camera-controls">
+        <button (click)="captureImage()" expand="block" id="capture">
           Capture
         </button>
-        <button (click)="retakeImage()" *ngIf="imageSrc" class="retake-button">
-          Retake Photo
-        </button>
-        <button class="upload-button">Upload</button>
-        <button #closeModalBtn class="close-modal">Close</button>
+        <button (click)="flipCamera()" expand="block" id="flip">Flip</button>
       </div>
     </div>
-  </div>
-</div>
+    <ion-img [src]="image" *ngIf="image && !cameraActive"></ion-img>
+  </ng-template>
+</ion-modal>
