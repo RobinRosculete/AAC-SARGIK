@@ -1,6 +1,25 @@
-<h1>
-  gallery
-  <div class="buttons-container">
-    <button mat-flat-button [routerLink]="['/']">Menu</button>
-  </div>
-</h1>
+<div style="min-height: 100vh; overflow-y: auto">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Gallery</ion-title>
+      <!--ion-button routerLink="/" fill="clear">Home</ion-button-->
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="3">
+        <ion-img src="../assets/images/GalleryTestImages/1.jpg"></ion-img>
+      </ion-col>
+      <ion-col size="12" size-sm="3">
+        <ion-img src="../assets/images/GalleryTestImages/2.jpg"></ion-img>
+      </ion-col>
+
+      <ion-col size="12" size-sm="3">
+        <ion-img src="../assets/images/GalleryTestImages/3.jpg"></ion-img>
+      </ion-col>
+      <ion-col size="12" size-sm="3">
+        <ion-img src="../assets/images/GalleryTestImages/4.jpg"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
-import {ImageService} from './image/image.service';
-//import { Router } from '@angular/router';
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.css']
+  styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  //title = 'Gallery';
-  //constructor(private imageService: ImageService){}  
- 
+  images: number[] = [1, 2, 3, 4, 5];
+  constructor() {}
+  ngOnInit(): void {
+    setTimeout(() => {
+      // Load images after a small delay to allow container to calculate its height
+      this.images = [1, 2, 3, 4, 5];
+    }, 100);
+  }
 }

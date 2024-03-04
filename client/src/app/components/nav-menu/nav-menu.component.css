@@ -23,6 +23,30 @@ h1 {
   font-weight: bold;
 }
 
+/* Style for the section containing the buttons */
+section {
+  display: flex;
+  justify-content: center; /* Center the button container */
+}
+
+.icon-container {
+  display: flex; /* Allow buttons to sit side-by-side */
+  flex-wrap: wrap; /* Wrap buttons if they don't fit in a line */
+  justify-content: center; /* Center the buttons within their row*/
+}
+
+/* Shift the middle button to the left and add space on the right */
+.icon-container ion-button:nth-child(1) {
+  margin-left: -200px; /* Adjust the negative value to shift left */
+  margin-right: 30px; /* Adjust to add space on the right */
+}
+
+/* Styling for individual buttons */
+ion-button {
+  margin: 0 15px 15px 0; /* Add space between buttons horizontally and vertically */
+}
+
+/* Align the profile button to the top and add margin */
 .profile {
   align-self: flex-start;
   margin: 30px;
