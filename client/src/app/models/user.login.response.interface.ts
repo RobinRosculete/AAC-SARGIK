@@ -1,6 +1,6 @@
 //Model to store the returned User Data after successful login in the backend
 export interface UserLoginResponse {
-  UserId: number;
+  Id: number;
   message: string;
   FirstName: string;
   LastName: string;

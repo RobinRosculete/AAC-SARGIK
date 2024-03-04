@@ -7,7 +7,7 @@ public partial class Image
 {
     public int ImageId { get; set; }
 
-    public int UserId { get; set; }
+    public int Id { get; set; }
 
     public string ImageUri { get; set; } = null!;
 
@@ -17,5 +17,5 @@ public partial class Image
 
     public virtual ICollection<BoundingBox> BoundingBoxes { get; set; } = new List<BoundingBox>();
 
-    public virtual User User { get; set; } = null!;
+    public virtual User IdNavigation { get; set; } = null!;
 }

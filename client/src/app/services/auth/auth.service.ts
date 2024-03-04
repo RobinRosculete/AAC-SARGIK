@@ -7,12 +7,16 @@ import { User } from '@codetrix-studio/capacitor-google-auth';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Router } from '@angular/router';
 import { isPlatform } from '@ionic/angular';
+import { UserModel } from 'src/app/models/user.interface';
+import { UserLoginResponse } from 'src/app/models/user.login.response.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private tokenKey: string = 'token';
+  private userModel!: UserModel;
+  private userResponse!: UserLoginResponse;
 
   constructor(protected http: HttpClient, private router: Router) {
     if (isPlatform('capacitor')) {
@@ -36,9 +40,9 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
-  login(item: User): Observable<User> {
-    var url = environment.SERVER_URL + 'api/User/LoginWithGoogle'; //Change path after setting up backend
-    return this.http.post<User>(url, item);
+  login(item: UserModel): Observable<UserLoginResponse> {
+    var url = environment.SERVER_URL + '/api/User/LoginWithGoogle'; //Change path after setting up backend
+    return this.http.post<UserLoginResponse>(url, item);
   }
 
   signOut(): void {
@@ -49,10 +53,20 @@ export class AuthService {
   async googleSignIn() {
     try {
       const user = await GoogleAuth.signIn();
-
       if (user && user.authentication && user.authentication.accessToken) {
-        localStorage.setItem(this.tokenKey, user.authentication.accessToken);
-        this.router.navigate(['/']);
+        this.userModel = {
+          googleId: user.id,
+          EmailAddress: user.email,
+          FirstName: user.givenName,
+          LastName: user.familyName,
+          PictureUrl: user.imageUrl,
+        };
+        this.login(this.userModel).subscribe((response: UserLoginResponse) => {
+          this.userResponse = response;
+          localStorage.setItem(this.tokenKey, response.token);
+          this.router.navigate(['/']);
+        });
+
         return user;
       }
     } catch (error) {

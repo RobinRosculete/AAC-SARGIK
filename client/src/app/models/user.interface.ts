@@ -1,7 +1,7 @@
-export interface User {
-  UserId: number;
+export interface UserModel {
+  googleId: string;
   FirstName: string;
   LastName: string;
-  Email: string;
-  ProfilePictureUri: string;
+  EmailAddress: string;
+  PictureUrl: string;
 }

@@ -18,7 +18,7 @@ public partial class AacSargikDbContext : DbContext
     public virtual DbSet<BoundingBox> BoundingBoxes { get; set; }
 
     public virtual DbSet<Image> Images { get; set; }
-   
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,7 +36,6 @@ public partial class AacSargikDbContext : DbContext
 
         optionsBuilder.UseMySql(connectionString, serverVersion);
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,33 +76,31 @@ public partial class AacSargikDbContext : DbContext
 
             entity.ToTable("images");
 
-            entity.HasIndex(e => e.UserId, "user_id");
+            entity.HasIndex(e => e.Id, "id");
 
             entity.Property(e => e.ImageId).HasColumnName("image_id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ImageHeight).HasColumnName("image_height");
             entity.Property(e => e.ImageUri)
                 .HasColumnType("text")
                 .HasColumnName("image_uri");
             entity.Property(e => e.ImageWidth).HasColumnName("image_width");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Images)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Images)
+                .HasForeignKey(d => d.Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("images_ibfk_1");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("users");
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
-                .HasColumnName("user_id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email).HasColumnName("email");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(255)
@@ -114,6 +111,9 @@ public partial class AacSargikDbContext : DbContext
             entity.Property(e => e.ProfilePictureUri)
                 .HasColumnType("text")
                 .HasColumnName("profile_picture_uri");
+            entity.Property(e => e.UserGoogleId)
+                .HasMaxLength(255)
+                .HasColumnName("user_google_id");
         });
 
         OnModelCreatingPartial(modelBuilder);

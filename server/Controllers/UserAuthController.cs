@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.DTOs;
@@ -35,13 +36,13 @@ namespace server.Controllers
 
             try
             {
-                var alreadySavedData = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userdata.UserId);
+                var alreadySavedData = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == userdata.googleId);
 
                 if (alreadySavedData != null)
                 {
                     return Ok(new
                     {
-                        id = alreadySavedData.UserId,
+                        id = alreadySavedData.Id,
                         message = "User data has already been saved",
                         token = GenerateJwtToken(alreadySavedData),
                         expiration = DateTime.UtcNow.AddYears(1),
@@ -53,7 +54,7 @@ namespace server.Controllers
 
                 var newUser = new User
                 {
-                    UserId = userdata.UserId,
+                    UserGoogleId = userdata.googleId,
                     FirstName = userdata.FirstName,
                     LastName = userdata.LastName,
                     ProfilePictureUri = userdata.PictureUrl,
@@ -65,7 +66,7 @@ namespace server.Controllers
 
                 return Ok(new
                 {
-                    id = newUser.UserId,
+                    id = newUser.Id,
                     message = "User login successful",
                     username = newUser.FirstName,
                     pictureUrl = newUser.ProfilePictureUri,
@@ -88,7 +89,7 @@ namespace server.Controllers
             {
         new Claim(JwtRegisteredClaimNames.Sub, user.FirstName),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.UniqueName, user.UserId.ToString()) // Convert UserId to string
+        new Claim(JwtRegisteredClaimNames.UniqueName, user.UserGoogleId) // Convert UserId to string
     };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Token");
