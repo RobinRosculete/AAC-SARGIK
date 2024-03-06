@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CameraPreview, CameraPreviewOptions,CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
@@ -17,6 +17,16 @@ export class VsdComponent {
   public photoCaptured: boolean = false;
 
   constructor() {}
+
+  ngAfterViewInit(): void {
+
+    this.openModal();
+  }
+  
+  openModal() {
+    this.modal.present()
+  }
+
 
   public startCamera(): void {
     const cameraPreviewOptions: CameraPreviewOptions = {
@@ -79,6 +89,8 @@ export class VsdComponent {
       });
 
       this.image = image.webPath ?? null; 
+      this.photoCaptured = true;
+      this.stopCamera();
 
     } catch (error) {
       console.error(error);
