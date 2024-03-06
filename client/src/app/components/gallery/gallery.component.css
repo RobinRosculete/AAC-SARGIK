@@ -1,5 +1,18 @@
+
 ion-img {
+  width:100%;
+  height:100%;
   object-fit: cover; /* Maintain aspect ratio and cover the entire space */
   border: solid 1px #fff;
   size: 6;
+}
+ion-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:10px;
+  text-align:center;
+}
+p{
+  margin-top:5px;
 }
