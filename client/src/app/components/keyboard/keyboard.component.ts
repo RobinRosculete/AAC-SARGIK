@@ -3,6 +3,7 @@ import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
+
 // KeyboardComponent
 @Component({
   selector: 'app-keyboard',
