@@ -10,13 +10,11 @@ const routes: Routes = [
   {
     path: '',
     component: KeyboardComponent,
-    canActivate: [authGuardGuard],
   },
 
   {
     path: 'gallery',
     component: GalleryComponent,
-    canActivate: [authGuardGuard],
   },
 ];
 
