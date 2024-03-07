@@ -1,0 +1,71 @@
+
+button {
+  margin-right: 20px;
+  font-size: 18px;
+  max-width: 300px;
+  max-height: 100px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border: 2px solid #61c6d1;
+  border-radius: 25px;
+  background-color: #61c6d1;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #61c6d1;
+  transform: scale(1.05);
+}
+.camera-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+.cameraPreview {
+  display: flex; 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.camera-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+#capture
+{
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 25px);
+  width: 50px;
+  height: 50px;
+}
+#flip{
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% + 125px);
+  width: 50px;
+  height: 50px;
+
+}
+#gallery{
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 175px);
+  width: 50px;
+  height: 50px;
+}
+.button_color {
+  --background: #61c6d1; /* Button background color */
+  --background-hover: #ffffff; /* Color on hover */
+}

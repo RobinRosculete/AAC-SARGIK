@@ -1,5 +1,11 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { VsdComponent } from '../vsd/vsd.component';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogConfig,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navmenu',
