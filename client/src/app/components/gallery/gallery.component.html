@@ -1,25 +1,23 @@
-<div style="min-height: 100vh; overflow-y: auto">
+<div style="height: 500vh; overflow-y: scroll">
   <ion-header>
     <ion-toolbar>
       <ion-title>Gallery</ion-title>
-      <!--ion-button routerLink="/" fill="clear">Home</ion-button-->
+      <!--ion-button rounterLink = "/" fill="clear">Home</ion-button-->
     </ion-toolbar>
   </ion-header>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-sm="3">
-        <ion-img src="../assets/images/GalleryTestImages/1.jpg"></ion-img>
-      </ion-col>
-      <ion-col size="12" size-sm="3">
-        <ion-img src="../assets/images/GalleryTestImages/2.jpg"></ion-img>
-      </ion-col>
+  <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-sm="4" *ngFor="let image of [1, 2, 3, 4, 5]">
+          <ion-img
+            src="assets/images/GalleryTestImages/{{ image }}.jpg"
+            alt="Image{{ image }}"
+          >
+          </ion-img>
 
-      <ion-col size="12" size-sm="3">
-        <ion-img src="../assets/images/GalleryTestImages/3.jpg"></ion-img>
-      </ion-col>
-      <ion-col size="12" size-sm="3">
-        <ion-img src="../assets/images/GalleryTestImages/4.jpg"></ion-img>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+          <p>caption{{ image }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
 </div>
