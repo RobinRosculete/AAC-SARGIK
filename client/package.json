@@ -22,6 +22,7 @@
     "@angular/router": "^17.2.2",
     "@azure/msal-angular": "^3.0.12",
     "@azure/msal-browser": "^3.9.0",
+    "@capacitor-community/camera-preview": "^5.0.0",
     "@capacitor-community/camera-preview": "github:capacitor-community/camera-preview",
     "@capacitor-community/text-to-speech": "^3.0.1",
     "@capacitor/android": "^5.6.0",

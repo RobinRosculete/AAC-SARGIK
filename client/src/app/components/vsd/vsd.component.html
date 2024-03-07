@@ -1,6 +1,5 @@
-<button id="open-modal" expand="block">Open Modal</button>
 <ion-modal
-  trigger="open-modal"
+  #modal
   (willDismiss)="onWillDismiss($event)"
   (ionModalDidPresent)="startCamera()"
 >

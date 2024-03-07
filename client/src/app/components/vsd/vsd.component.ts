@@ -23,6 +23,14 @@ export class VsdComponent {
 
   constructor() {}
 
+  ngAfterViewInit(): void {
+    this.openModal();
+  }
+
+  openModal() {
+    this.modal.present();
+  }
+
   public startCamera(): void {
     const cameraPreviewOptions: CameraPreviewOptions = {
       position: 'rear',
@@ -84,6 +92,8 @@ export class VsdComponent {
       });
 
       this.image = image.webPath ?? null;
+      this.photoCaptured = true;
+      this.stopCamera();
     } catch (error) {
       console.error(error);
     }
