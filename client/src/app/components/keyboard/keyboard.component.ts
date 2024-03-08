@@ -13,7 +13,7 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 export class KeyboardComponent {
   private keyboard!: Keyboard;
   protected userInput: string = '';
-  protected ghostText: string = '';
+  protected suggestions = new Map<number, string>();
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(
@@ -57,13 +57,13 @@ export class KeyboardComponent {
         ABC: [
           'a b c d e f g h i j {bksp}',
           'k l m n o p q r s {enter}',
-          '{shift} t u v w x y z , . {ABC_shift}',
+          '{ABC_shift} t u v w x y z , . {ABC_shift}',
           '{alt} {smileys} {space} {altright} {QWERTY}',
         ],
         ABC_shift: [
           'A B C D E F G H I J {bksp}',
           'K L M N O P Q R S {enter}',
-          '{shiftactivated} T U V W X Y Z , . {ABC_shiftactivated}',
+          '{ABC_shiftactivated} T U V W X Y Z , . {ABC_shiftactivated}',
           '{alt} {smileys} {space} {altright} {QWERTY}',
         ],
         alt: [
@@ -100,24 +100,24 @@ export class KeyboardComponent {
 
   clearInput() {
     this.userInput = '';
-    this.ghostText = '';
+    this.clearSuggestions();
     this.keyboard.setInput(''); // Clear the input on the keyboard
   }
   //Handles any press on keyboard
   onChange = (input: string) => {
     this.userInput = input;
-    this.updateGhostText();
+    this.updateSuggestions();
   };
   //Funciton to complete prediciton to update real text
   CompletePrediction() {
-    if (this.ghostText) {
+    //if (this.suggestions) {
       // Set input to ghost text
-      this.userInput = this.ghostText;
-      this.keyboard.setInput(this.ghostText);
-      this.ghostText = '';
-    } else {
-      console.log('No ghost text');
-    }
+      //this.userInput = this.suggestion;
+      //this.keyboard.setInput(this.suggestion);
+      //this.suggestion = '';
+    //} else {
+      //console.log('No ghost text');
+    //}
   }
   //Handles Key Commands
   onKeyPress = (button: string) => {
@@ -131,7 +131,7 @@ export class KeyboardComponent {
       this.CompletePrediction();
     }
     if (button.includes('{bksp}')) {
-      this.ghostText = '';
+      this.clearSuggestions();
     }
   };
   handleLayoutChange = (button: string) => {
@@ -174,17 +174,36 @@ export class KeyboardComponent {
     this.keyboard.setInput(event.target.value);
   };
 
-  updateGhostText() {
-    if (this.userInput) {
-      this.gpt.getData(this.userInput).subscribe(
+  updateSuggestions() {
+    let predIndex = 0;
+    let maxPredictions = 5;
+    let numberOfSuggestions = 0;
+
+    if (this.userInput.length != 0) {
+      this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-          this.ghostText = this.userInput + response?.predictions;
+
+          while(numberOfSuggestions < 3 && predIndex < maxPredictions){
+
+            if (!(this.suggestions.has(response.predictions[predIndex].text))){
+              this.suggestions.set(predIndex, response.predictions[predIndex].text);
+              numberOfSuggestions++;
+            }
+            predIndex++;
+          }
+          console.log(this.suggestions);
         },
         (error) => console.error('Error making text prediction', error)
       );
     } else {
-      this.ghostText = '';
-      this.keyboard.setOptions({ ghostText: '' });
+      this.clearSuggestions();
+      this.keyboard.setOptions({ suggestion: '' });
+    }
+  }
+
+  clearSuggestions() {
+    while (this.suggestions.size != 0 ){
+      this.suggestions.clear()
     }
   }
 }

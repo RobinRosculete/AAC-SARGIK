@@ -80,7 +80,17 @@ input::placeholder {
   position: absolute;
   margin-top: 45px;
   font-size: 32px;
-  margin-left: 151px;
+  margin-left: 138px;
   opacity: 0.5;
   color: #888;
+}
+
+ion-button.suggestion {
+  font-size: 50px;
+  margin: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  color: black;
+  --background: none;
+  --box-shadow: none;
 }

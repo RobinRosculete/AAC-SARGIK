@@ -1,5 +1,5 @@
 <!-- Display ghost text -->
-<div class="ghost-text">{{ ghostText }}</div>
+
 <button class="speaker" (click)="speakText()">
   <img src="../assets/images/speaker.png" alt="speaker logo" />
 </button>
@@ -24,5 +24,9 @@
     Clear
   </ion-button>
 
-  <div class="simple-keyboard"></div>
+  <div class="simple-keyboard">
+    <ion-button class="suggestion">{{ suggestions.get(2) }}</ion-button>
+    <ion-button class="suggestion">{{ suggestions.get(0) }}</ion-button>
+    <ion-button class="suggestion">{{ suggestions.get(1) }}</ion-button>
+  </div>
 </div>
