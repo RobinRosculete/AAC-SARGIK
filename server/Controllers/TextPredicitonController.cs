@@ -30,7 +30,7 @@ namespace server.Controllers;
         if (!(string.IsNullOrEmpty(query.text)))
         {
             // Creatin new OpenAiAPI object, requiers API KEY
-            OpenAIAPI api = new OpenAIAPI("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");
+            OpenAIAPI api = new OpenAIAPI();
 
             // Creating a chat completion of the input query (input text)
             var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
