@@ -1,5 +1,5 @@
 <!-- Display ghost text -->
-<div class="ghost-text">{{ ghostText }}</div>
+
 <button class="speaker" (click)="speakText()">
   <img src="../assets/images/speaker.png" alt="speaker logo" />
 </button>
@@ -17,12 +17,16 @@
     [value]="userInput"
   />
   <br />
-  <ion-button (click)="CompletePrediction()" size="large" type="submit">
+  <ion-button size="large" type="submit">
     Predict
   </ion-button>
   <ion-button (click)="clearInput()" size="large" type="submit">
     Clear
   </ion-button>
 
-  <div class="simple-keyboard"></div>
+  <div class="simple-keyboard">
+    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[2])">{{ suggestions[2] }}</ion-button>
+    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[0])" style="border-left: solid; border-right: solid;">{{ suggestions[0] }}</ion-button>
+    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[1])">{{ suggestions[1] }}</ion-button>
+  </div>
 </div>
