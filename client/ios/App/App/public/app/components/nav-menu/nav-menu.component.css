@@ -1,8 +1,8 @@
 /* Add styling for the header */
-header {
+nav {
   display: flex;
-  flex-direction: column; /* Display items vertically */
-  align-items: center; /* Center items horizontally */
+  justify-content: space-between;
+  align-items: center;
   padding: 10px;
 }
 
@@ -12,40 +12,42 @@ header {
   align-items: center;
 }
 
-img {
+.logo {
   max-width: 100px;
   margin-right: 10px; /* Adjust the margin as needed */
 }
 
 h1 {
-  font-size: 25px; /* Adjust the font size as needed */
+  font-size: 32px; /* Adjust the font size as needed */
   margin: 0; /* Remove default margin */
+  font-weight: bold;
 }
 
-/* Style the buttons container */
-.buttons-container {
+/* Style for the section containing the buttons */
+section {
   display: flex;
-  margin-top: 10px; /* Adjust the margin as needed */
+  justify-content: center; /* Center the button container */
 }
 
-/* Style the buttons */
-button {
-  margin-right: 20px;
-  font-size: 18px;
-  max-width: 300px;
-  max-height: 100px;
-  text-transform: uppercase;
-  padding: 12px 24px;
-  border: 2px solid #61c6d1;
-  border-radius: 25px;
-  background-color: #61c6d1;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+.icon-container {
+  display: flex; /* Allow buttons to sit side-by-side */
+  flex-wrap: wrap; /* Wrap buttons if they don't fit in a line */
+  justify-content: center; /* Center the buttons within their row*/
 }
 
-button:hover {
-  background-color: #ffffff;
-  color: #61c6d1;
-  transform: scale(1.05);
+/* Shift the middle button to the left and add space on the right */
+.icon-container ion-button:nth-child(1) {
+  margin-left: -200px; /* Adjust the negative value to shift left */
+  margin-right: 30px; /* Adjust to add space on the right */
+}
+
+/* Styling for individual buttons */
+ion-button {
+  margin: 0 15px 15px 0; /* Add space between buttons horizontally and vertically */
+}
+
+/* Align the profile button to the top and add margin */
+.profile {
+  align-self: flex-start;
+  margin: 30px;
 }

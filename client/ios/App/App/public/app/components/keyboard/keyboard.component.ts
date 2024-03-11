@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import Keyboard from 'simple-keyboard';
-import { TextPredictionApiService } from 'src/app/services/text-prediction-api.service';
-import {TypewiseAPIService} from '../../services/text_predict/typewise-api.service';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 // KeyboardComponent
 @Component({
@@ -11,12 +11,16 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
   styleUrls: ['./keyboard.component.css'],
 })
 export class KeyboardComponent {
-  keyboard!: Keyboard;
-  userInput: string = '';
-  ghostText: string = '';
+  private keyboard!: Keyboard;
+  protected userInput: string = '';
+  protected suggestions: string[] = [];
+  protected suggestionSet = new Set<string>();
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
-  constructor(private typewise:TypewiseAPIService){}
+  constructor(
+    private typewise: TypewiseAPIService,
+    private gpt: TextPredictionApiService
+  ) {}
 
   //Simple Function for text to speech
   speakText() {
@@ -31,20 +35,6 @@ export class KeyboardComponent {
       });
     };
     speak();
-  }
-  //Function Used to get API response for GPT Text prediction
-  CompletePrediction() {
-        let predSentence = this.ghostText.split(' ')
-        let prediction = predSentence[predSentence.length - 1];
-        const words = this.userInput.split(' ');
-        let joinWords;
-
-        if (words){
-          words[words.length - 1] = prediction;
-          joinWords = words.join(' ');
-          this.userInput = joinWords;
-          this.keyboard.setInput(this.userInput);
-        }
   }
 
   ngAfterViewInit(): void {
@@ -68,13 +58,13 @@ export class KeyboardComponent {
         ABC: [
           'a b c d e f g h i j {bksp}',
           'k l m n o p q r s {enter}',
-          '{shift} t u v w x y z , . {ABC_shift}',
+          '{ABC_shift} t u v w x y z , . {ABC_shift}',
           '{alt} {smileys} {space} {altright} {QWERTY}',
         ],
         ABC_shift: [
           'A B C D E F G H I J {bksp}',
           'K L M N O P Q R S {enter}',
-          '{shiftactivated} T U V W X Y Z , . {ABC_shiftactivated}',
+          '{ABC_shiftactivated} T U V W X Y Z , . {ABC_shiftactivated}',
           '{alt} {smileys} {space} {altright} {QWERTY}',
         ],
         alt: [
@@ -104,41 +94,29 @@ export class KeyboardComponent {
         '{space}': ' ',
         '{default}': 'ABC',
         '{back}': '⇦',
-        '{QWERTY}': 'QWERTY'
+        '{QWERTY}': 'QWERTY',
       },
     });
   }
 
+  clearInput() {
+    this.userInput = '';
+    this.clearSuggestions();
+    this.keyboard.setInput(''); // Clear the input on the keyboard
+  }
   //Handles any press on keyboard
   onChange = (input: string) => {
-      this.userInput = input;
-      this.updateGhostText();
-      /* const words = this.userInput.split(' ');
-      let lastWord = words[words.length - 1];
-
-      if (lastWord.length == 1){
-        this.typewise.getData(this.userInput).subscribe(
-          (response: any) => {
-            let prediction = response.predictions[0].text;
-            const words = this.userInput.split(' ');
-            let joinWords;
-    
-            if (words){
-              words[words.length - 1] = prediction;
-              joinWords = words.join(' ');
-              this.userInput = joinWords;
-              this.keyboard.setInput(this.userInput);
-            }
-    
-            console.log('API Response:', response);
-          },
-          (error) => {
-            console.error('Error making text prediction', error);
-          }
-        );
-      } */
+    this.userInput = input;
+    this.updateSuggestions();
   };
-
+  //Funciton to complete prediciton to update real text
+  CompletePrediction(suggestion: any) {
+    let words = this.userInput.split(' ');
+    words[words.length - 1] = suggestion;
+    this.userInput = words.join(' ');
+    this.keyboard.setInput(this.userInput);
+      //this.clearSuggestions;
+  }
   //Handles Key Commands
   onKeyPress = (button: string) => {
     /**
@@ -146,9 +124,6 @@ export class KeyboardComponent {
      */
     if (button.includes('{') && button.includes('}')) {
       this.handleLayoutChange(button);
-    }
-    if (button.includes('{enter}')) {
-      this.CompletePrediction();
     }
   };
   handleLayoutChange = (button: string) => {
@@ -178,8 +153,6 @@ export class KeyboardComponent {
         layoutName = currentLayout === 'ABC' ? 'ABC_shift' : 'ABC';
         break;
 
-      
-
       default:
         break;
     }
@@ -193,41 +166,44 @@ export class KeyboardComponent {
     this.keyboard.setInput(event.target.value);
   };
 
-  handleShift = () => {
-    let currentLayout = this.keyboard.options.layoutName;
-    let shiftToggle = currentLayout === 'default' ? 'shift' : 'default';
+  updateSuggestions() {
+    let predIndex = 0;
+    let suggestionIndex = 0;
+    let numberOfSuggestions = 0;
+    let maxPredictions = 5;
 
-    this.keyboard.setOptions({
-      layoutName: shiftToggle,
-    });
-  };
-
-  updateGhostText() {
-    const words = this.userInput.split(' ');
-    const lastWord = words[words.length - 1];
-
-    if (lastWord.length > 0) {
+    if (this.userInput.length != 0) {
       this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-          let prediction = response.predictions[0].text;
-          const words = this.userInput.split(' ');
-          let joinWords;
-  
-          if (words){
-            words[words.length - 1] = prediction;
-            joinWords = words.join(' ');
-            this.ghostText = joinWords;
+
+          while(numberOfSuggestions < 3 && predIndex < maxPredictions){
+
+            if (!this.suggestionSet.has(response.predictions[predIndex].text)){
+              this.suggestionSet.add(response.predictions[predIndex].text);
+              numberOfSuggestions++;
+            }
+            predIndex++;
+          }
+          
+          //this.suggestions = Array.from(this.suggestionSet);
+
+          for (let suggestion of this.suggestionSet){
+            this.suggestions[suggestionIndex] = suggestion;
+            suggestionIndex++;
           }
 
-          this.keyboard.setOptions({ ghostText: prediction }); // Set ghost text in simple-keyboard
+          this.suggestionSet.clear()
         },
-        (error) => {
-          console.error('Error making text prediction', error);
-        }
+        (error) => console.error('Error making text prediction', error)
       );
     } else {
-      this.ghostText = ''; // Clear ghost text when last word is longer than 1 character
-      this.keyboard.setOptions({ ghostText: '' }); // Clear ghost text in simple-keyboard
+      this.clearSuggestions();
+    }
+  }
+
+  clearSuggestions() {
+    for (let i = 0; i < this.suggestions.length; i++){
+      this.suggestions.pop();
     }
   }
 }

@@ -13,7 +13,8 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 export class KeyboardComponent {
   private keyboard!: Keyboard;
   protected userInput: string = '';
-  protected suggestions = new Map<number, string>();
+  protected suggestions: string[] = [];
+  protected suggestionSet = new Set<string>();
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(
@@ -109,15 +110,12 @@ export class KeyboardComponent {
     this.updateSuggestions();
   };
   //Funciton to complete prediciton to update real text
-  CompletePrediction() {
-    //if (this.suggestions) {
-      // Set input to ghost text
-      //this.userInput = this.suggestion;
-      //this.keyboard.setInput(this.suggestion);
-      //this.suggestion = '';
-    //} else {
-      //console.log('No ghost text');
-    //}
+  CompletePrediction(suggestion: any) {
+    let words = this.userInput.split(' ');
+    words[words.length - 1] = suggestion;
+    this.userInput = words.join(' ');
+    this.keyboard.setInput(this.userInput);
+      //this.clearSuggestions;
   }
   //Handles Key Commands
   onKeyPress = (button: string) => {
@@ -126,12 +124,6 @@ export class KeyboardComponent {
      */
     if (button.includes('{') && button.includes('}')) {
       this.handleLayoutChange(button);
-    }
-    if (button.includes('{enter}')) {
-      this.CompletePrediction();
-    }
-    if (button.includes('{bksp}')) {
-      this.clearSuggestions();
     }
   };
   handleLayoutChange = (button: string) => {
@@ -176,8 +168,9 @@ export class KeyboardComponent {
 
   updateSuggestions() {
     let predIndex = 0;
-    let maxPredictions = 5;
+    let suggestionIndex = 0;
     let numberOfSuggestions = 0;
+    let maxPredictions = 5;
 
     if (this.userInput.length != 0) {
       this.typewise.getData(this.userInput).subscribe(
@@ -185,25 +178,32 @@ export class KeyboardComponent {
 
           while(numberOfSuggestions < 3 && predIndex < maxPredictions){
 
-            if (!(this.suggestions.has(response.predictions[predIndex].text))){
-              this.suggestions.set(predIndex, response.predictions[predIndex].text);
+            if (!this.suggestionSet.has(response.predictions[predIndex].text)){
+              this.suggestionSet.add(response.predictions[predIndex].text);
               numberOfSuggestions++;
             }
             predIndex++;
           }
-          console.log(this.suggestions);
+          
+          //this.suggestions = Array.from(this.suggestionSet);
+
+          for (let suggestion of this.suggestionSet){
+            this.suggestions[suggestionIndex] = suggestion;
+            suggestionIndex++;
+          }
+
+          this.suggestionSet.clear()
         },
         (error) => console.error('Error making text prediction', error)
       );
     } else {
       this.clearSuggestions();
-      this.keyboard.setOptions({ suggestion: '' });
     }
   }
 
   clearSuggestions() {
-    while (this.suggestions.size != 0 ){
-      this.suggestions.clear()
+    for (let i = 0; i < this.suggestions.length; i++){
+      this.suggestions.pop();
     }
   }
 }

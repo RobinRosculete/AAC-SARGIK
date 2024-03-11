@@ -86,10 +86,11 @@ input::placeholder {
 }
 
 ion-button.suggestion {
-  font-size: 50px;
+  font-size: 45px;
+  width: 30%;
+  height: 75px;
   margin: 10px;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding: 0;
   color: black;
   --background: none;
   --box-shadow: none;

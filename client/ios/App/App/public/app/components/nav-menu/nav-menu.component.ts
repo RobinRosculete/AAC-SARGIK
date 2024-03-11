@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
-  selector: 'app-nav-menu',
+  selector: 'app-navmenu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  styleUrls: ['./nav-menu.component.css'],
 })
-export class NavMenuComponent {
+export class NavmenuComponent {
+  constructor(private authService: AuthService) {}
 
+  signOut() {
+    return this.authService.googleSignOut();
+  }
+  isLoggedIn() {
+    return this.authService.isAuthenticated();
+  }
 }
