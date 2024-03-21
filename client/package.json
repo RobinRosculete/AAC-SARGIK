@@ -22,7 +22,6 @@
     "@angular/router": "^17.2.2",
     "@azure/msal-angular": "^3.0.12",
     "@azure/msal-browser": "^3.9.0",
-    "@capacitor-community/camera-preview": "^5.0.0",
     "@capacitor-community/camera-preview": "github:capacitor-community/camera-preview",
     "@capacitor-community/text-to-speech": "^3.0.1",
     "@capacitor/android": "^5.6.0",
@@ -42,9 +41,9 @@
     "zone.js": "~0.14.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.1",
-    "@angular/cli": "~16.2.1",
-    "@angular/compiler-cli": "^16.2.0",
+    "@angular-devkit/build-angular": "^17.3.1",
+    "@angular/cli": "~17.3.1",
+    "@angular/compiler-cli": "^17.3.1",
     "@capacitor/assets": "^3.0.4",
     "@capacitor/cli": "^5.7.2",
     "@ionic/angular-toolkit": "latest",

@@ -56,7 +56,8 @@ export class AuthService {
   //Method used to SingIn users with google
   async googleSignIn() {
     try {
-      const user = await GoogleAuth.signIn();
+      const user = await GoogleAuth.signIn(); // BUG HERE pm
+      console.log('Out');
       if (user && user.authentication && user.authentication.accessToken) {
         //if successful login create a new user model to send to API server
         this.userModel = {
@@ -66,6 +67,7 @@ export class AuthService {
           LastName: user.familyName,
           PictureUrl: user.imageUrl,
         };
+        console.log('in');
         //Calling login method to send data to API server
         this.login(this.userModel).subscribe((response: UserLoginResponse) => {
           this.userResponse = response; //Return user successfully authenticated data
