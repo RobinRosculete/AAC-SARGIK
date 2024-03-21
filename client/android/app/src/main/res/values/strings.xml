@@ -4,4 +4,10 @@
     <string name="title_activity_main">AAC SARGIK</string>
     <string name="package_name">com.sargik.angular</string>
     <string name="custom_url_scheme">com.sargik.angular</string>
+
+
+    <!-- google auth -->
+    <string
+    name="server_client_id"
+  >836222128097-cvrthd4rfcs61r8efm6gpi59195gpvbf.apps.googleusercontent.com</string>
 </resources>

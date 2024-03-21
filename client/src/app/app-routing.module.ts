@@ -8,12 +8,11 @@ import { authGuardGuard } from './services/auth/auth-guard.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'vsd', component: VsdComponent, canActivate: [authGuardGuard] },
-  { path: '', component: KeyboardComponent, canActivate: [authGuardGuard] },
+  { path: 'vsd', component: VsdComponent },
+  { path: '', component: KeyboardComponent },
   {
     path: 'gallery',
     component: GalleryComponent,
-    canActivate: [authGuardGuard],
   },
 ];
 

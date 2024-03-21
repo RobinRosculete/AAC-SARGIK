@@ -14,9 +14,9 @@ const config: CapacitorConfig = {
   plugins: {
     GoogleAuth: {
       scopes: ['profile', 'email'],
-      clientId: environment.androidClientId,
+      clientId: environment.googleClientId,
       serverClientId: environment.googleClientId, // android -> strings.xml
-      androidClientId: environment.androidClientId, // android -> It doesn't matter if you don't need to use it
+      androidClientId: environment.googleClientId, // android -> It doesn't matter if you don't need to use it
     },
     CapacitorHttp: {
       enabled: true,
