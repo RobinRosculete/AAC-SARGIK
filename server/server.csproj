@@ -26,15 +26,18 @@
     </PackageReference>
 
     <PackageReference Include="Google.Apis.Auth" Version="1.67.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Models\" />
     <None Remove="DTO%27s\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="DTO%27s\" />
+    <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

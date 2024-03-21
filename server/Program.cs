@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using server.Models;
+using server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -16,6 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AacSargikDbContext>(optionsBuilder =>
 optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
 serverVersion));
+
+builder.Services.AddSingleton<BlobFileService>();
 
 // Allowing all Origins to acces API for development
 // Change in production environment for security reasons.
