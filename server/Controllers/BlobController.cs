@@ -1,6 +1,7 @@
 ﻿
 //Controler used to manage upload, delete and update of images to Azure Blob Stroage 
 
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
@@ -30,26 +31,44 @@ namespace server.Controllers
             return Ok(result);
         }
 
-
-        //API to upload Images to Blob Storage
-        // POST api/values
-        [HttpPost]
-        public async Task <IActionResult> UploadImage(IFormFile file)
+        [HttpGet("users/{googleUserId}/images")]
+        public async Task<IActionResult> GetUserImages(string googleUserId)
         {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
 
-            var googleUserId = Request.Headers["GoogleUserId"].FirstOrDefault();
-
-            if (string.IsNullOrEmpty(googleUserId))
-            {
-                return BadRequest("GoogleUserId header is missing.");
-            }
-            // Get the user ID from the database corresponding to the Google user ID
-            var user = await _db .Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
+            var imageUris = await _db.Images
+                .Where(i => i.Id == user.Id)
+                .Select(i => i.ImageUri)
+                .ToListAsync();
+
+            return Ok(imageUris);
+        }
+
+        // API to upload Images to Blob Storage
+        // POST api/values
+        [HttpPost("users/{googleUserId}/upload-image")]
+        public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId)
+        {
+          
+            Console.WriteLine(googleUserId);
+
+            if (string.IsNullOrEmpty(googleUserId))
+            {
+                return BadRequest("GoogleUserId claim is missing.");
+            }
+
+            // Get the user ID from the database corresponding to the Google user ID
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+           
             // Upload the image to Blob Storage
             var result = await _blobFileService.UploadAsync(file);
 
@@ -58,15 +77,15 @@ namespace server.Controllers
             {
                 Id = user.Id,
                 ImageUri = result.Blob.Uri,
-                ImageWidth = null, 
+                ImageWidth = null,
                 ImageHeight = null
             };
             _db.Images.Add(image);
             await _db.SaveChangesAsync();
 
             return Ok(result);
-
         }
+
 
         //Api to Download Images From Blob Storage
         // GET api/values/5
