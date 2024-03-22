@@ -3,6 +3,7 @@ using System.Drawing;
 using Azure;
 using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Sas;
 using server.DTOs;
 
 namespace server.Services;
@@ -165,6 +166,22 @@ public class BlobFileService
         string fileExtension = Path.GetExtension(file.FileName).ToLower();
 
         return allowedExtensions.Contains(fileExtension);
+    }
+
+    public string GenerateSasToken(string uri)
+    {
+       
+        var sasBuilder = new BlobSasBuilder()
+        {
+            BlobContainerName = _containerName,
+            Resource = "b",
+            StartsOn = DateTimeOffset.UtcNow,
+            ExpiresOn = DateTimeOffset.UtcNow.AddHours(1), // Set the expiration time as needed
+        };
+        sasBuilder.SetPermissions(BlobSasPermissions.Read);
+
+        var sasToken = sasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential(_storageAccount, _key));
+        return $"{uri}?{sasToken}";
     }
 
 }

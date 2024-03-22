@@ -20,7 +20,7 @@ export class GalleryComponent {
     setTimeout(() => {
       this.blobAPI.getImageURIs(this.googleID).subscribe(
         (imageURIs: string[]) => {
-          this.images = imageURIs.map((imageUrl) => imageUrl + '');
+          this.images = imageURIs;
         },
         (error) => {
           console.error('Error fetching image URIs:', error);

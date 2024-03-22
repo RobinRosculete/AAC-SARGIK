@@ -10,7 +10,7 @@ using server.Services;
 
 namespace server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class BlobController : Controller
     {
@@ -48,7 +48,14 @@ namespace server.Controllers
                 .Select(i => i.ImageUri)
                 .ToListAsync();
 
-            return Ok(imageUris);
+            var imageUrlsWithSasToken = new List<string>();
+            foreach (var uri in imageUris)
+            {
+                var sasToken = _blobFileService.GenerateSasToken(uri);
+                imageUrlsWithSasToken.Add(sasToken);
+            }
+
+            return Ok(imageUrlsWithSasToken);
         }
 
 
