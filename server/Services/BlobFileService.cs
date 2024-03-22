@@ -65,7 +65,7 @@ public class BlobFileService
 
     }
 
-    public async Task<BlobResponseDTO> UploadAsync(IFormFile blob)
+    public async Task<BlobResponseDTO> UploadAsync(IFormFile blob, string googleUserId)
     {
         BlobResponseDTO response = new();
         try
@@ -77,7 +77,8 @@ public class BlobFileService
                 return response;
             }
 
-            BlobClient client = _filesContainer.GetBlobClient(blob.FileName);
+            string directoryName = $"user_{googleUserId}/{blob.FileName}";
+            BlobClient client = _filesContainer.GetBlobClient(directoryName);
 
             await using (Stream? data = blob.OpenReadStream())
             {

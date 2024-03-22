@@ -2,6 +2,7 @@
 //Controler used to manage upload, delete and update of images to Azure Blob Stroage 
 
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
@@ -9,6 +10,7 @@ using server.Services;
 
 namespace server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class BlobController : Controller
     {
@@ -49,12 +51,14 @@ namespace server.Controllers
             return Ok(imageUris);
         }
 
+
         // API to upload Images to Blob Storage
         // POST api/values
         [HttpPost("users/{googleUserId}/upload-image")]
         public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId)
         {
-          
+
+
             Console.WriteLine(googleUserId);
 
             if (string.IsNullOrEmpty(googleUserId))
@@ -70,7 +74,7 @@ namespace server.Controllers
             }
            
             // Upload the image to Blob Storage
-            var result = await _blobFileService.UploadAsync(file);
+            var result = await _blobFileService.UploadAsync(file,googleUserId);
 
             // Associate the image with the user
             var image = new Image

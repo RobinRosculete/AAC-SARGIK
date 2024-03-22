@@ -6,8 +6,6 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
 using server.DTOs;
-
-
 namespace server.Controllers;
 
 
