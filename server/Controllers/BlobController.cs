@@ -2,6 +2,8 @@
 //Controler used to manage upload, delete and update of images to Azure Blob Stroage 
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using server.Models;
 using server.Services;
 
 namespace server.Controllers
@@ -10,9 +12,12 @@ namespace server.Controllers
     public class BlobController : Controller
     {
         private readonly BlobFileService _blobFileService;
-        public BlobController(BlobFileService blobFileService)
+        private readonly AacSargikDbContext _db;
+
+        public BlobController(BlobFileService blobFileService, AacSargikDbContext db)
         {
             _blobFileService = blobFileService;
+            _db = db;
 
         }
 
@@ -31,7 +36,34 @@ namespace server.Controllers
         [HttpPost]
         public async Task <IActionResult> UploadImage(IFormFile file)
         {
+
+            var googleUserId = Request.Headers["GoogleUserId"].FirstOrDefault();
+
+            if (string.IsNullOrEmpty(googleUserId))
+            {
+                return BadRequest("GoogleUserId header is missing.");
+            }
+            // Get the user ID from the database corresponding to the Google user ID
+            var user = await _db .Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Upload the image to Blob Storage
             var result = await _blobFileService.UploadAsync(file);
+
+            // Associate the image with the user
+            var image = new Image
+            {
+                Id = user.Id,
+                ImageUri = result.Blob.Uri,
+                ImageWidth = null, 
+                ImageHeight = null
+            };
+            _db.Images.Add(image);
+            await _db.SaveChangesAsync();
+
             return Ok(result);
 
         }

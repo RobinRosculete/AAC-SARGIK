@@ -1,5 +1,6 @@
 // API to manage text prediction and text genration using GPT API
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI_API;
 using OpenAI_API.Chat;
@@ -10,6 +11,8 @@ using server.DTOs;
 namespace server.Controllers;
 
 
+
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TextPredictionController : ControllerBase

@@ -14,7 +14,6 @@ import { UserLoginResponse } from 'src/app/models/user.login.response.interface'
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey: string = 'token';
   private userModel!: UserModel;
   private userResponse!: UserLoginResponse;
 
@@ -27,7 +26,7 @@ export class AuthService {
 
   //Function to return token if stored in local storage
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem('token');
   }
 
   //Function Used to make http request to the server to login and retrieve JWT token
@@ -59,7 +58,7 @@ export class AuthService {
         //Calling login method to send data to API server
         this.login(this.userModel).subscribe((response: UserLoginResponse) => {
           this.userResponse = response; //Return user successfully authenticated data
-          localStorage.setItem(this.tokenKey, response.token); //Store the token in local storage from server
+          localStorage.setItem('token', response.token); //Store the token in local storage from server
           this.router.navigate(['/']);
         });
         return 'Successfully Singed in with Googe!';

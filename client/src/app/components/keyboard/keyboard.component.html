@@ -17,16 +17,31 @@
     [value]="userInput"
   />
   <br />
-  <ion-button size="large" type="submit">
-    Predict
-  </ion-button>
+  <ion-button size="large" type="submit"> Predict </ion-button>
   <ion-button (click)="clearInput()" size="large" type="submit">
     Clear
   </ion-button>
 
   <div class="simple-keyboard">
-    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[2])">{{ suggestions[2] }}</ion-button>
-    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[0])" style="border-left: solid; border-right: solid;">{{ suggestions[0] }}</ion-button>
-    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[1])">{{ suggestions[1] }}</ion-button>
+    <ion-button
+      class="suggestion"
+      (click)="CompletePrediction(suggestions[2])"
+      >{{ suggestions[2] }}</ion-button
+    >
+    <ion-button
+      class="suggestion"
+      (click)="CompletePrediction(suggestions[0])"
+      style="border-left: solid; border-right: solid"
+      >{{ suggestions[0] }}</ion-button
+    >
+    <ion-button
+      class="suggestion"
+      (click)="CompletePrediction(suggestions[1])"
+      >{{ suggestions[1] }}</ion-button
+    >
   </div>
+  <!-- Additional input field and button for testing getPred method -->
+  <br />
+
+  <ion-button (click)="getPred('robi')">Get Prediction</ion-button>
 </div>

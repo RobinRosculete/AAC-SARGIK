@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavmenuComponent } from './components/nav-menu/nav-menu.component';
@@ -12,6 +12,7 @@ import { LoginComponent } from './components/login/login.component';
 import { IonicModule } from '@ionic/angular';
 import { VsdComponent } from './components/vsd/vsd.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,11 +28,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    IonicModule ,
+    IonicModule,
     IonicModule.forRoot({}),
     MatDialogModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

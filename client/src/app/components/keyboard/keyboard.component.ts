@@ -3,6 +3,7 @@ import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import { Observable } from 'rxjs';
 
 // KeyboardComponent
 @Component({
@@ -116,7 +117,7 @@ export class KeyboardComponent {
     words[words.length - 1] = suggestion;
     this.userInput = words.join(' ');
     this.keyboard.setInput(this.userInput);
-      //this.clearSuggestions;
+    //this.clearSuggestions;
   }
   //Handles Key Commands
   onKeyPress = (button: string) => {
@@ -176,24 +177,22 @@ export class KeyboardComponent {
     if (this.userInput.length != 0) {
       this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-
-          while(numberOfSuggestions < 3 && predIndex < maxPredictions){
-
-            if (!this.suggestionSet.has(response.predictions[predIndex].text)){
+          while (numberOfSuggestions < 3 && predIndex < maxPredictions) {
+            if (!this.suggestionSet.has(response.predictions[predIndex].text)) {
               this.suggestionSet.add(response.predictions[predIndex].text);
               numberOfSuggestions++;
             }
             predIndex++;
           }
-          
+
           //this.suggestions = Array.from(this.suggestionSet);
 
-          for (let suggestion of this.suggestionSet){
+          for (let suggestion of this.suggestionSet) {
             this.suggestions[suggestionIndex] = suggestion;
             suggestionIndex++;
           }
 
-          this.suggestionSet.clear()
+          this.suggestionSet.clear();
         },
         (error) => console.error('Error making text prediction', error)
       );
@@ -203,8 +202,19 @@ export class KeyboardComponent {
   }
 
   clearSuggestions() {
-    for (let i = 0; i < this.suggestions.length; i++){
+    for (let i = 0; i < this.suggestions.length; i++) {
       this.suggestions.pop();
     }
+  }
+
+  getPred(inputText: string) {
+    this.gpt.getData(inputText).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('Error getting prediction:', error);
+      }
+    );
   }
 }

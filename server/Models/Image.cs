@@ -7,7 +7,7 @@ public partial class Image
 {
     public int ImageId { get; set; }
 
-    public int Id { get; set; }
+    public int Id { get; set; } // Reprents the user ID with the corresponding image
 
     public string ImageUri { get; set; } = null!;
 
