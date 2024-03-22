@@ -2,20 +2,14 @@
   <ion-header>
     <ion-toolbar>
       <ion-title>Gallery</ion-title>
-      <!--ion-button rounterLink = "/" fill="clear">Home</ion-button-->
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-grid>
       <ion-row>
-        <ion-col size="6" size-sm="4" *ngFor="let image of [1, 2, 3, 4, 5]">
-          <ion-img
-            src="assets/images/GalleryTestImages/{{ image }}.jpg"
-            alt="Image{{ image }}"
-          >
-          </ion-img>
-
-          <p>caption{{ image }}</p>
+        <ion-col size="6" size-sm="4" *ngFor="let imageUrl of images">
+          <ion-img [src]="imageUrl"></ion-img>
+          <p>caption <br />I like pizza</p>
         </ion-col>
       </ion-row>
     </ion-grid>
