@@ -206,15 +206,4 @@ export class KeyboardComponent {
       this.suggestions.pop();
     }
   }
-
-  getPred(inputText: string) {
-    this.gpt.getData(inputText).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.error('Error getting prediction:', error);
-      }
-    );
-  }
 }

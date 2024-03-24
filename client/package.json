@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/schematics-cli": "^17.3.1",
     "@angular/animations": "^17.2.2",
     "@angular/cdk": "^17.3.1",
     "@angular/common": "^17.2.2",
@@ -32,7 +33,7 @@
     "@capacitor/ios": "next",
     "@capacitor/preferences": "next",
     "@codetrix-studio/capacitor-google-auth": "^3.3.6",
-    "@ionic/angular": "^7.7.3",
+    "@ionic/angular": "^7.8.1",
     "ionicons": "^7.2.2",
     "rxjs": "~7.8.0",
     "simple-keyboard": "^3.7.45",
