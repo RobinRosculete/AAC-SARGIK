@@ -3,7 +3,6 @@ import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
-import { Observable } from 'rxjs';
 
 // KeyboardComponent
 @Component({
@@ -23,6 +22,8 @@ export class KeyboardComponent {
     private typewise: TypewiseAPIService,
     private gpt: TextPredictionApiService
   ) {}
+
+  suggestion: string = 'great weekend!';
 
   //Simple Function for text to speech
   speakText() {

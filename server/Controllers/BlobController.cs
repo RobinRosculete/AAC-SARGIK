@@ -97,7 +97,6 @@ namespace server.Controllers
             return Ok(result);
         }
 
-
         //Api to Download Images From Blob Storage
         // GET api/values/5
         [HttpGet]
@@ -116,8 +115,7 @@ namespace server.Controllers
         public async Task<IActionResult> DeleteImage(string fileName)
         {
             var result = await _blobFileService.DeleteAsync(fileName);
-            return Ok(result);
+               return Ok(result);
         }
     }
 }
-
