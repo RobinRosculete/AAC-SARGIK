@@ -3,6 +3,7 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CameraPreview, CameraPreviewOptions,CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-vsd',
@@ -11,10 +12,15 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 })
 export class VsdComponent {
   @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('cropper') cropper!: ImageCropperComponent;
   public image: string | null = null;
+  public myImage: string | null = null;
   public cameraActive: boolean = false; 
   public name: string = '';
   public photoCaptured: boolean = false;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+
 
   constructor() {}
 
@@ -62,6 +68,7 @@ export class VsdComponent {
     const result = await CameraPreview.capture(cameraPreviewPictureOptions);
     this.image = `data:image/jpeg;base64,${result.value}`;
     this.photoCaptured = true;
+    this.croppedImage = null;
     this.stopCamera();
     
   }
@@ -96,5 +103,33 @@ export class VsdComponent {
       console.error(error);
     }
   }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+
+  cropImage() {
+    if (this.cropper) {
+      const croppedImage = this.cropper.crop()?.base64;
+      if (croppedImage) {
+        this.croppedImage = croppedImage;
+        this.image = this.croppedImage;
+        // Update the view with the new image, maybe close the cropper or hide it
+      } else {
+        console.error('Cropping failed');
+      }
+    } else {
+      console.error('Cropper is not initialized');
+    }
+  }
+  editPhoto() {
+    this.myImage = this.image; // Prepare the image for cropping
+    this.croppedImage = null; // Ensure the cropper is shown again
+  }
+  
+  confirmCropping() {
+      this.image = this.croppedImage;
+
 }
 
+}
