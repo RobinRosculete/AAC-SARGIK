@@ -1,5 +1,4 @@
 <!-- Display ghost text -->
-
 <button class="speaker" (click)="speakText()">
   <img src="../assets/images/speaker.png" alt="speaker logo" />
 </button>
@@ -18,21 +17,18 @@
   />
   <br />
   <div class="simple-keyboard">
-    <ion-button
-      class="suggestion"
-      (click)="CompletePrediction(suggestions[2])"
-      >{{ suggestions[2] }}</ion-button
-    >
+    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[2])">
+      {{ suggestions[2] }} {{ emojiMap[suggestions[2]] }}
+    </ion-button>
     <ion-button
       class="suggestion"
       (click)="CompletePrediction(suggestions[0])"
       style="border-left: solid; border-right: solid"
-      >{{ suggestions[0] }}</ion-button
     >
-    <ion-button
-      class="suggestion"
-      (click)="CompletePrediction(suggestions[1])"
-      >{{ suggestions[1] }}</ion-button
-    >
+      {{ suggestions[0] }} {{ emojiMap[suggestions[0]] }}
+    </ion-button>
+    <ion-button class="suggestion" (click)="CompletePrediction(suggestions[1])">
+      {{ suggestions[1] }} {{ emojiMap[suggestions[1]] }}
+    </ion-button>
   </div>
 </div>

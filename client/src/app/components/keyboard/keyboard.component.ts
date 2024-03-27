@@ -3,6 +3,7 @@ import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import * as emojiMap from '../../../assets/emojis/emojiMap.json';
 
 // KeyboardComponent
 @Component({
@@ -16,6 +17,9 @@ export class KeyboardComponent {
   protected userInput: string = '';
   protected suggestions: string[] = [];
   protected suggestionSet = new Set<string>();
+  // Define the emojiMap property
+  emojiMap: { [key: string]: string } = emojiMap;
+
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(
