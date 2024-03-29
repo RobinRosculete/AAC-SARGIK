@@ -16,7 +16,7 @@ dependencies {
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-preferences')
     implementation project(':codetrix-studio-capacitor-google-auth')
-
+    implementation "com.soundcloud.android:android-crop:1.0.0@aar"
 }
 
 

@@ -12,6 +12,10 @@ import { LoginComponent } from './components/login/login.component';
 import { IonicModule } from '@ionic/angular';
 import { VsdComponent } from './components/vsd/vsd.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { File } from '@ionic-native/file/ngx';
+import 'hammerjs';
+
 
 @NgModule({
   declarations: [
@@ -30,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     IonicModule ,
     IonicModule.forRoot({}),
     MatDialogModule,
+    ImageCropperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
