@@ -94,7 +94,8 @@ export class KeyboardComponent {
         '{ABC}': 'ABC Layout',
         '{space}': ' ',
         '{default}': 'ABC',
-        '{back}': '⇦',
+        '{mobile_enter}': '⇦',
+        '{mobile_ABC}': 'ABC',
         '{QWERTY}': 'QWERTY',
       },
     });

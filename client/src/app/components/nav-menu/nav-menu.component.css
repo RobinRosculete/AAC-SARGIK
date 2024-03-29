@@ -8,12 +8,6 @@ nav {
   padding: 10px;
 }
 
-/* Style the logo container */
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
 .logo {
   max-width: 90px;
   margin-right: 10px; /* Adjust the margin as needed */
@@ -25,21 +19,23 @@ h1 {
   font-weight: bold;
 }
 
-/* Style for the section containing the buttons */
-section {
+/* Style the logo container */
+.logo-container {
   display: flex;
-  justify-content: center; /* Center the button container */
+  align-items: center;
+  order: 1;
 }
 
 .icon-container {
-  display: flex; /* Allow buttons to sit side-by-side */
-  flex-wrap: wrap; /* Wrap buttons if they don't fit in a line */
-  justify-content: center; /* Center the buttons within their row*/
+  order: 2;
+}
+
+.profile-icon {
+  order: 3;
 }
 
 /* Shift the middle button to the left and add space on the right */
 .icon-container ion-button:nth-child(1) {
-  margin-left: -200px; /* Adjust the negative value to shift left */
   margin-right: 30px; /* Adjust to add space on the right */
 }
 
@@ -59,4 +55,25 @@ ion-button {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+@media all and (max-width: 1200px) {
+  nav {
+    flex-wrap:wrap;
+    margin-top: 23px;
+  }
+  .icon-container {
+    width: 100%;
+    order: 3;
+    text-align: center;
+  }
+
+  .logo-container {
+    order: 1;
+  }
+  .profile-icon {
+
+    order:2;
+
+  }
 }
