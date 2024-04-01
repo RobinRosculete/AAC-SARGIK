@@ -20,6 +20,7 @@ export class VsdComponent {
   public photoCaptured: boolean = false;
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  
 
 
   constructor() {}
@@ -75,8 +76,10 @@ export class VsdComponent {
 
   retakePhoto() {
     this.image = null;
+    this.myImage = null;
+    this.croppedImage = null;
     this.photoCaptured = false;
-    this.startCamera();
+    this.startCamera(); // Start the camera again for a new photo
   }
 
   flipCamera(){
@@ -105,31 +108,30 @@ export class VsdComponent {
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
-  }
-
-  cropImage() {
-    if (this.cropper) {
-      const croppedImage = this.cropper.crop()?.base64;
-      if (croppedImage) {
-        this.croppedImage = croppedImage;
-        this.image = this.croppedImage;
-        // Update the view with the new image, maybe close the cropper or hide it
-      } else {
-        console.error('Cropping failed');
-      }
-    } else {
-      console.error('Cropper is not initialized');
+    if (event.blob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.blob);
+      reader.onloadend = () => {
+        this.croppedImage = reader.result as string;
+      };
     }
   }
-  editPhoto() {
-    this.myImage = this.image; // Prepare the image for cropping
-    this.croppedImage = null; // Ensure the cropper is shown again
-  }
   
+  
+  editPhoto() {
+    // Only prepare for cropping if there is a cropped image
+    if (this.croppedImage) {
+      this.myImage = this.croppedImage; // Prepare the cropped image for re-cropping
+    } else if (this.image) {
+      this.myImage = this.image; // Prepare the original image for cropping
+    }
+    this.photoCaptured = true; // Indicate that a photo is captured and is being edited
+  }
   confirmCropping() {
+    if (this.croppedImage) {
       this.image = this.croppedImage;
-
-}
-
+      this.myImage = null;
+      this.photoCaptured = true; 
+    }
+  }
 }

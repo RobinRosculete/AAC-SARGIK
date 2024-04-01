@@ -10,9 +10,7 @@
           <ion-button (click)="cancel()">Cancel</ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
-          <ion-button
-            (click)="cropImage()"
-            *ngIf="photoCaptured && !croppedImage"
+          <ion-button (click)="confirmCropping()" *ngIf="myImage"
             >Confirm</ion-button
           >
         </ion-buttons>
@@ -50,7 +48,7 @@
       </div>
     </div>
     <div *ngIf="photoCaptured && !myImage">
-      <ion-img [src]="image"></ion-img>
+      <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
       <ion-button
         class="button_color"
         (click)="retakePhoto()"
@@ -59,25 +57,24 @@
       >
         <ion-icon name="refresh-outline"></ion-icon>
       </ion-button>
-      <ion-img [src]="image"></ion-img>
       <ion-button
-        *ngIf="photoCaptured && !croppedImage"
         class="button_color"
         (click)="editPhoto()"
         expand="block"
         id="gallery"
       >
+        <ion-icon name="create-outline"></ion-icon>
       </ion-button>
     </div>
 
     <image-cropper
-      *ngIf="myImage && !croppedImage"
+      #cropper
+      *ngIf="myImage"
       [imageBase64]="myImage"
       format="png"
       [maintainAspectRatio]="true"
       [aspectRatio]="1 / 1"
       (imageCropped)="imageCropped($event)"
-      class="image-cropper"
     ></image-cropper>
 
     <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
