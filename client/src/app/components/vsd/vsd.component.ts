@@ -8,6 +8,7 @@ import {
   CameraPreviewPictureOptions,
 } from '@capacitor-community/camera-preview';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-vsd',
@@ -16,10 +17,15 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 })
 export class VsdComponent {
   @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('cropper') cropper!: ImageCropperComponent;
   public image: string | null = null;
+  public myImage: string | null = null;
+  public cameraActive: boolean = false;
   public cameraActive: boolean = false;
   public name: string = '';
   public photoCaptured: boolean = false;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
 
   constructor() {}
 
@@ -64,13 +70,16 @@ export class VsdComponent {
     const result = await CameraPreview.capture(cameraPreviewPictureOptions);
     this.image = `data:image/jpeg;base64,${result.value}`;
     this.photoCaptured = true;
+    this.croppedImage = null;
     this.stopCamera();
   }
 
   retakePhoto() {
     this.image = null;
+    this.myImage = null;
+    this.croppedImage = null;
     this.photoCaptured = false;
-    this.startCamera();
+    this.startCamera(); // Start the camera again for a new photo
   }
 
   flipCamera() {
@@ -96,6 +105,33 @@ export class VsdComponent {
       this.stopCamera();
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.blob);
+      reader.onloadend = () => {
+        this.croppedImage = reader.result as string;
+      };
+    }
+  }
+
+  editPhoto() {
+    // Only prepare for cropping if there is a cropped image
+    if (this.croppedImage) {
+      this.myImage = this.croppedImage; // Prepare the cropped image for re-cropping
+    } else if (this.image) {
+      this.myImage = this.image; // Prepare the original image for cropping
+    }
+    this.photoCaptured = true; // Indicate that a photo is captured and is being edited
+  }
+  confirmCropping() {
+    if (this.croppedImage) {
+      this.image = this.croppedImage;
+      this.myImage = null;
+      this.photoCaptured = true;
     }
   }
 }

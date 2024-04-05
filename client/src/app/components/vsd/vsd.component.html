@@ -9,6 +9,12 @@
         <ion-buttons slot="start">
           <ion-button (click)="cancel()">Cancel</ion-button>
         </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="confirmCropping()" *ngIf="myImage"
+            >Confirm</ion-button
+          >
+        </ion-buttons>
+
         <ion-title>Visual Scene Display</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -23,7 +29,6 @@
         >
           <ion-icon name="camera-outline" slot="icon-only"></ion-icon>
         </ion-button>
-
         <ion-button
           class="button_color"
           (click)="selectImageFromGallery()"
@@ -32,7 +37,6 @@
         >
           <ion-icon name="images-outline"></ion-icon>
         </ion-button>
-
         <ion-button
           class="button_color"
           (click)="flipCamera()"
@@ -43,7 +47,8 @@
         </ion-button>
       </div>
     </div>
-    <div *ngIf="photoCaptured">
+    <div *ngIf="photoCaptured && !myImage">
+      <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
       <ion-button
         class="button_color"
         (click)="retakePhoto()"
@@ -52,8 +57,26 @@
       >
         <ion-icon name="refresh-outline"></ion-icon>
       </ion-button>
+      <ion-button
+        class="button_color"
+        (click)="editPhoto()"
+        expand="block"
+        id="gallery"
+      >
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
     </div>
 
-    <ion-img [src]="image" *ngIf="image && !cameraActive"></ion-img>
+    <image-cropper
+      #cropper
+      *ngIf="myImage"
+      [imageBase64]="myImage"
+      format="png"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1 / 1"
+      (imageCropped)="imageCropped($event)"
+    ></image-cropper>
+
+    <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
   </ng-template>
 </ion-modal>
