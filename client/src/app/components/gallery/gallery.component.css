@@ -21,3 +21,15 @@ p {
   box-shadow: none;
   padding: 0;
 }
+
+ion-button:active {
+  color: #fff;
+}
+:host {
+  --image-size: 400px; /* Change this value to adjust the size of the images */
+}
+
+ion-col ion-img {
+  width: var(--image-size);
+  height: var(--image-size);
+}

@@ -8,7 +8,7 @@ import { BlobApiService } from 'src/app/services/blob/blob-api.service';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  images: string[] = [''];
+  images: { imageUrl: string; captions: string[] }[] = [];
   googleID: string = '';
   userInput: string = '';
 
@@ -20,7 +20,14 @@ export class GalleryComponent {
     setTimeout(() => {
       this.blobAPI.getImageURIs(this.googleID).subscribe(
         (imageURIs: string[]) => {
-          this.images = imageURIs;
+          this.images = imageURIs.map((imageUrl) => ({
+            imageUrl,
+            captions: [
+              'This is a drawing I made in high school',
+              'I want to eat an apple',
+              'This is the cake I had for my 18th birthday',
+            ], // Replace with your actual captions
+          }));
         },
         (error) => {
           console.error('Error fetching image URIs:', error);
@@ -29,7 +36,11 @@ export class GalleryComponent {
     }, 100);
   }
 
-  //Methd used to parse The JWT token and retrieve the user id
+  readCaption(caption: string): void {
+    TextToSpeech.speak({ text: caption });
+  }
+
+  // Method used to parse The JWT token and retrieve the user id
   getUserIdFromToken(): string {
     const token = localStorage.getItem('token');
     if (token) {
