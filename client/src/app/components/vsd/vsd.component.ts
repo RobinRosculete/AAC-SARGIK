@@ -21,7 +21,7 @@ export class VsdComponent {
   public image: string | null = null;
   public myImage: string | null = null;
   public cameraActive: boolean = false;
-  public cameraActive: boolean = false;
+
   public name: string = '';
   public photoCaptured: boolean = false;
   imageChangedEvent: any = '';
