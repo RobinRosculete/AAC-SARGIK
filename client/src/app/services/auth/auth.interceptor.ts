@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     console.log('Request headers:', req.headers);
     // send the request to the next handler
     return next.handle(req).pipe(
-      catchError((error) => {
+      catchError((error: any) => {
         // Perform logout on 401 – Unauthorized HTTP response errors
         if (error instanceof HttpErrorResponse && error.status === 401) {
           this.authService.googleSignOut;

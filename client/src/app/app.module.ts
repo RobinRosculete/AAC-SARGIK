@@ -12,6 +12,10 @@ import { LoginComponent } from './components/login/login.component';
 import { IonicModule } from '@ionic/angular';
 import { VsdComponent } from './components/vsd/vsd.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { File } from '@ionic-native/file/ngx';
+import 'hammerjs';
+
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 @NgModule({
@@ -31,6 +35,7 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
     IonicModule,
     IonicModule.forRoot({}),
     MatDialogModule,
+    ImageCropperModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

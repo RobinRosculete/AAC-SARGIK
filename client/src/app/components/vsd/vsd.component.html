@@ -5,6 +5,14 @@
         <ion-buttons slot="start">
           <ion-button (click)="cancel()">Cancel</ion-button>
         </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button
+            (click)="cropImage()"
+            *ngIf="photoCaptured && !croppedImage"
+            >Confirm</ion-button
+          >
+        </ion-buttons>
+
         <ion-title>Visual Scene Display</ion-title>
       </ion-toolbar>
     </ion-header>

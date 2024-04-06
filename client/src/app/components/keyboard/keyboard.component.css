@@ -27,7 +27,7 @@ input::placeholder {
   padding: 0;
   border: none;
   background: none;
-  right: 150px;
+  right: 10vw;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
@@ -41,7 +41,7 @@ input::placeholder {
   position: fixed;
   bottom: 0;
   left: 50%;
-  font-size: 40px;
+  font-size: max(2vw, 25px);
   transform: translateX(-50%);
 }
 
