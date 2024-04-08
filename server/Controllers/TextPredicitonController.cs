@@ -107,11 +107,9 @@ namespace server.Controllers;
                 
             }
             else {
-                return Ok(result.Choices[0].Message.TextContent);
+                return Ok(result);
 
             }
-
-
                 
         }
         return Ok("ew"); // If Query empty return empty string

@@ -3,6 +3,26 @@
 ul {
   text-align: center;
 }
+/* New styling for the emoji display */
+.emoji-display {
+  position: fixed;
+  bottom: 74%;
+  left: 80%;
+  transform: translateX(-50%);
+  font-size: 3em;
+  background-color: #61c6d1;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above the keyboard */
+  display: none; /* Initially hidden */
+}
+
+/* Show the emoji display when there is content */
+.has-emoji {
+  display: block;
+}
 
 input {
   width: 90%;

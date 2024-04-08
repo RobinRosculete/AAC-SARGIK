@@ -17,6 +17,7 @@ export class KeyboardComponent {
   protected userInput: string = '';
   protected suggestions: string[] = [];
   protected suggestionSet = new Set<string>();
+  protected gptEmoji: string = '';
   // Define the emojiMap property
   emojiMap: { [key: string]: string } = emojiMap;
 
@@ -115,6 +116,9 @@ export class KeyboardComponent {
   //Handles any press on keyboard
   onChange = (input: string) => {
     this.userInput = input;
+    if (this.userInput) {
+      this.getEmoji(this.userInput);
+    }
     this.updateSuggestions();
   };
   //Funciton to complete prediciton to update real text
@@ -211,5 +215,15 @@ export class KeyboardComponent {
     for (let i = 0; i < this.suggestions.length; i++) {
       this.suggestions.pop();
     }
+  }
+  getEmoji(text: string) {
+    this.gpt.getEmoji(text).subscribe(
+      (response: any) => {
+        this.gptEmoji = response;
+      },
+      (error) => {
+        console.error('Error getting emoji:', error);
+      }
+    );
   }
 }

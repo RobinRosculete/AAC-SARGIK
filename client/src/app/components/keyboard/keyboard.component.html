@@ -1,3 +1,6 @@
+<div class="emoji-display" [ngClass]="{ 'has-emoji': gptEmoji }">
+  {{ gptEmoji }}
+</div>
 <button class="speaker" (click)="speakText()">
   <img src="../assets/images/speaker.png" alt="speaker logo" />
 </button>
