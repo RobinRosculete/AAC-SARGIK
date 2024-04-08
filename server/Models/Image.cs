@@ -15,6 +15,8 @@ public partial class Image
 
     public int? ImageHeight { get; set; }
 
+    public string Caption { get; set; } = null!;
+
     public virtual ICollection<BoundingBox> BoundingBoxes { get; set; } = new List<BoundingBox>();
 
     public virtual User IdNavigation { get; set; } = null!;

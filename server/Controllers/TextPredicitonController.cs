@@ -23,7 +23,7 @@ namespace server.Controllers;
             _configuration = configuration;
         }
     
-
+    //APi endpoint to acces GPT API
     [HttpPost]
     public async Task<IActionResult> UseChatGPT([FromBody] TextPredictionBody query)
     {
@@ -72,6 +72,7 @@ namespace server.Controllers;
         return Ok(""); // If Query empty return empty string
     }
 
+    //API end point to return a user Emoji
     [HttpPost("emoji")]
     public async Task<IActionResult> GetEmoji([FromBody] TextPredictionBody query)
     {

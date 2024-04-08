@@ -8,9 +8,8 @@ import { BlobApiService } from 'src/app/services/blob/blob-api.service';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  images: { imageUrl: string; captions: string[] }[] = [];
+  images: { imageUrl: string; caption: string }[] = [];
   googleID: string = '';
-  userInput: string = '';
 
   constructor(protected blobAPI: BlobApiService) {}
 
@@ -18,19 +17,15 @@ export class GalleryComponent {
     this.googleID = this.getUserIdFromToken();
 
     setTimeout(() => {
-      this.blobAPI.getImageURIs(this.googleID).subscribe(
-        (imageURIs: string[]) => {
-          this.images = imageURIs.map((imageUrl) => ({
-            imageUrl,
-            captions: [
-              'This is a drawing I made in high school',
-              'I want to eat an apple',
-              'This is the cake I had for my 18th birthday',
-            ], // Replace with your actual captions
+      this.blobAPI.getUserImages(this.googleID).subscribe(
+        (imagesWithCaptions: any[]) => {
+          this.images = imagesWithCaptions.map((image) => ({
+            imageUrl: image.imgUri,
+            caption: image.imgCaption,
           }));
         },
         (error) => {
-          console.error('Error fetching image URIs:', error);
+          console.error('Error fetching images with captions:', error);
         }
       );
     }, 100);

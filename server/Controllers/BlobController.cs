@@ -1,10 +1,9 @@
 ﻿
 //Controler used to manage upload, delete and update of images to Azure Blob Stroage 
 
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.DTOs;
 using server.Models;
 using server.Services;
 
@@ -33,39 +32,42 @@ namespace server.Controllers
             return Ok(result);
         }
 
+
+        // APi endpoint to return all the users images and captions
         [HttpGet("users/{googleUserId}/images")]
         public async Task<IActionResult> GetUserImages(string googleUserId)
         {
+            // Geting User ID based on googleID
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
 
+            // Checking if user exists
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
-            var imageUris = await _db.Images
+            // Storing images and captions in the images variable
+            var images = await _db.Images
                 .Where(i => i.Id == user.Id)
-                .Select(i => i.ImageUri)
+                .Select(i => new ImageCaptionDTO
+                {
+                    //Storing image uri with SAS token to allow image acces
+                    ImgUri = $"{_blobFileService.GenerateSasToken(i.ImageUri)}",
+                    ImgCaption = i.Caption
+                })
                 .ToListAsync();
 
-            var imageUrlsWithSasToken = new List<string>();
-            foreach (var uri in imageUris)
-            {
-                var sasToken = _blobFileService.GenerateSasToken(uri);
-                imageUrlsWithSasToken.Add(sasToken);
-            }
-
-            return Ok(imageUrlsWithSasToken);
-        }
+            return Ok(images);
+        } // public async Task<IActionResult> GetUserImages(string googleUserId)
 
 
+        // POST api/values
+        //***** ONLY FOR TESTING AT THE MOMENT ***** 
         // API to upload Images to Blob Storage
         // POST api/values
         [HttpPost("users/{googleUserId}/upload-image")]
-        public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId)
+        public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId, string caption)
         {
-
-
             Console.WriteLine(googleUserId);
 
             if (string.IsNullOrEmpty(googleUserId))
@@ -79,23 +81,25 @@ namespace server.Controllers
             {
                 return NotFound("User not found.");
             }
-           
-            // Upload the image to Blob Storage
-            var result = await _blobFileService.UploadAsync(file,googleUserId);
 
-            // Associate the image with the user
+            // Upload the image to Blob Storage
+            var result = await _blobFileService.UploadAsync(file, googleUserId);
+
+            // Associate the image with the user and set the caption
             var image = new Image
             {
                 Id = user.Id,
                 ImageUri = result.Blob.Uri,
                 ImageWidth = null,
-                ImageHeight = null
+                ImageHeight = null,
+                Caption = caption
             };
             _db.Images.Add(image);
             await _db.SaveChangesAsync();
 
             return Ok(result);
         }
+
 
         //Api to Download Images From Blob Storage
         // GET api/values/5
