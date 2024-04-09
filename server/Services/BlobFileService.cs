@@ -168,7 +168,7 @@ public class BlobFileService
         return allowedExtensions.Contains(fileExtension);
     }
 
-    public string GenerateSasToken(string uri)
+    public string GenerateSasToken()
     {
        
         var sasBuilder = new BlobSasBuilder()
@@ -178,10 +178,10 @@ public class BlobFileService
             StartsOn = DateTimeOffset.UtcNow,
             ExpiresOn = DateTimeOffset.UtcNow.AddHours(1), // Set the expiration time as needed
         };
-        sasBuilder.SetPermissions(BlobSasPermissions.Read);
+        sasBuilder.SetPermissions(BlobSasPermissions.All);
 
         var sasToken = sasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential(_storageAccount, _key));
-        return $"{uri}?{sasToken}";
+        return $"{sasToken}";
     }
 
 }

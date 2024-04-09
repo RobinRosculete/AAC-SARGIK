@@ -11,6 +11,10 @@ export class GalleryComponent {
   images: { imageUrl: string; caption: string }[] = [];
   googleID: string = '';
 
+  //Variables used for Image and caption Upload Testing
+  file: File | null = null;
+  caption: string = '';
+
   constructor(protected blobAPI: BlobApiService) {}
 
   ngOnInit(): void {
@@ -35,7 +39,6 @@ export class GalleryComponent {
     TextToSpeech.speak({ text: caption });
   }
 
-  // Method used to parse The JWT token and retrieve the user id
   getUserIdFromToken(): string {
     const token = localStorage.getItem('token');
     if (token) {
@@ -45,5 +48,34 @@ export class GalleryComponent {
       return decodedToken.unique_name;
     }
     return '';
+  }
+
+  onFileSelected(event: any): void {
+    this.file = <File>event.target.files[0];
+  }
+
+  uploadImageWithCaption(): void {
+    if (!this.file) {
+      console.error('No file selected.');
+      return;
+    }
+    if (!this.caption.trim()) {
+      console.error('Caption is required.');
+      return;
+    }
+
+    this.blobAPI.uploadImage(this.file, this.googleID, this.caption).subscribe(
+      (response) => {
+        //Handle successful upload
+        console.log('Image uploaded successfully:', response);
+
+        //reset input
+        this.file = null;
+        this.caption = '';
+      },
+      (error) => {
+        console.error('Error uploading image:', error);
+      }
+    );
   }
 }

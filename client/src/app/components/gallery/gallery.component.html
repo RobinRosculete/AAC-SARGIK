@@ -1,9 +1,18 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Gallery</ion-title>
+    <ion-title>Gallery </ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-input type="file" (change)="onFileSelected($event)"></ion-input>
+<ion-input
+  type="text"
+  placeholder="Enter caption..."
+  [(ngModel)]="caption"
+></ion-input>
+<ion-button type="button" value="Upload" (click)="uploadImageWithCaption()"
+  >Upload Image With Caption API Test</ion-button
+>
 <ion-grid>
   <ion-row>
     <ion-col size="6" size-sm="4" *ngFor="let image of images; let i = index">

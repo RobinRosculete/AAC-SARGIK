@@ -52,7 +52,7 @@ namespace server.Controllers
                 .Select(i => new ImageCaptionDTO
                 {
                     //Storing image uri with SAS token to allow image acces
-                    ImgUri = $"{_blobFileService.GenerateSasToken(i.ImageUri)}",
+                    ImgUri = $"{i.ImageUri}?{_blobFileService.GenerateSasToken()}",
                     ImgCaption = i.Caption
                 })
                 .ToListAsync();

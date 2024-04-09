@@ -30,7 +30,9 @@ namespace server.Controllers;
         if (!(string.IsNullOrEmpty(query.text)))
         {
             // Create a new OpenAiAPI object, requires API KEY
-            OpenAIAPI api = new OpenAIAPI();
+            string apiKey = _configuration["GPT-API-KEY"];
+            OpenAIAPI api = new OpenAIAPI(apiKey);
+            
 
             // Extract the word from the query text
             var word = query.text;
@@ -81,7 +83,8 @@ namespace server.Controllers;
         if (!(string.IsNullOrEmpty(query.text)))
         {
             // Create a new OpenAiAPI object, requires API KEY
-            OpenAIAPI api = new OpenAIAPI();
+            string apiKey = _configuration["GPT-API-KEY"];
+            OpenAIAPI api = new OpenAIAPI(apiKey);
 
             // Extract the word from the query text
             var word = query.text;

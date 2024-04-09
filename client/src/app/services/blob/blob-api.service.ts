@@ -16,4 +16,23 @@ export class BlobApiService {
       environment.SERVER_URL + '/api/Blob/users/' + googleId + '/images';
     return this.http.get<Image[]>(url);
   }
+
+  // Function to upload an image to the server
+  uploadImage(
+    file: File,
+    googleUserId: string,
+    caption: string
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('googleUserId', googleUserId);
+    formData.append('caption', caption);
+
+    let url =
+      environment.SERVER_URL +
+      '/api/Blob/users/' +
+      googleUserId +
+      '/upload-image';
+    return this.http.post<any>(url, formData);
+  }
 }
