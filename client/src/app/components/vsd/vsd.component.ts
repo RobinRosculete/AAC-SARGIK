@@ -1,7 +1,6 @@
-// Visual Scence Display
 import { Component, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core/components';
+import { OverlayEventDetail } from '@ionic/core';
 import {
   CameraPreview,
   CameraPreviewOptions,
@@ -23,6 +22,7 @@ export class VsdComponent {
   public cameraActive: boolean = false; 
   public name: string = '';
   public photoCaptured: boolean = false;
+  buttonText: string = 'I like Ducks!';
   imageChangedEvent: any = '';
   croppedImage: any = '';
 

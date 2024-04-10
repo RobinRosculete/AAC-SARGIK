@@ -1,7 +1,36 @@
-@import "simple-keyboard/build/css/index.css";
-
 ul {
   text-align: center;
+}
+/* New styling for the emoji display */
+.emoji-display {
+  position: absolute;
+  bottom: 78%; /* Adjust this value as needed */
+  left: 15%;
+  transform: translateX(-50%);
+  font-size: 2.5em;
+  background-color: #31c6d7;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above the keyboard */
+  display: none; /* Initially hidden */
+}
+
+/* Triangle styles */
+.emoji-display:after {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* Adjust this value to position the triangle */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #31c6d7 transparent transparent transparent;
+}
+/* Show the emoji display when there is content */
+.has-emoji {
+  display: block;
 }
 
 input {

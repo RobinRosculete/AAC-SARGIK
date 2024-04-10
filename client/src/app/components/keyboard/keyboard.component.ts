@@ -3,6 +3,7 @@ import Keyboard from 'simple-keyboard';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise-api.service';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import * as emojiMap from '../../../assets/emojis/emojiMap.json';
 
 // KeyboardComponent
 @Component({
@@ -16,12 +17,18 @@ export class KeyboardComponent {
   protected userInput: string = '';
   protected suggestions: string[] = [];
   protected suggestionSet = new Set<string>();
+  protected gptEmoji: string = '';
+  // Define the emojiMap property
+  emojiMap: { [key: string]: string } = emojiMap;
+
   //constructor(private textPredictionApi: TextPredictionApiService) {}
 
   constructor(
     private typewise: TypewiseAPIService,
     private gpt: TextPredictionApiService
   ) {}
+
+  suggestion: string = 'great weekend!';
 
   //Simple Function for text to speech
   speakText() {
@@ -109,6 +116,9 @@ export class KeyboardComponent {
   //Handles any press on keyboard
   onChange = (input: string) => {
     this.userInput = input;
+    if (this.userInput) {
+      this.getEmoji(this.userInput);
+    }
     this.updateSuggestions();
   };
   //Funciton to complete prediciton to update real text
@@ -117,7 +127,7 @@ export class KeyboardComponent {
     words[words.length - 1] = suggestion;
     this.userInput = words.join(' ');
     this.keyboard.setInput(this.userInput);
-      //this.clearSuggestions;
+    //this.clearSuggestions;
   }
   //Handles Key Commands
   onKeyPress = (button: string) => {
@@ -177,24 +187,22 @@ export class KeyboardComponent {
     if (this.userInput.length != 0) {
       this.typewise.getData(this.userInput).subscribe(
         (response: any) => {
-
-          while(numberOfSuggestions < 3 && predIndex < maxPredictions){
-
-            if (!this.suggestionSet.has(response.predictions[predIndex].text)){
+          while (numberOfSuggestions < 3 && predIndex < maxPredictions) {
+            if (!this.suggestionSet.has(response.predictions[predIndex].text)) {
               this.suggestionSet.add(response.predictions[predIndex].text);
               numberOfSuggestions++;
             }
             predIndex++;
           }
-          
+
           //this.suggestions = Array.from(this.suggestionSet);
 
-          for (let suggestion of this.suggestionSet){
+          for (let suggestion of this.suggestionSet) {
             this.suggestions[suggestionIndex] = suggestion;
             suggestionIndex++;
           }
 
-          this.suggestionSet.clear()
+          this.suggestionSet.clear();
         },
         (error) => console.error('Error making text prediction', error)
       );
@@ -204,8 +212,18 @@ export class KeyboardComponent {
   }
 
   clearSuggestions() {
-    for (let i = 0; i < this.suggestions.length; i++){
+    for (let i = 0; i < this.suggestions.length; i++) {
       this.suggestions.pop();
     }
+  }
+  getEmoji(text: string) {
+    this.gpt.getEmoji(text).subscribe(
+      (response: any) => {
+        this.gptEmoji = response;
+      },
+      (error) => {
+        console.error('Error getting emoji:', error);
+      }
+    );
   }
 }
