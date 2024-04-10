@@ -1,59 +1,58 @@
-<ion-modal
-  #modal
-  (willDismiss)="onWillDismiss($event)"
-  (ionModalDidPresent)="startCamera()"
->
+<ion-modal #modal (willDismiss)="stopCamera()">
   <ng-template>
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-button (click)="cancel()">Cancel</ion-button>
         </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button
+            (click)="cropImage()"
+            *ngIf="photoCaptured && !croppedImage"
+            >Confirm</ion-button
+          >
+        </ion-buttons>
+
         <ion-title>Visual Scene Display</ion-title>
       </ion-toolbar>
     </ion-header>
-    <div class="camera-container" *ngIf="!photoCaptured">
-      <div id="cameraPreview" class="cameraPreview"></div>
-      <div class="camera-controls">
-        <ion-button
-          class="button_color"
-          (click)="captureImage()"
-          expand="block"
-          id="capture"
+    <ion-content>
+      <div #cameraPreview class="camera-preview"></div>
+      <div *ngIf="photoCaptured">
+        <!-- Display captured image -->
+        <img [src]="image" />
+      </div>
+      <div *ngIf="!photoCaptured">
+        <!-- Capture and other buttons -->
+        <ion-button (click)="captureImage()">Capture</ion-button>
+        <ion-button (click)="selectImageFromGallery()"
+          >Select from Gallery</ion-button
         >
-          <ion-icon name="camera-outline" slot="icon-only"></ion-icon>
+      </div>
+      <ion-input
+        *ngIf="photoCaptured"
+        [(ngModel)]="buttonText"
+        style="
+          border: none;
+          background-color: transparent;
+          color: inherit;
+          text-align: center;
+        "
+        >Edit:</ion-input
+      >
+      <div class="button-group">
+        <ion-button
+          class="button-left"
+          *ngIf="photoCaptured"
+          (click)="retakePhoto()"
+        >
+          Retake Photo
         </ion-button>
-
-        <ion-button
-          class="button_color"
-          (click)="selectImageFromGallery()"
-          expand="block"
-          id="gallery"
-        >
-          <ion-icon name="images-outline"></ion-icon>
-        </ion-button>
-
-        <ion-button
-          class="button_color"
-          (click)="flipCamera()"
-          expand="block"
-          id="flip"
-        >
-          <ion-icon name="camera-reverse-outline"></ion-icon>
+        <ion-button class="button-right" *ngIf="photoCaptured">
+          <ion-icon name="volume-high-outline" slot="start"></ion-icon>
+          {{ buttonText }}
         </ion-button>
       </div>
-    </div>
-    <div *ngIf="photoCaptured">
-      <ion-button
-        class="button_color"
-        (click)="retakePhoto()"
-        expand="block"
-        id="capture"
-      >
-        <ion-icon name="refresh-outline"></ion-icon>
-      </ion-button>
-    </div>
-
-    <ion-img [src]="image" *ngIf="image && !cameraActive"></ion-img>
+    </ion-content>
   </ng-template>
 </ion-modal>

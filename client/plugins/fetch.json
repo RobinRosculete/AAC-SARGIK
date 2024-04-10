@@ -1,0 +1,10 @@
+{
+  "cordova-plugin-crop": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-crop"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}
