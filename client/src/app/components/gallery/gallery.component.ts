@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gallery',
@@ -15,7 +16,7 @@ export class GalleryComponent {
   file: File | null = null;
   caption: string = '';
 
-  constructor(protected blobAPI: BlobApiService) {}
+  constructor(protected blobAPI: BlobApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.googleID = this.getUserIdFromToken();
@@ -72,6 +73,13 @@ export class GalleryComponent {
         //reset input
         this.file = null;
         this.caption = '';
+
+        // Refresh the page by navigating back to the current route
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['gallery']);
+          });
       },
       (error) => {
         console.error('Error uploading image:', error);
