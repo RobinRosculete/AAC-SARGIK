@@ -67,6 +67,13 @@
       </ion-button>
     </div>
 
+    <input
+      type="file"
+      #fileInput
+      style="display: none"
+      (change)="onFileSelected($event)"
+    />
+
     <image-cropper
       #cropper
       *ngIf="myImage"

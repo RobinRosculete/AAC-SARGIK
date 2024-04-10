@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonModal, Platform } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CameraPreview, CameraPreviewOptions,CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { ImageCroppedEvent, ImageCropperComponent,CropperPosition } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-vsd',
@@ -13,6 +13,7 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 export class VsdComponent {
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('cropper') cropper!: ImageCropperComponent;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   public image: string | null = null;
   public myImage: string | null = null;
   public cameraActive: boolean = false; 
@@ -20,10 +21,12 @@ export class VsdComponent {
   public photoCaptured: boolean = false;
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
   
 
 
-  constructor() {}
+  constructor(private platform: Platform) {}
+
 
   ngAfterViewInit(): void {
 
@@ -79,35 +82,59 @@ export class VsdComponent {
     this.myImage = null;
     this.croppedImage = null;
     this.photoCaptured = false;
-    this.startCamera(); // Start the camera again for a new photo
+    this.startCamera()
   }
 
   flipCamera(){
     CameraPreview.flip();
   }
   triggerFileInput() {
-    const fileInput: HTMLElement = document.getElementById('file-input') as HTMLElement;
-    fileInput.click(); 
-  }
+    this.fileInput.nativeElement.click();
+}
 
-  async selectImageFromGallery() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Photos,
-      });
+    async selectImageFromGallery() {
+      if (this.platform.is('cordova')) {
+        try {
+          const image = await Camera.getPhoto({
+            quality: 90,
+            resultType: CameraResultType.Uri,
+            source: CameraSource.Photos,
+          });
 
-      this.image = image.webPath ?? null; 
-      this.photoCaptured = true;
-      this.stopCamera();
+          this.image = image.webPath ?? null;
+          this.photoCaptured = true;
 
-    } catch (error) {
-      console.error(error);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+      
+        this.triggerFileInput();
+      }
     }
+
+    onFileSelected(event: Event) {
+      const element = event.currentTarget as HTMLInputElement;
+      let file: File | null = null;
+  
+      if (element.files && element.files.length > 0) {
+          file = element.files[0];
+      }
+  
+      if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              this.image = reader.result as string;
+              this.photoCaptured = true;
+          };
+          reader.readAsDataURL(file);
+      }
   }
+  
+
 
   imageCropped(event: ImageCroppedEvent) {
+    this.cropperPosition = event.cropperPosition;
     if (event.blob) {
       const reader = new FileReader();
       reader.readAsDataURL(event.blob);
@@ -119,19 +146,23 @@ export class VsdComponent {
   
   
   editPhoto() {
-    // Only prepare for cropping if there is a cropped image
     if (this.croppedImage) {
-      this.myImage = this.croppedImage; // Prepare the cropped image for re-cropping
+      this.myImage = this.croppedImage;
     } else if (this.image) {
-      this.myImage = this.image; // Prepare the original image for cropping
+      this.myImage = this.image;
     }
-    this.photoCaptured = true; // Indicate that a photo is captured and is being edited
+    this.photoCaptured = true; 
   }
+
+  
+  
   confirmCropping() {
+    console.log('Cropper Position:', this.cropperPosition);
+
     if (this.croppedImage) {
-      this.image = this.croppedImage;
-      this.myImage = null;
-      this.photoCaptured = true; 
+        this.image = this.croppedImage;
+        this.myImage = null;
+        this.photoCaptured = true;
     }
-  }
+}
 }
