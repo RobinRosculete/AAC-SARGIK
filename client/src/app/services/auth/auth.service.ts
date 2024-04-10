@@ -14,23 +14,10 @@ import { UserLoginResponse } from 'src/app/models/user.login.response.interface'
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey: string = 'token';
   private userModel!: UserModel;
   private userResponse!: UserLoginResponse;
 
-  constructor(protected http: HttpClient, private router: Router) {
-    if (isPlatform('capacitor')) {
-      this.initializeApp();
-    }
-  }
-
-  async initializeApp() {
-    await GoogleAuth.initialize({
-      clientId: environment.googleClientId,
-      scopes: ['profile', 'email'],
-      grantOfflineAccess: true,
-    });
-  }
+  constructor(protected http: HttpClient, private router: Router) {}
 
   //Function to check if token is stored in local storage
   isAuthenticated(): boolean {
@@ -39,7 +26,7 @@ export class AuthService {
 
   //Function to return token if stored in local storage
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem('token');
   }
 
   //Function Used to make http request to the server to login and retrieve JWT token
@@ -57,6 +44,7 @@ export class AuthService {
   async googleSignIn() {
     try {
       const user = await GoogleAuth.signIn();
+
       if (user && user.authentication && user.authentication.accessToken) {
         //if successful login create a new user model to send to API server
         this.userModel = {
@@ -66,10 +54,11 @@ export class AuthService {
           LastName: user.familyName,
           PictureUrl: user.imageUrl,
         };
+
         //Calling login method to send data to API server
         this.login(this.userModel).subscribe((response: UserLoginResponse) => {
           this.userResponse = response; //Return user successfully authenticated data
-          localStorage.setItem(this.tokenKey, response.token); //Store the token in local storage from server
+          localStorage.setItem('token', response.token); //Store the token in local storage from server
           this.router.navigate(['/']);
         });
         return 'Successfully Singed in with Googe!';

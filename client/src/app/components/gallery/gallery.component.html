@@ -1,23 +1,46 @@
-<div style="height: 500vh; overflow-y: scroll">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Gallery</ion-title>
-      <!--ion-button rounterLink = "/" fill="clear">Home</ion-button-->
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" size-sm="4" *ngFor="let image of [1, 2, 3, 4, 5]">
-          <ion-img
-            src="assets/images/GalleryTestImages/{{ image }}.jpg"
-            alt="Image{{ image }}"
-          >
-          </ion-img>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Gallery </ion-title>
+  </ion-toolbar>
+</ion-header>
 
-          <p>caption{{ image }}</p>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-content>
-</div>
+<ion-input type="file" (change)="onFileSelected($event)"></ion-input>
+<ion-input type="text" placeholder="Enter caption..." [(ngModel)]="caption"></ion-input>
+<ion-button type="button" value="Upload" (click)="uploadImageWithCaption()">Upload Image With Caption API Test</ion-button>
+
+<ion-grid>
+  <ion-row>
+    <ion-col size="6" size-sm="4" *ngFor="let image of images; let i = index">
+      <ion-button expand="block" class="image-button" (click)="openModal(i)">
+        <ion-img draggable="false" (dragstart)="false;" class="unselectable" [src]="image.imageUrl"></ion-img>
+      </ion-button>
+      <div>
+        <ion-button (click)="readCaption(image.caption)">
+          <ion-icon name="volume-high-outline" slot="start"></ion-icon>
+          <p>{{ image.caption }}</p>
+        </ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-content class="ion-padding">
+  <ng-container *ngFor="let modal of modals">
+    <ion-modal (willDismiss)="onWillDismiss($event, modal.index)">
+      <ng-template>
+        <ion-content>
+          <ion-item>
+            <ion-img draggable="false" (dragstart)="false;" class="unselectable fit" [src]="images[modal.index].imageUrl"></ion-img>
+          </ion-item>
+          <div style="text-align: center;">
+            <ion-button class="center" (click)="readCaption(images[modal.index].caption)">
+              <ion-icon name="volume-high-outline" slot="start"></ion-icon>
+              <p>{{ images[modal.index].caption }}</p>
+            </ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </ng-container>
+</ion-content>
+

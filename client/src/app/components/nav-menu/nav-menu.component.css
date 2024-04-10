@@ -1,17 +1,9 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
 /* Add styling for the header */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-}
-
-/* Style the logo container */
-.logo-container {
-  display: flex;
-  align-items: center;
 }
 
 .logo {
@@ -25,16 +17,19 @@ h1 {
   font-weight: bold;
 }
 
-/* Style for the section containing the buttons */
-section {
+/* Style the logo container */
+.logo-container {
   display: flex;
-  justify-content: center; /* Center the button container */
+  align-items: center;
+  order: 1;
 }
 
 .icon-container {
-  display: flex; /* Allow buttons to sit side-by-side */
-  flex-wrap: wrap; /* Wrap buttons if they don't fit in a line */
-  justify-content: center; /* Center the buttons within their row*/
+  order: 2;
+}
+
+.profile-icon {
+  order: 3;
 }
 
 /* Shift the middle button to the left and add space on the right */

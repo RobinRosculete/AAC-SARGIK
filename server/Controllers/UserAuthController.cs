@@ -91,26 +91,37 @@ namespace server.Controllers;
  // Function to generate JWT token to be returned for user session.
         private string GenerateJwtToken(User user)
         {
-            var encryptionKey = _configuration["AppSettings:EncryptionKey"];
+
+
             var claims = new[]
             {
         new Claim(JwtRegisteredClaimNames.Sub, user.FirstName),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserGoogleId) // Convert UserId to string
-    };
+                };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Token");
 
-            var loginKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(encryptionKey));
+      
             var token = new JwtSecurityToken(
-                issuer: "ifeoluwa",
-                audience: "ifeoluwa",
-                expires: DateTime.UtcNow.AddYears(1),
+                issuer: _configuration["JwtSettings:Issuer"],
+                audience: _configuration["JwtSettings:Audience"],
                 claims: claimsIdentity.Claims,
-                signingCredentials: new SigningCredentials(loginKey, SecurityAlgorithms.HmacSha256)
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(
+                    _configuration["JwtSettings:ExpirationTimeInMinutes"])),
+        
+                signingCredentials: GetSigningCredentials()
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+    private SigningCredentials GetSigningCredentials()
+    {
+        var key = Encoding.UTF8.GetBytes(
+            _configuration["JwtSettings:SecurityKey"]);
+        var secret = new SymmetricSecurityKey(key);
+        return new SigningCredentials(secret,
+            SecurityAlgorithms.HmacSha256);
     }
+}
 

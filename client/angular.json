@@ -25,11 +25,6 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
               }
             ],
             "styles": [
@@ -66,43 +61,8 @@
               },
               {
                 "input": "src/theme/variables.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/core.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/normalize.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/structure.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/typography.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/display.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/padding.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/float-elements.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/text-alignment.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/text-transformation.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/flex-utils.css"
-              },
-              {
-                "input": "src/theme/variables.css"
               }
             ],
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -134,8 +94,6 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
-              
-           
             }
           },
           "defaultConfiguration": "production"
@@ -170,41 +128,10 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": []
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "client:ionic-cordova-build",
-            "devServerTarget": "client:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "client:ionic-cordova-build:production",
-              "devServerTarget": "client:serve:production"
-            }
-          }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "client:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "client:build:production"
-            }
           }
         },
         "ionic-cordova-serve": {
@@ -236,10 +163,7 @@
   },
   "cli": {
     "analytics": false,
-    "schematicCollections": [
-      "@ionic/angular-toolkit",
-      "@ionic/angular-toolkit"
-    ]
+    "schematicCollections": ["@ionic/angular-toolkit"]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
