@@ -22,6 +22,11 @@ p {
   padding: 0;
 }
 
+.image-button {
+  color: black;
+  --background: none;
+  --box-shadow: none;
+}
 ion-button:active {
   color: #fff;
 }
