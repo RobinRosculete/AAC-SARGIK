@@ -32,7 +32,7 @@ namespace server.Controllers
                 }
 
                 // Load the YOLOv8 model
-                using var predictor = new YoloV8("../server/MLModels/best.onnx");
+                using var predictor = new YoloV8("../server/MLModels/yolov8n-oiv7.onnx");
 
                 // Perform object detection on the provided image file
                 var result = await predictor.DetectAsync(file.OpenReadStream());
