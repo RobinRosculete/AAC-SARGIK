@@ -4,6 +4,7 @@ import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
+import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 
 @Component({
   selector: 'app-gallery',
@@ -19,7 +20,11 @@ export class GalleryComponent {
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
 
-  constructor(protected blobAPI: BlobApiService, private router: Router) {}
+  constructor(
+    protected blobAPI: BlobApiService,
+    private router: Router,
+    private objectDetectionService: ObjectDetectionService
+  ) {}
 
   ngOnInit(): void {
     this.googleID = this.getUserIdFromToken();
@@ -113,6 +118,22 @@ export class GalleryComponent {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
       //this.message = `Hello, ${ev.detail.data}!`;
+    }
+  }
+
+  async detectObjects(): Promise<void> {
+    if (!this.file) {
+      console.error('No file selected.');
+      return;
+    }
+
+    try {
+      const result = await this.objectDetectionService
+        .getObjectDetection(this.file)
+        .toPromise();
+      console.log('Object detection result:', result);
+    } catch (error) {
+      console.error('Error detecting objects:', error);
     }
   }
 }

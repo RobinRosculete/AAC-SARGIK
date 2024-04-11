@@ -5,14 +5,26 @@
 </ion-header>
 
 <ion-input type="file" (change)="onFileSelected($event)"></ion-input>
-<ion-input type="text" placeholder="Enter caption..." [(ngModel)]="caption"></ion-input>
-<ion-button type="button" value="Upload" (click)="uploadImageWithCaption()">Upload Image With Caption API Test</ion-button>
+<ion-input
+  type="text"
+  placeholder="Enter caption..."
+  [(ngModel)]="caption"
+></ion-input>
+<ion-button type="button" value="Upload" (click)="uploadImageWithCaption()"
+  >Upload Image With Caption API Test</ion-button
+>
+<ion-button type="button" (click)="detectObjects()">Detect Objects</ion-button>
 
 <ion-grid>
   <ion-row>
     <ion-col size="6" size-sm="4" *ngFor="let image of images; let i = index">
       <ion-button expand="block" class="image-button" (click)="openModal(i)">
-        <ion-img draggable="false" (dragstart)="false;" class="unselectable" [src]="image.imageUrl"></ion-img>
+        <ion-img
+          draggable="false"
+          (dragstart)="(false)"
+          class="unselectable"
+          [src]="image.imageUrl"
+        ></ion-img>
       </ion-button>
       <div>
         <ion-button (click)="readCaption(image.caption)">
@@ -30,10 +42,18 @@
       <ng-template>
         <ion-content>
           <ion-item>
-            <ion-img draggable="false" (dragstart)="false;" class="unselectable fit" [src]="images[modal.index].imageUrl"></ion-img>
+            <ion-img
+              draggable="false"
+              (dragstart)="(false)"
+              class="unselectable fit"
+              [src]="images[modal.index].imageUrl"
+            ></ion-img>
           </ion-item>
-          <div style="text-align: center;">
-            <ion-button class="center" (click)="readCaption(images[modal.index].caption)">
+          <div style="text-align: center">
+            <ion-button
+              class="center"
+              (click)="readCaption(images[modal.index].caption)"
+            >
               <ion-icon name="volume-high-outline" slot="start"></ion-icon>
               <p>{{ images[modal.index].caption }}</p>
             </ion-button>
@@ -43,4 +63,3 @@
     </ion-modal>
   </ng-container>
 </ion-content>
-
