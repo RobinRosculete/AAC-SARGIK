@@ -5,6 +5,7 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
+import { Image } from 'src/app/models/image.interfacce';
 
 @Component({
   selector: 'app-gallery',
@@ -12,7 +13,7 @@ import { ObjectDetectionService } from 'src/app/services/object_detection/object
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  images: { imageUrl: string; caption: string }[] = [];
+  images: Image[] = [];
   googleID: string = '';
   file: File | null = null;
   caption: string = '';
@@ -32,8 +33,9 @@ export class GalleryComponent {
       this.blobAPI.getUserImages(this.googleID).subscribe(
         (imagesWithCaptions: any[]) => {
           this.images = imagesWithCaptions.map((image) => ({
-            imageUrl: image.imgUri,
-            caption: image.imgCaption,
+            imageID: image.imageID,
+            imageUrl: image.imageUri,
+            caption: image.imageCaption,
           }));
           this.modals = this.images.map(() => ({ index: -1, name: '' }));
         },
