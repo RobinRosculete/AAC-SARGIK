@@ -32,20 +32,21 @@ namespace server.Controllers
                 }
 
                 // Load the YOLOv8 model
-                using var predictor = new YoloV8("../server/MLModels/yolov8n-oiv7.onnx");
+                const string model_path = "../server/MLModels/yolov8n-oiv7.onnx";
+                using var predictor = new YoloV8(model_path);
 
                 // Perform object detection on the provided image file
                 var result = await predictor.DetectAsync(file.OpenReadStream());
 
-                // Parse the JSON data
-                var jsonString = JsonConvert.SerializeObject(result);
-                var detectionResult = JsonConvert.DeserializeObject<DetectionResult>(jsonString);
+                // Extract class names from the detected objects
+                List<string> classNames = new List<string>();
+                foreach (var box in result.Boxes)
+                {
+                    classNames.Add(box.Class?.Name ?? "Unknown");
+                }
 
-                // Extract class name from the first detected object
-                string? className = detectionResult?.Boxes?.Count > 0 ? detectionResult.Boxes[0].Class?.Name : "Unknown";
-
-                // Return the class name
-                return Ok(className);
+                // Return the array of class names
+                return Ok(classNames);
             }
             catch (Exception ex)
             {

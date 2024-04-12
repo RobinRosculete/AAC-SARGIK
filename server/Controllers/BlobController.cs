@@ -1,9 +1,7 @@
-﻿
-//Controler used to manage upload, delete and update of images to Azure Blob Stroage 
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.DTOs;
+using server.Migrations;
 using server.Models;
 using server.Services;
 
@@ -26,66 +24,68 @@ namespace server.Controllers
         //Api to list all files in the Blob Storage
         // GET: api/values
         [HttpGet]
-        public async Task <IActionResult> ListAllBlolbs()
+        public async Task<IActionResult> ListAllBlolbs()
         {
             var result = await _blobFileService.ListAsync();
             return Ok(result);
         }
 
-
-        // APi endpoint to return all the users images and captions
         [HttpGet("users/{googleUserId}/images")]
         public async Task<IActionResult> GetUserImages(string googleUserId)
         {
-            // Geting User ID based on googleID
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
+            if (string.IsNullOrWhiteSpace(googleUserId))
+            {
+                return BadRequest("GoogleUserId is missing or empty.");
+            }
 
-            // Checking if user exists
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
-            // Storing images and captions in the images variable
             var images = await _db.Images
-                .Where(i => i.Id == user.Id)
+                .Where(i => i.Id == user.Id) // Assuming there's a UserId property in your Image entity
                 .Select(i => new ImageCaptionDTO
                 {
-                    //Storing image uri with SAS token to allow image acces
-                    ImgUri = $"{i.ImageUri}?{_blobFileService.GenerateSasToken()}",
-                    ImgCaption = i.Caption
+                    ImageID = i.ImageId, // Include the ImageId in the response
+                    ImageUri = $"{i.ImageUri}?{_blobFileService.GenerateSasToken()}",
+                    ImageCaption = i.Caption
                 })
                 .ToListAsync();
 
             return Ok(images);
-        } // public async Task<IActionResult> GetUserImages(string googleUserId)
+        }
 
 
-        // POST api/values
-        //***** ONLY FOR TESTING AT THE MOMENT ***** 
-        // API to upload Images to Blob Storage
+        // API endpoint to store the user image with a specific caption
         // POST api/values
         [HttpPost("users/{googleUserId}/upload-image")]
         public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId, string caption)
         {
-            Console.WriteLine(googleUserId);
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
 
-            if (string.IsNullOrEmpty(googleUserId))
+            if (string.IsNullOrWhiteSpace(googleUserId))
             {
                 return BadRequest("GoogleUserId claim is missing.");
             }
 
-            // Get the user ID from the database corresponding to the Google user ID
+            if (string.IsNullOrWhiteSpace(caption))
+            {
+                return BadRequest("Caption is missing.");
+            }
+
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserGoogleId == googleUserId);
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
-            // Upload the image to Blob Storage
             var result = await _blobFileService.UploadAsync(file, googleUserId);
 
-            // Associate the image with the user and set the caption
             var image = new Image
             {
                 Id = user.Id,
@@ -100,18 +100,51 @@ namespace server.Controllers
             return Ok(result);
         }
 
+        // POST api/values
+        [HttpPost("users/save-bounding-box")]
+        public async Task<IActionResult> SaveBoundingBox(BoundingBoxDTO boundingBoxDTO)
+        {
+            if (boundingBoxDTO == null ||
+                boundingBoxDTO.imageID < 0 ||
+                boundingBoxDTO.xMin < 0 || boundingBoxDTO.xMax < 0 ||
+                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0 ||
+                string.IsNullOrWhiteSpace(boundingBoxDTO.label))
+            {
+                return BadRequest("Invalid input.");
+            }
+
+            var image = await _db.Images.FirstOrDefaultAsync(i => i.ImageId == boundingBoxDTO.imageID);
+            if (image == null)
+            {
+                return NotFound("Image Does not Exist int DB");
+            }
+
+            var boundinBox = new BoundingBox
+            {
+                ImageId = image.ImageId,
+                XMin = boundingBoxDTO.xMin,
+                YMin = boundingBoxDTO.yMin,
+                XMax = boundingBoxDTO.xMax,
+                YMax = boundingBoxDTO.yMax,
+                Label = boundingBoxDTO.label,
+                Message = boundingBoxDTO.message
+            };
+            _db.BoundingBoxes.Add(boundinBox);
+            await _db.SaveChangesAsync();
+
+            return Ok("Succesfully Saved Bounding Box in Database");
+        }
 
         //Api to Download Images From Blob Storage
         // GET api/values/5
         [HttpGet]
         [Route("fileName")]
-        public async Task <IActionResult> DownloadImage(string fileName)
+        public async Task<IActionResult> DownloadImage(string fileName)
         {
             var result = await _blobFileService.DownloadAsync(fileName);
-            return File(result.Content,result.ContentType,result.Name);
+            return File(result.Content, result.ContentType, result.Name);
         }
 
-  
         // Api to Delete Images/filse given a file name
         // DELETE api/values/5
         [HttpDelete]
@@ -119,7 +152,7 @@ namespace server.Controllers
         public async Task<IActionResult> DeleteImage(string fileName)
         {
             var result = await _blobFileService.DeleteAsync(fileName);
-               return Ok(result);
+            return Ok(result);
         }
     }
 }

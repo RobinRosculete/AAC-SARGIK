@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
+import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
+import { Image } from 'src/app/models/image.interfacce';
 
 @Component({
   selector: 'app-gallery',
@@ -9,25 +13,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  images: { imageUrl: string; caption: string }[] = [];
+  images: Image[] = [];
   googleID: string = '';
-
-  //Variables used for Image and caption Upload Testing
   file: File | null = null;
   caption: string = '';
+  modals: { index: number; name: string }[] = [];
 
-  constructor(protected blobAPI: BlobApiService, private router: Router) {}
+  @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
+
+  constructor(
+    protected blobAPI: BlobApiService,
+    private router: Router,
+    private objectDetectionService: ObjectDetectionService
+  ) {}
 
   ngOnInit(): void {
     this.googleID = this.getUserIdFromToken();
-
     setTimeout(() => {
       this.blobAPI.getUserImages(this.googleID).subscribe(
         (imagesWithCaptions: any[]) => {
           this.images = imagesWithCaptions.map((image) => ({
-            imageUrl: image.imgUri,
-            caption: image.imgCaption,
+            imageID: image.imageID,
+            imageUrl: image.imageUri,
+            caption: image.imageCaption,
           }));
+          this.modals = this.images.map(() => ({ index: -1, name: '' }));
         },
         (error) => {
           console.error('Error fetching images with captions:', error);
@@ -67,10 +77,7 @@ export class GalleryComponent {
 
     this.blobAPI.uploadImage(this.file, this.googleID, this.caption).subscribe(
       (response) => {
-        //Handle successful upload
         console.log('Image uploaded successfully:', response);
-
-        //reset input
         this.file = null;
         this.caption = '';
 
@@ -85,5 +92,50 @@ export class GalleryComponent {
         console.error('Error uploading image:', error);
       }
     );
+  }
+
+  openModal(index: number): void {
+    const modal = this.ionModals.toArray()[index];
+    if (modal) {
+      this.modals[index].index = index;
+      modal.present();
+    }
+  }
+
+  cancel(index: number): void {
+    const modal = this.ionModals.toArray()[index];
+    if (modal) {
+      modal.dismiss(null, 'cancel');
+    }
+  }
+
+  confirm(index: number): void {
+    const modal = this.ionModals.toArray()[index];
+    if (modal) {
+      modal.dismiss(this.modals[index].name, 'confirm');
+    }
+  }
+
+  onWillDismiss(event: Event, index: number): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      //this.message = `Hello, ${ev.detail.data}!`;
+    }
+  }
+
+  async detectObjects(): Promise<void> {
+    if (!this.file) {
+      console.error('No file selected.');
+      return;
+    }
+
+    try {
+      const result = await this.objectDetectionService
+        .getObjectDetection(this.file)
+        .toPromise();
+      console.log('Object detection result:', result);
+    } catch (error) {
+      console.error('Error detecting objects:', error);
+    }
   }
 }
