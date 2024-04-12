@@ -22,56 +22,44 @@ namespace server.Controllers;
         {
             _configuration = configuration;
         }
-    
+
     //APi endpoint to acces GPT API
     [HttpPost]
-    public async Task<IActionResult> UseChatGPT([FromBody] TextPredictionBody query)
+  
+    public async Task<IActionResult> UseChatGPT([FromBody] string[] imageClasses)
     {
-        if (!(string.IsNullOrEmpty(query.text)))
+        if (imageClasses != null && imageClasses.Length > 0)
         {
             // Create a new OpenAiAPI object, requires API KEY
             string apiKey = _configuration["GPT-API-KEY"];
             OpenAIAPI api = new OpenAIAPI(apiKey);
-            
-
-            // Extract the word from the query text
-            var word = query.text;
 
             // Creating a chat completion of the input query (input text)
             var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
             {
                 Model = Model.ChatGPTTurbo, // Specifying Model
                 Temperature = 0.1,
-                MaxTokens = 50,  // Max tokens to be predicted
+                MaxTokens = 30,  // Max tokens to be predicted
                 Messages = new ChatMessage[]
                 {
-                // Requesting Chat Completion from model, with the given prompt
-                new ChatMessage(ChatMessageRole.User, $"Find sentences related to the word '{word}'"),
-
+        // Requesting Chat Completion from model, with the given prompt
+        new ChatMessage(ChatMessageRole.User, $"I am working on an assistive communication tool for people with communication disorders. Given a list of image classes, " +
+        $"I need your help generating short, first-person sentences expressing basic wants, needs, observations, or feelings related to those classes. " +
+        $"\n\nHere are some guidelines:\n\n* **Keep it simple.** Use clear, everyday language.\n* **Focus on the immediate.** " +
+        $"Think about what someone might want to express right now based on the visual information.\n* **Variety is key.**  " +
+        $"Offer a few different options, showing several ways to relate to the image classes.\n\n**Example image classes:" +
+        $"** dog, park, smile\n\n**Possible Responses:**\n* \"I want to pet the dog.\"\n* \"The park looks fun!\"\n* \"That smile makes me happy.\" " +
+        $"\n\n**New image classes:** {string.Join(", ", imageClasses)}  ")
                 }
             });
 
-            // Extracting the sentences related to the word
-            var sentences = new List<string>();
-            var completion = result.ToString();
-            var completionParts = completion.Split("user: ");
-            foreach (var part in completionParts)
-            {
-                if (part.Contains(word))
-                {
-                    var sentence = part.Split('\n')[0].Trim();
-                    if (!sentences.Contains(sentence))
-                    {
-                        sentences.Add(sentence + ".");
-                    }
-                    if (sentences.Count >= 3) break;
-                }
-            }
 
-            // Return the predicted completion by the model
-            return Ok(new { sentences });
+            var sentence = result.ToString().Trim();
+
+            // Return the generated sentence
+            return Ok(new { sentence });
         }
-        return Ok(""); // If Query empty return empty string
+        return BadRequest("No classes detected in the image.");
     }
 
     //API end point to return a user Emoji
