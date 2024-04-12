@@ -32,7 +32,7 @@ namespace server.Controllers
                 }
 
                 // Load the YOLOv8 model
-                const string model_path = "../server/MLModels/yolov8n-oiv7.onnx";
+                const string model_path = "../server/MLModels/yolov8s-coco.onnx";
                 using var predictor = new YoloV8(model_path);
 
                 // Perform object detection on the provided image file

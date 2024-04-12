@@ -5,6 +5,7 @@ using server.Models;
 using server.Services;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace server.Controllers
@@ -74,29 +75,6 @@ namespace server.Controllers
             }
         }
 
-        // Api to get all the bouding boxes coresponding to a image
-        [HttpPost("users/get-bounding-boxes")]
-        public async Task<IActionResult> GetBoundingBoxes([FromBody] int imageID)
-        {
-            if (imageID < 0)
-            {
-                return BadRequest("Invalid input.");
-            }
-
-            try
-            {
-                var boundingBoxes = await _db.BoundingBoxes.Where(b => b.ImageId == imageID).ToListAsync();
-                if (boundingBoxes == null || !boundingBoxes.Any())
-                {
-                    return NotFound("Bounding boxes not found for the specified image.");
-                }
-                return Ok(boundingBoxes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
 
         // API endpoint to store the user image with a specific caption
         // POST api/values
