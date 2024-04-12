@@ -105,17 +105,18 @@ namespace server.Controllers;
             
             if (!Regex.IsMatch(result.Choices[0].Message.TextContent, EMOJI_PATTERN))
             {
-                // Return the first emoji - like character
+                //if no emoji in output return a emptry string
                 return Ok("");
                 
             }
             else {
+
                 return Ok(result);
 
             }
                 
         }
-        return Ok("ew"); // If Query empty return empty string
+        return Ok(""); // If Query empty return empty string
     }
 
 }
