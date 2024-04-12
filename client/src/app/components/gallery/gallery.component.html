@@ -30,9 +30,6 @@
     <ion-modal (willDismiss)="onWillDismiss($event, modal.index)">
       <ng-template>
         <ion-content>
-          <ion-item>
-            <ion-img draggable="false" (dragstart)="(false)" class="unselectable fit" [src]="images[modal.index].imageUrl"></ion-img>
-          </ion-item>
           <image-cropper
             [imageURL]="images[modal.index].imageUrl"
             [imageChangedEvent]="imageChangedEvent"
