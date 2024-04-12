@@ -51,15 +51,22 @@ ion-input {
   left: 0;
   right: 0;
 }
+#flip{
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% + 125px);
+  width: 50px;
+  height: 50px;
 
-/* Edit button styles */
-.button-left {
-  flex: 1;
-  margin-right: 10px;
 }
-
-/* Other button styles */
-.button-right {
-  flex: 1;
-  margin-left: 10px;
+#gallery{
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 175px);
+  width: 50px;
+  height: 50px;
+}
+.button_color {
+  --background: #61c6d1; /* Button background color */
+  --background-hover: #ffffff; /* Color on hover */
 }
