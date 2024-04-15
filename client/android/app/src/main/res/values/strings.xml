@@ -1,7 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8' ?>
 <resources>
     <string name="app_name">AAC SARGIK</string>
     <string name="title_activity_main">AAC SARGIK</string>
     <string name="package_name">com.sargik.angular</string>
     <string name="custom_url_scheme">com.sargik.angular</string>
+
+
+    <!-- google auth -->
+    <string
+    name="server_client_id"
+  >836222128097-cvrthd4rfcs61r8efm6gpi59195gpvbf.apps.googleusercontent.com</string>
 </resources>
