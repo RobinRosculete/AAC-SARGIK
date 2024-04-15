@@ -47,8 +47,10 @@
         </ion-button>
       </div>
     </div>
+
     <div *ngIf="photoCaptured && !myImage">
-      <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
+      <ion-img *ngIf="croppedImage" [src]="croppedImage"></ion-img>
+      <ion-img *ngIf="!croppedImage" [src]="image"></ion-img>
       <ion-button
         class="button_color"
         (click)="retakePhoto()"
@@ -85,5 +87,79 @@
     ></image-cropper>
 
     <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
+
+    <div *ngIf="photoCaptured && !myImage">
+      <ion-img [src]="croppedImage ? croppedImage : image"></ion-img>
+      <ion-button
+        class="button_color"
+        (click)="retakePhoto()"
+        expand="block"
+        id="retake"
+      >
+        <ion-icon name="refresh-outline"></ion-icon>
+        Retake
+      </ion-button>
+      <ion-button
+        class="button_color"
+        (click)="generateCaption()"
+        expand="block"
+        id="flip"
+      >
+        Generate Caption
+      </ion-button>
+
+      <ion-button
+        class="button_color"
+        (click)="editPhoto()"
+        expand="block"
+        id="edit"
+      >
+        <ion-icon name="create-outline"></ion-icon>
+        Edit
+      </ion-button>
+    </div>
+
+    <div *ngIf="captionSectionVisible">
+      <div *ngIf="captionSectionVisible" class="caption-box">
+        <ion-item *ngIf="captionSectionVisible">
+          <ion-label position="floating">Caption</ion-label>
+          <ion-textarea
+            [(ngModel)]="captionText"
+            placeholder="Enter caption here..."
+          ></ion-textarea>
+        </ion-item>
+      </div>
+      <div *ngIf="photoCaptured && !myImage">
+        <ion-button
+          id="gallery"
+          class="button_color"
+          (click)="retakePhoto()"
+          expand="block"
+        >
+          <ion-icon name="refresh-outline"></ion-icon>
+          Retake
+        </ion-button>
+
+        <ion-button
+          class="button_color"
+          (click)="startSpeechToText()"
+          expand="block"
+          id="capture"
+        >
+          <ion-icon name="mic-outline"></ion-icon>
+          Voice to Text
+        </ion-button>
+
+        <ion-button
+          class="button_color"
+          (click)="confirmCaption()"
+          expand="block"
+          id="flip"
+        >
+          <ion-icon name="checkmark-outline"></ion-icon>
+          Confirm
+        </ion-button>
+      </div>
+    </div>
   </ng-template>
 </ion-modal>

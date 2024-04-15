@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef,ChangeDetectorRef  } from '@angular/core';
 import { IonModal, Platform } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { CameraPreview, CameraPreviewOptions,CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
@@ -22,10 +22,11 @@ export class VsdComponent {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
+  public captionSectionVisible: boolean = false;
+  public captionText: string = '';
+
   
-
-
-  constructor(private platform: Platform) {}
+  constructor(private platform: Platform, private cdr: ChangeDetectorRef) { }
 
 
   ngAfterViewInit(): void {
@@ -74,6 +75,7 @@ export class VsdComponent {
     this.photoCaptured = true;
     this.croppedImage = null;
     this.stopCamera();
+    this.cdr.detectChanges();
     
   }
 
@@ -82,6 +84,7 @@ export class VsdComponent {
     this.myImage = null;
     this.croppedImage = null;
     this.photoCaptured = false;
+    this.captionSectionVisible = false;
     this.startCamera()
   }
 
@@ -146,12 +149,13 @@ export class VsdComponent {
   
   
   editPhoto() {
+    this.photoCaptured = true;
     if (this.croppedImage) {
-      this.myImage = this.croppedImage;
+      this.croppedImage = null;
+      this.myImage = null;
     } else if (this.image) {
       this.myImage = this.image;
     }
-    this.photoCaptured = true; 
   }
 
   
@@ -162,7 +166,21 @@ export class VsdComponent {
     if (this.croppedImage) {
         this.image = this.croppedImage;
         this.myImage = null;
+        this.croppedImage = null;
         this.photoCaptured = true;
     }
 }
+
+generateCaption() {
+  this.captionSectionVisible = true;
+}
+
+startSpeechToText() {
+ 
+}
+
+confirmCaption() {
+
+}
+
 }
