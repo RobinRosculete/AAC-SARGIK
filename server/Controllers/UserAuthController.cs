@@ -91,8 +91,6 @@ namespace server.Controllers;
  // Function to generate JWT token to be returned for user session.
         private string GenerateJwtToken(User user)
         {
-
-
             var claims = new[]
             {
         new Claim(JwtRegisteredClaimNames.Sub, user.FirstName),

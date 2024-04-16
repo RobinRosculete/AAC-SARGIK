@@ -7,15 +7,10 @@ import { environment } from '../../../environments/environment.development';
 })
 export class TextPredictionApiService {
   constructor(private http: HttpClient) {}
-  //Function to send user text input to Text Prediction API service and return predicted text
-  getData(inputText: string): Observable<any> {
-    // Request body
-    let url = environment.SERVER_URL + '/api/TextPrediction';
-    let body = {
-      text: inputText,
-    };
-
-    return this.http.post(url, body);
+  //Function ro send array of predicted classes from a image and return 3 generated sentences based on the class
+  getData(imageClasses: string[]): Observable<any> {
+    let url = environment.SERVER_URL + '/api/UseChatGPT';
+    return this.http.post(url, imageClasses); // returns a array of strings containing generated sentences senteces
   }
 
   //Makes request to Text Prediction API service to get an emoji based on input text
