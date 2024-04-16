@@ -13,7 +13,7 @@
       /><br />
     </ion-button>
 
-    <ion-button routerLink="/vsd" fill="clear">
+    <ion-button id="vsd" (click)="toggleVsd()" fill="clear">
       <img
         src="../assets/images/VSD_icon.png"
         alt="Visual Scene Display icon"
@@ -37,3 +37,5 @@
     </ion-button>
   </div>
 </nav>
+
+<app-vsd *ngIf="vsdOpened" (willDismiss)="onWillDismiss($event)"></app-vsd>

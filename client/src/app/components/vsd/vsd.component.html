@@ -1,58 +1,118 @@
-<ion-modal #modal (willDismiss)="stopCamera()">
+<ion-modal #modal class="main-modal" (ionModalWillDismiss)="stopCamera()">
   <ng-template>
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="cancel()">Cancel</ion-button>
+          <ion-button (click)="cancel()"> Cancel</ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
           <ion-button
-            (click)="cropImage()"
-            *ngIf="photoCaptured && !croppedImage"
-            >Confirm</ion-button
+            *ngIf="myImage && !croppingMode"
+            (click)="saveImageToGallery()"
+            >Save Image</ion-button
           >
         </ion-buttons>
-
         <ion-title>Visual Scene Display</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div #cameraPreview class="camera-preview"></div>
-      <div *ngIf="photoCaptured">
-        <!-- Display captured image -->
-        <img [src]="image" />
-      </div>
-      <div *ngIf="!photoCaptured">
+      <div class="camera-preview"></div>
+
+      <div *ngIf="!myImage">
         <!-- Capture and other buttons -->
-        <ion-button (click)="captureImage()">Capture</ion-button>
-        <ion-button (click)="selectImageFromGallery()"
-          >Select from Gallery</ion-button
+        <ion-button expand="full" (click)="captureImage()">
+          <ion-icon name="camera-outline"></ion-icon>
+          &nbsp; Capture</ion-button
         >
+        <ion-button expand="full" (click)="fileInput.click()">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          &nbsp; Upload Image</ion-button
+        >
+        <input
+          type="file"
+          #fileInput
+          style="display: none"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+        />
       </div>
-      <ion-input
-        *ngIf="photoCaptured"
-        [(ngModel)]="buttonText"
-        style="
-          border: none;
-          background-color: transparent;
-          color: inherit;
-          text-align: center;
-        "
-        >Edit:</ion-input
+
+      <!-- Added Grid to display buttons properly-->
+      <ion-grid *ngIf="myImage && !croppingMode">
+        <ion-row class="ion-justify-content-center">
+          <ion-col class="ion-align-self-center">
+            <ion-img [src]="croppedImage ? croppedImage : myImage"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-input
+          placeholder="Enter Text"
+          [(ngModel)]="aiSelectedText"
+        ></ion-input>
+
+        <ion-row class="ion-justify-content-center">
+          <ion-col class="ion-align-self-center">
+            <ion-button (click)="editPhoto()" id="gallery" expand="block">
+              <ion-icon name="crop-outline"></ion-icon>
+              Crop Image
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-align-self-center">
+            <ion-button
+              (click)="openTextModal()"
+              id="generate-caption"
+              expand="block"
+            >
+              <ion-icon name="logo-ionitron"></ion-icon>
+              &nbsp;A.I. Text Generation
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-align-self-center">
+            <ion-button (click)="retakePhoto()" id="capture" expand="block">
+              <ion-icon name="refresh-outline"></ion-icon>
+              Retake Photo
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <image-cropper
+        #cropper
+        *ngIf="myImage && croppingMode"
+        [imageBase64]="myImage"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+      ></image-cropper>
+      <ion-button
+        (click)="confirmCropping()"
+        expand="full"
+        *ngIf="croppingMode"
       >
-      <div class="button-group">
-        <ion-button
-          class="button-left"
-          *ngIf="photoCaptured"
-          (click)="retakePhoto()"
+        <ion-icon name="save-outline"></ion-icon> &nbsp; Save Cropped
+        Image</ion-button
+      >
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal class="textModal" #textModal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>
+          <ion-icon name="logo-ionitron"></ion-icon> &nbsp; Select Best
+          Generated Text
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item
+          *ngFor="let text of generatedTexts"
+          (click)="selectText(text)"
         >
-          Retake Photo
-        </ion-button>
-        <ion-button class="button-right" *ngIf="photoCaptured">
-          <ion-icon name="volume-high-outline" slot="start"></ion-icon>
-          {{ buttonText }}
-        </ion-button>
-      </div>
+          {{ text }}
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ng-template>
 </ion-modal>

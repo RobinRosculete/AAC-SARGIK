@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
@@ -6,6 +6,10 @@ import { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 import { Image } from 'src/app/models/image.interfacce';
+import { LoadingController } from '@ionic/angular';
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-gallery',
@@ -13,18 +17,24 @@ import { Image } from 'src/app/models/image.interfacce';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  images: Image[] = [];
-  googleID: string = '';
-  file: File | null = null;
-  caption: string = '';
-  modals: { index: number; name: string }[] = [];
+  private myImage: any = null;
+  protected images: Image[] = [];
+  private googleID: string = '';
+  private file: File | null = null;
+  protected caption: string = '';
+  protected modals: { index: number; name: string }[] = [];
+  protected croppedImage: any = '';
+  protected cropperPosition: any; // Adjust the type as per your needs
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
+  imageChangedEvent: any = '';
 
   constructor(
     protected blobAPI: BlobApiService,
     private router: Router,
-    private objectDetectionService: ObjectDetectionService
+    private objectDetectionService: ObjectDetectionService,
+    private loadingCtrl: LoadingController,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -123,19 +133,30 @@ export class GalleryComponent {
     }
   }
 
-  async detectObjects(): Promise<void> {
-    if (!this.file) {
-      console.error('No file selected.');
-      return;
-    }
+  async selectImage() {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+    const loading = await this.loadingCtrl.create();
+    await loading.present();
 
-    try {
-      const result = await this.objectDetectionService
-        .getObjectDetection(this.file)
-        .toPromise();
-      console.log('Object detection result:', result);
-    } catch (error) {
-      console.error('Error detecting objects:', error);
-    }
+    this.myImage = `data:image/jpeg;base64,${image.base64String}`;
+    this.croppedImage = null;
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
   }
 }
