@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonModal } from '@ionic/angular';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 import {
   CameraPreview,
   CameraPreviewOptions,
@@ -26,7 +28,7 @@ export class VsdComponent {
   @ViewChild('cropper') cropper!: ImageCropperComponent;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  protected myImage: string | null = null;
+  protected myImage: string = '';
   protected cameraActive: boolean = false;
   protected photoCaptured: boolean = false;
   protected croppingMode: boolean = false;
@@ -38,10 +40,16 @@ export class VsdComponent {
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
   protected aiSelectedText: string = '';
+  protected file: File | null = null;
 
+  //Used to get coordinates from cropper
   cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
-  constructor() {}
+  constructor(
+    private textPredictionApiService: TextPredictionApiService,
+
+    private objectDetectionService: ObjectDetectionService
+  ) {}
 
   ngAfterViewInit(): void {
     this.openModal();
@@ -53,14 +61,18 @@ export class VsdComponent {
 
   //Used to open the ai text generation modal
   openTextModal() {
-    this.textModal.present();
+    // Check if myImage is available
+    if (this.myImage) {
+      this.textModal.present();
+    } else {
+      console.error('No image selected.');
+    }
   }
 
   //Used to select one of the 3 text genertae by the ai
   selectText(text: string) {
     this.aiSelectedText = text;
     this.textModal.dismiss();
-    console.log('Selected text:', this.aiSelectedText);
   }
 
   public startCamera(): void {
@@ -95,8 +107,8 @@ export class VsdComponent {
   }
 
   retakePhoto() {
-    this.myImage = null;
-    this.myImage = null;
+    this.myImage = '';
+
     this.croppedImage = null;
     this.photoCaptured = false;
     this.aiSelectedText = '';

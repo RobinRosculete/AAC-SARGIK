@@ -5,19 +5,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-input type="file" (change)="onFileSelected($event)"></ion-input>
-  <ion-input
-    type="text"
-    placeholder="Enter caption..."
-    [(ngModel)]="caption"
-  ></ion-input>
-  <ion-button type="button" (click)="uploadImageWithCaption()"
-    >Upload Image With Caption API Test</ion-button
-  >
-  <ion-button type="button" (click)="detectObjects()"
-    >Detect Objects</ion-button
-  >
-
   <ion-grid>
     <ion-row>
       <ion-col size="6" size-sm="4" *ngFor="let image of images; let i = index">

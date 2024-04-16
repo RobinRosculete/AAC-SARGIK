@@ -17,14 +17,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent {
-  myImage: any = null;
-  images: Image[] = [];
-  googleID: string = '';
-  file: File | null = null;
-  caption: string = '';
-  modals: { index: number; name: string }[] = [];
-  croppedImage: any = '';
-  cropperPosition: any; // Adjust the type as per your needs
+  private myImage: any = null;
+  protected images: Image[] = [];
+  private googleID: string = '';
+  private file: File | null = null;
+  protected caption: string = '';
+  protected modals: { index: number; name: string }[] = [];
+  protected croppedImage: any = '';
+  protected cropperPosition: any; // Adjust the type as per your needs
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -130,22 +130,6 @@ export class GalleryComponent {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
       //this.message = `Hello, ${ev.detail.data}!`;
-    }
-  }
-
-  async detectObjects(): Promise<void> {
-    if (!this.file) {
-      console.error('No file selected.');
-      return;
-    }
-
-    try {
-      const result = await this.objectDetectionService
-        .getObjectDetection(this.file)
-        .toPromise();
-      console.log('Object detection result:', result);
-    } catch (error) {
-      console.error('Error detecting objects:', error);
     }
   }
 

@@ -25,6 +25,7 @@ namespace server.Controllers
         {
             try
             {
+                
                 // Ensure that an image file is provided
                 if (file == null || file.Length == 0)
                 {

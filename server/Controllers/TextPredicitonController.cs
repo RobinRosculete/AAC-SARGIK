@@ -25,7 +25,6 @@ namespace server.Controllers;
 
     //APi endpoint to acces GPT API
     [HttpPost]
-
     public async Task<IActionResult> UseChatGPT([FromBody] string[] imageClasses)
     {
         if (imageClasses != null && imageClasses.Length > 0)
