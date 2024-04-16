@@ -39,14 +39,14 @@ namespace server.Controllers
                 var result = await predictor.DetectAsync(file.OpenReadStream());
 
                 // Extract class names from the detected objects
-                List<string> classNames = new List<string>();
+                HashSet<string> classNames = new HashSet<string>();
                 foreach (var box in result.Boxes)
                 {
                     classNames.Add(box.Class?.Name ?? "Unknown");
                 }
 
-                // Return the array of class names
-                return Ok(classNames);
+                // Return the array of unique class names
+                return Ok(classNames.ToList());
             }
             catch (Exception ex)
             {
@@ -55,27 +55,5 @@ namespace server.Controllers
             }
         }
 
-        // Define class to represent the detection result
-        public class DetectionResult
-        {
-            public List<Box>? Boxes { get; set; }
-            // Other properties as needed...
-        }
-
-        // Define class to represent a detected object
-        public class Box
-        {
-            public ClassInfo? Class { get; set; }
-            public float Confidence { get; set; }
-            // Other properties as needed...
-        }
-
-        // Define class to represent class information
-        public class ClassInfo
-        {
-            public int Id { get; set; }
-            public string? Name { get; set; }
-            // Other properties as needed...
-        }
     }
 }
