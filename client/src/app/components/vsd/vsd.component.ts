@@ -34,7 +34,9 @@ export class VsdComponent {
   protected photoCaptured: boolean = false;
   protected croppingMode: boolean = false;
   private imageClasses: string[] = [];
-  protected generatedTexts: string[] = [];
+  protected generatedTexts: string[] = [
+    'No Generated Text, Classes not detected in the image.',
+  ];
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
   protected aiSelectedText: string = '';
@@ -58,6 +60,9 @@ export class VsdComponent {
 
   //Method tho get the classes of a image and return generated text based on the image!
   getImagePrediction(image: string) {
+    this.generatedTexts = [
+      'No Generated Text, Classes not detected in the image.',
+    ];
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
     const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
