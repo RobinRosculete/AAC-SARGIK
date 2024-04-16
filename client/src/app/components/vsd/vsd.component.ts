@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonModal, Platform } from '@ionic/angular';
+import { IonModal } from '@ionic/angular';
 import {
   CameraPreview,
   CameraPreviewOptions,
@@ -18,7 +18,11 @@ import {
   styleUrls: ['./vsd.component.css'],
 })
 export class VsdComponent {
+  saveImageToGallery() {
+    throw new Error('Method not implemented.');
+  }
   @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('textModal') textModal!: IonModal;
   @ViewChild('cropper') cropper!: ImageCropperComponent;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -26,12 +30,18 @@ export class VsdComponent {
   protected cameraActive: boolean = false;
   protected photoCaptured: boolean = false;
   protected croppingMode: boolean = false;
+  protected generatedTexts: string[] = [
+    'Ghost Text 1',
+    'Ghost Text 2',
+    'Ghost Text 3',
+  ];
+  protected imageChangedEvent: any = '';
+  protected croppedImage: any = '';
+  protected aiSelectedText: string = '';
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
   cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
-  constructor(private platform: Platform) {}
+  constructor() {}
 
   ngAfterViewInit(): void {
     this.openModal();
@@ -39,6 +49,18 @@ export class VsdComponent {
 
   openModal() {
     this.modal.present();
+  }
+
+  //Used to open the ai text generation modal
+  openTextModal() {
+    this.textModal.present();
+  }
+
+  //Used to select one of the 3 text genertae by the ai
+  selectText(text: string) {
+    this.aiSelectedText = text;
+    this.textModal.dismiss();
+    console.log('Selected text:', this.aiSelectedText);
   }
 
   public startCamera(): void {
@@ -77,6 +99,7 @@ export class VsdComponent {
     this.myImage = null;
     this.croppedImage = null;
     this.photoCaptured = false;
+    this.aiSelectedText = '';
   }
 
   flipCamera() {
