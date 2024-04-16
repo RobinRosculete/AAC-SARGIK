@@ -2,9 +2,12 @@ ion-img {
   width: 100%;
   height: 100%;
   object-fit: cover; /* Maintain aspect ratio and cover the entire space */
-  border: solid 1px #fff;
+  border: solid 1px rgb(66, 173, 226); /* Blue border line */
+  border-radius: 20px; /* Round corners */
   size: 6;
+  overflow: hidden; /* Hide overflow content to round corners */
 }
+
 ion-col {
   display: flex;
   flex-direction: column;
@@ -12,9 +15,11 @@ ion-col {
   padding: 10px;
   text-align: center;
 }
+
 p {
   margin-top: 5px;
 }
+
 .plain-button {
   background-color: transparent;
   border: none;
@@ -27,9 +32,11 @@ p {
   --background: none;
   --box-shadow: none;
 }
+
 ion-button:active {
   color: #fff;
 }
+
 :host {
   --image-size: 400px; /* Change this value to adjust the size of the images */
 }
@@ -40,18 +47,22 @@ ion-col ion-img {
 }
 
 ion-modal {
-  --height: 50%;
-  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --border-radius: 10px; /* Round modal corners */
+  --background: #fff; /* Modal background color */
 }
 
 ion-modal::part(backdrop) {
-  background: rgba(209, 213, 219);
-  opacity: 1;
+  background: rgba(
+    209,
+    213,
+    219,
+    0.8
+  ); /* Backdrop background color and opacity */
 }
 
 ion-modal ion-toolbar {
-  --background: rgb(14 116 144);
-  --color: white;
+  --background: rgb(14, 116, 144); /* Toolbar background color */
+  --color: white; /* Toolbar text color */
 }
 
 .ion-padding {
@@ -65,6 +76,7 @@ ion-modal ion-toolbar {
   padding-top: var(--ion-padding, 0px);
   padding-bottom: var(--ion-padding, 0px);
 }
+
 :host {
   --padding-start: 0px;
   --inner-padding-end: 0px;

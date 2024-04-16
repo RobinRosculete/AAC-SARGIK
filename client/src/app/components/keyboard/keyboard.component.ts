@@ -196,7 +196,6 @@ export class KeyboardComponent {
           }
 
           //this.suggestions = Array.from(this.suggestionSet);
-
           for (let suggestion of this.suggestionSet) {
             this.suggestions[suggestionIndex] = suggestion;
             suggestionIndex++;
