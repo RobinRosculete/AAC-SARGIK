@@ -149,8 +149,6 @@ export class GalleryComponent {
     }
   }
 
-
-
   async selectImage() {
     const image = await Camera.getPhoto({
       quality: 100,
@@ -166,17 +164,15 @@ export class GalleryComponent {
 
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
-}
+  }
 
-imageLoaded(image: LoadedImage) {
+  imageLoaded(image: LoadedImage) {
     // show cropper
-}
-cropperReady() {
+  }
+  cropperReady() {
     // cropper ready
-}
-loadImageFailed() {
+  }
+  loadImageFailed() {
     // show message
-}
-
-
+  }
 }

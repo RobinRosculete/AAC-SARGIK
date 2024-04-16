@@ -1,72 +1,10 @@
-/* Button styles */
-button {
-  font-size: 18px;
-  text-transform: uppercase;
-  padding: 12px 24px;
-  border: 2px solid #61c6d1;
-  border-radius: 25px;
-  background-color: #61c6d1;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-}
+/* modal-styles.css */
 
-button:hover {
-  background-color: #ffffff;
-  color: #61c6d1;
-  transform: scale(1.05);
-}
-
-/* Container styles */
-.camera-container {
-  position: relative;
-  height: 100%;
-}
-
-/* Camera preview styles */
-.camera-preview {
+ion-img {
+  display: block;
+  margin: 0 auto;
   width: 100%;
-  height: calc(100% - 120px); /* Adjust height as needed */
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Edit input styles */
-ion-input {
-  border: none;
-  background-color: transparent;
-  color: inherit;
-  text-align: center;
-  width: 100%;
-}
-
-/* Button group styles */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-}
-#flip{
-  position: absolute;
-  bottom: 30px;
-  left: calc(50% + 125px);
-  width: 50px;
-  height: 50px;
-
-}
-#gallery{
-  position: absolute;
-  bottom: 30px;
-  left: calc(50% - 175px);
-  width: 50px;
-  height: 50px;
-}
-.button_color {
-  --background: #61c6d1; /* Button background color */
-  --background-hover: #ffffff; /* Color on hover */
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
