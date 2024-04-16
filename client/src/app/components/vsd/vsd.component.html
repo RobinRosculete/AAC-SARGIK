@@ -58,6 +58,7 @@
           </ion-col>
           <ion-col class="ion-align-self-center">
             <ion-button
+              (click)="getImagePrediction(this.myImage)"
               (click)="openTextModal()"
               id="generate-caption"
               expand="block"

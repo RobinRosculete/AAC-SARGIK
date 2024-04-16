@@ -9,12 +9,12 @@ import { environment } from 'src/environments/environment.development';
 export class ObjectDetectionService {
   constructor(private http: HttpClient) {}
 
-  getObjectDetection(image: File): Observable<string> {
+  getObjectDetection(image: File): Observable<string[]> {
     const url = environment.SERVER_URL + '/api/ObjectDetection/detectImage';
 
     const formData = new FormData();
     formData.append('file', image);
 
-    return this.http.post<string>(url, formData);
+    return this.http.post<string[]>(url, formData);
   }
 }

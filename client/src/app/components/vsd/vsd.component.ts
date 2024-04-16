@@ -13,6 +13,7 @@ import {
   ImageCropperComponent,
   CropperPosition,
 } from 'ngx-image-cropper';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-vsd',
@@ -32,11 +33,8 @@ export class VsdComponent {
   protected cameraActive: boolean = false;
   protected photoCaptured: boolean = false;
   protected croppingMode: boolean = false;
-  protected generatedTexts: string[] = [
-    'Ghost Text 1',
-    'Ghost Text 2',
-    'Ghost Text 3',
-  ];
+  private imageClasses: string[] = [];
+  protected generatedTexts: string[] = [];
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
   protected aiSelectedText: string = '';
@@ -47,7 +45,6 @@ export class VsdComponent {
 
   constructor(
     private textPredictionApiService: TextPredictionApiService,
-
     private objectDetectionService: ObjectDetectionService
   ) {}
 
@@ -57,6 +54,38 @@ export class VsdComponent {
 
   openModal() {
     this.modal.present();
+  }
+
+  getImagePrediction(image: string) {
+    const imageName = 'name.png';
+    const imageBlob = this.dataURItoBlob(image);
+    const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
+    console.log(imageFile);
+
+    this.objectDetectionService
+      .getObjectDetection(imageFile)
+      .pipe(
+        switchMap((classes) => {
+          this.imageClasses = classes;
+          return this.textPredictionApiService.getData(this.imageClasses);
+        })
+      )
+      .subscribe(({ sentences }) => {
+        this.generatedTexts = sentences;
+      });
+  }
+  //Function used to convert Base
+  dataURItoBlob(dataURI: string): Blob {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      intArray[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([intArray], { type: mimeString });
   }
 
   //Used to open the ai text generation modal

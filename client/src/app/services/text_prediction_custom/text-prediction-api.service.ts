@@ -9,7 +9,7 @@ export class TextPredictionApiService {
   constructor(private http: HttpClient) {}
   //Function ro send array of predicted classes from a image and return 3 generated sentences based on the class
   getData(imageClasses: string[]): Observable<any> {
-    let url = environment.SERVER_URL + '/api/UseChatGPT';
+    let url = environment.SERVER_URL + '/api/TextPrediction';
     return this.http.post(url, imageClasses); // returns a array of strings containing generated sentences senteces
   }
 
