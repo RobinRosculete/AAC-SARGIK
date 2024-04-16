@@ -56,25 +56,29 @@ export class VsdComponent {
     this.modal.present();
   }
 
+  //Method tho get the classes of a image and return generated text based on the image!
   getImagePrediction(image: string) {
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
     const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
     console.log(imageFile);
 
+    //Calling api's for object detection and text generation
     this.objectDetectionService
       .getObjectDetection(imageFile)
       .pipe(
         switchMap((classes) => {
           this.imageClasses = classes;
-          return this.textPredictionApiService.getData(this.imageClasses);
+          return this.textPredictionApiService.getGeneratedText(
+            this.imageClasses
+          );
         })
       )
       .subscribe(({ sentences }) => {
         this.generatedTexts = sentences;
       });
   }
-  //Function used to convert Base
+  //Function used to convert Base 64 string to File object
   dataURItoBlob(dataURI: string): Blob {
     const byteString = atob(dataURI.split(',')[1]);
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
