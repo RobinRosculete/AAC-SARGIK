@@ -10,6 +10,8 @@ import { LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SharedService } from '../shared.service';
+
 
 @Component({
   selector: 'app-gallery',
@@ -34,8 +36,13 @@ export class GalleryComponent {
     private router: Router,
     private objectDetectionService: ObjectDetectionService,
     private loadingCtrl: LoadingController,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private sharedService: SharedService
   ) {}
+
+  openVSDModal() {
+    this.sharedService.openVSDModal();
+  }
 
   ngOnInit(): void {
     this.googleID = this.getUserIdFromToken();

@@ -5,6 +5,7 @@ import { TypewiseAPIService } from '../../services/text_predict_typwise/typewise
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import * as emojiMap from '../../../assets/emojis/emojiMap.json';
 
+
 // KeyboardComponent
 @Component({
   selector: 'app-keyboard',

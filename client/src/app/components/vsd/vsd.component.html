@@ -42,12 +42,17 @@
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-self-center">
             <ion-img [src]="croppedImage ? croppedImage : myImage"></ion-img>
+            <ion-button (click)="speakText(aiSelectedText)" expand="block">
+              <ion-icon name="volume-high-outline"></ion-icon>
+              Text-to-Speech
+            </ion-button>
           </ion-col>
         </ion-row>
         <ion-input
           placeholder="Enter Text"
           [(ngModel)]="aiSelectedText"
         ></ion-input>
+        
 
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-self-center">

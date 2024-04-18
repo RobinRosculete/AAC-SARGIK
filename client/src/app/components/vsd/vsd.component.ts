@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
@@ -13,13 +13,17 @@ import {
   ImageCropperComponent,
   CropperPosition,
 } from 'ngx-image-cropper';
+import { SharedService } from '../shared.service';
+import { KeyboardService } from '../keyboard.service';
+
+
 
 @Component({
   selector: 'app-vsd',
   templateUrl: './vsd.component.html',
   styleUrls: ['./vsd.component.css'],
 })
-export class VsdComponent {
+export class VsdComponent implements OnInit{
   saveImageToGallery() {
     throw new Error('Method not implemented.');
   }
@@ -48,8 +52,22 @@ export class VsdComponent {
   constructor(
     private textPredictionApiService: TextPredictionApiService,
 
-    private objectDetectionService: ObjectDetectionService
+    private objectDetectionService: ObjectDetectionService,
+
+    private sharedService: SharedService,
+
+    private keyboardService: KeyboardService
   ) {}
+
+  ngOnInit(): void {
+    this.sharedService.openVSDModal$.subscribe(() => {
+      this.openModal();
+    });
+  }
+
+  speakText(text: string): void {
+    this.keyboardService.speakText(text);
+  }
 
   ngAfterViewInit(): void {
     this.openModal();
