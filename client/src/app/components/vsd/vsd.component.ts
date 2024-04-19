@@ -1,6 +1,5 @@
-// Visual Scence Display
-import { Component, ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonModal, Platform } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import {
   CameraPreview,
@@ -8,7 +7,13 @@ import {
   CameraPreviewPictureOptions,
 } from '@capacitor-community/camera-preview';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import {
+  ImageCroppedEvent,
+  ImageCropperComponent,
+  CropperPosition,
+} from 'ngx-image-cropper';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 
 @Component({
   selector: 'app-vsd',
@@ -16,18 +21,36 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
   styleUrls: ['./vsd.component.css'],
 })
 export class VsdComponent {
+  saveImageToGallery() {
+    throw new Error('Method not implemented.');
+  }
   @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('textModal') textModal!: IonModal;
   @ViewChild('cropper') cropper!: ImageCropperComponent;
-  public image: string | null = null;
-  public myImage: string | null = null;
-  public cameraActive: boolean = false;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  public name: string = '';
-  public photoCaptured: boolean = false;
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
+  protected myImage: string = '';
+  protected cameraActive: boolean = false;
+  protected photoCaptured: boolean = false;
+  protected croppingMode: boolean = false;
+  protected generatedTexts: string[] = [
+    'Ghost Text 1',
+    'Ghost Text 2',
+    'Ghost Text 3',
+  ];
+  protected imageChangedEvent: any = '';
+  protected croppedImage: any = '';
+  protected aiSelectedText: string = '';
+  protected file: File | null = null;
 
-  constructor() {}
+  //Used to get coordinates from cropper
+  cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+  constructor(
+    private textPredictionApiService: TextPredictionApiService,
+
+    private objectDetectionService: ObjectDetectionService
+  ) {}
 
   ngAfterViewInit(): void {
     this.openModal();
@@ -37,78 +60,51 @@ export class VsdComponent {
     this.modal.present();
   }
 
-  public startCamera(): void {
-    const cameraPreviewOptions: CameraPreviewOptions = {
-      position: 'rear',
-      parent: 'cameraPreview',
-      className: 'cameraPreview',
-    };
-    CameraPreview.start(cameraPreviewOptions);
-    this.cameraActive = true;
+  //Used to open the ai text generation modal
+  openTextModal() {
+    // Check if myImage is available
+    if (this.myImage) {
+      this.textModal.present();
+    } else {
+      console.error('No image selected.');
+    }
+  }
+
+  //Used to select one of the 3 text genertae by the ai
+  selectText(text: string) {
+    this.aiSelectedText = text;
+    this.textModal.dismiss();
   }
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
-    this.stopCamera();
   }
 
-  confirm() {
-    this.modal.dismiss(this.name, 'confirm');
-  }
-
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-  }
-  async stopCamera() {
-    await CameraPreview.stop();
-    this.cameraActive = false;
-  }
   async captureImage() {
-    const cameraPreviewPictureOptions: CameraPreviewPictureOptions = {
-      quality: 90,
-    };
-    const result = await CameraPreview.capture(cameraPreviewPictureOptions);
-    this.image = `data:image/jpeg;base64,${result.value}`;
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      quality: 100,
+    });
+
+    this.myImage = capturedPhoto.webPath!;
     this.photoCaptured = true;
-    this.croppedImage = null;
-    this.stopCamera();
   }
 
   retakePhoto() {
-    this.image = null;
-    this.myImage = null;
+    this.myImage = '';
+
     this.croppedImage = null;
     this.photoCaptured = false;
-    this.startCamera(); // Start the camera again for a new photo
+    this.aiSelectedText = '';
   }
 
-  flipCamera() {
-    CameraPreview.flip();
-  }
   triggerFileInput() {
-    const fileInput: HTMLElement = document.getElementById(
-      'file-input'
-    ) as HTMLElement;
-    fileInput.click();
-  }
-
-  async selectImageFromGallery() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Photos,
-      });
-
-      this.image = image.webPath ?? null;
-      this.photoCaptured = true;
-      this.stopCamera();
-    } catch (error) {
-      console.error(error);
-    }
+    this.fileInput.nativeElement.click();
   }
 
   imageCropped(event: ImageCroppedEvent) {
+    this.cropperPosition = event.cropperPosition;
     if (event.blob) {
       const reader = new FileReader();
       reader.readAsDataURL(event.blob);
@@ -119,19 +115,21 @@ export class VsdComponent {
   }
 
   editPhoto() {
-    // Only prepare for cropping if there is a cropped image
+    this.photoCaptured = true;
     if (this.croppedImage) {
-      this.myImage = this.croppedImage; // Prepare the cropped image for re-cropping
-    } else if (this.image) {
-      this.myImage = this.image; // Prepare the original image for cropping
+      this.myImage = this.croppedImage;
+    } else if (this.myImage) {
+      this.myImage = this.myImage;
     }
-    this.photoCaptured = true; // Indicate that a photo is captured and is being edited
+    this.photoCaptured = true;
+    this.croppingMode = true;
   }
+
   confirmCropping() {
+    console.log('Cropper Position:', this.cropperPosition);
     if (this.croppedImage) {
-      this.image = this.croppedImage;
-      this.myImage = null;
-      this.photoCaptured = true;
+      this.myImage = this.croppedImage;
+      this.croppingMode = false;
     }
   }
 }

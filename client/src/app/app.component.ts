@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'client';
+  constructor() {
+    defineCustomElements(window);
+  }
 }
