@@ -82,12 +82,12 @@ export class VsdComponent {
 
   async captureImage() {
     const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
       quality: 100,
     });
 
-    this.myImage = capturedPhoto.webPath!;
+    this.myImage = `data:image/jpeg;base64,${capturedPhoto.base64String}`;
     this.photoCaptured = true;
   }
 
