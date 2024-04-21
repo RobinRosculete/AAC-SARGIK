@@ -1,3 +1,4 @@
+<!-- Header with upload button -->
 <ion-header>
   <ion-toolbar>
     <ion-title>Gallery</ion-title>
@@ -11,10 +12,18 @@
 </ion-header>
 
 <ion-content>
+  <!-- Grid for displaying images -->
   <ion-grid>
     <ion-row>
+      <!-- Loop through images and create buttons -->
       <ion-col size="6" size-sm="4" *ngFor="let image of images; let i = index">
-        <ion-button expand="block" class="image-button" (click)="openModal(i)">
+        <!-- Button to open modal and fetch bounding boxes -->
+        <ion-button
+          expand="block"
+          class="image-button"
+          (click)="openModal(i); getBoundingBoxes(image.imageID)"
+        >
+          <!-- Image to display -->
           <ion-img
             draggable="false"
             (dragstart)="(false)"
@@ -22,6 +31,7 @@
             [src]="image.imageUrl"
           ></ion-img>
         </ion-button>
+        <!-- Button to read caption -->
         <div>
           <ion-button (click)="readCaption(image.caption)">
             <ion-icon name="volume-high-outline" slot="start"></ion-icon>
@@ -31,10 +41,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Modal for displaying image and cropper -->
   <ng-container *ngFor="let modal of modals">
     <ion-modal (willDismiss)="onWillDismiss($event, modal.index)">
       <ng-template>
         <ion-content>
+          <!-- Image displayed in modal -->
           <ion-img
             draggable="false"
             *ngIf="images[modal.index].imageUrl && !showImageCropper"
@@ -43,6 +56,19 @@
             id="modal-image"
             [src]="images[modal.index].imageUrl"
           ></ion-img>
+
+          <!-- Bounding boxes displayed on the image -->
+          <ion-button
+            *ngFor="let box of boundingBoxes"
+            class="red-box bounding-box"
+            [style.left.px]="box.xMin"
+            [style.top.px]="box.yMin"
+            [style.width.px]="box.xMax - box.xMin"
+            [style.height.px]="box.yMax - box.yMin"
+            (click)="readCaption(box.message)"
+          ></ion-button>
+
+          <!-- Image cropper component -->
           <image-cropper
             *ngIf="images[modal.index].imageUrl && showImageCropper"
             [imageURL]="images[modal.index].imageUrl"
@@ -52,6 +78,8 @@
             format="png"
             (imageCropped)="getPosition($event, modal.index)"
           ></image-cropper>
+
+          <!-- Red box for bounding box selection -->
           <ion-button
             class="red-box bounding-box"
             *ngIf="showRedBox"
@@ -60,6 +88,8 @@
             [style.width.px]="redBoxWidth"
             [style.height.px]="redBoxHeight"
           ></ion-button>
+
+          <!-- Buttons for cropping and confirmation -->
           <div style="text-align: center" *ngIf="cropperButtons">
             <ion-button
               class="center"
@@ -75,22 +105,14 @@
               <p>Confirm</p>
             </ion-button>
           </div>
+
+          <!-- Input box for entering text -->
           <ion-grid *ngIf="images[modal.index].imageUrl && showInputBox">
             <ion-input
               placeholder="Enter Text"
               [(ngModel)]="boundingBoxInput"
             ></ion-input>
             <ion-row class="ion-justify-content-center">
-              <!-- <ion-col class="ion-align-self-center">
-                <ion-button
-                  (click)="openTextModal()"
-                  id="generate-caption"
-                  expand="block"
-                >
-                  <ion-icon name="logo-ionitron"></ion-icon>
-                  &nbsp;A.I. Text Generation
-                </ion-button>
-              </ion-col> -->
               <ion-col
                 class="ion-align-self-center"
                 (click)="sendBoundingBoxInfo(images[modal.index].imageID)"

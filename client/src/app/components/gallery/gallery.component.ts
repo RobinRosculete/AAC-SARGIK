@@ -35,16 +35,17 @@ export class GalleryComponent {
   protected caption: string = '';
   protected modals: { index: number; name: string }[] = [];
   protected croppedImage: any = '';
-  cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
-  showImageCropper: boolean = false;
-  showInputBox: boolean = false;
-  showRedBox: boolean = false;
-  cropperButtons: boolean = true;
-  redBoxLeft: number = 0;
-  redBoxTop: number = 0;
-  redBoxWidth: number = 0;
-  redBoxHeight: number = 0;
-  boundingBoxInput: string = '';
+  protected cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
+  protected showImageCropper: boolean = false;
+  protected showInputBox: boolean = false;
+  protected showRedBox: boolean = false;
+  protected cropperButtons: boolean = true;
+  protected redBoxLeft: number = 0;
+  protected redBoxTop: number = 0;
+  protected redBoxWidth: number = 0;
+  protected redBoxHeight: number = 0;
+  protected boundingBoxInput: string = '';
+  protected boundingBoxes: BoundingBox[] = [];
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -142,6 +143,7 @@ export class GalleryComponent {
     const modal = this.ionModals.toArray()[index];
     if (modal) {
       modal.dismiss(null, 'cancel');
+      this.resetCropping();
     }
   }
 
@@ -155,7 +157,7 @@ export class GalleryComponent {
   onWillDismiss(event: Event, index: number): void {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
-      //this.message = `Hello, ${ev.detail.data}!`;
+      this.resetCropping();
     }
   }
 
@@ -186,7 +188,7 @@ export class GalleryComponent {
     this.cropperCoor.h = cropperPosition.cropperPosition.y2;
     console.log(typeof this.cropperCoor.x1);
   }
-
+  //Function to show bounding Box
   showBox() {
     // Set the position and size of the red box based on the coordinates
     this.redBoxLeft = this.cropperCoor.x1;
@@ -222,13 +224,29 @@ export class GalleryComponent {
         console.error('Error saving bounding box information:', error);
       }
     );
-    this.resetBoundingBox();
   }
-  resetBoundingBox(): void {
+  //Function used ti reset coordinates of bonding box
+  resetCropping(): void {
     this.cropperCoor.x1 = 0;
     this.cropperCoor.y1 = 0;
     this.cropperCoor.x2 = 0;
     this.cropperCoor.y2 = 0;
     this.boundingBoxInput = '';
+    this.showImageCropper = false;
+    this.showRedBox = false;
+    this.showInputBox = false;
+    this.cropperButtons = true;
+  }
+
+  getBoundingBoxes(imageId: number): void {
+    this.blobAPI.getBoundingBox(imageId).subscribe(
+      (response) => {
+        this.boundingBoxes = response;
+        console.log(this.boundingBoxes);
+      },
+      (error) => {
+        console.error('Error getting bounding boxes:', error);
+      }
+    );
   }
 }
