@@ -19,6 +19,7 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
   declarations: [
     AppComponent,
     LoginComponent,
+    LoginComponent,
     NavmenuComponent,
     KeyboardComponent,
     GalleryComponent,
@@ -30,6 +31,7 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
     HttpClientModule,
     AppRoutingModule,
     IonicModule,
+    IonicModule,
     IonicModule.forRoot({}),
     MatDialogModule,
     ImageCropperModule,
@@ -37,6 +39,7 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}

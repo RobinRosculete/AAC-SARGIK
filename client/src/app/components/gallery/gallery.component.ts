@@ -12,7 +12,6 @@ import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from '../shared.service';
 
-
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',

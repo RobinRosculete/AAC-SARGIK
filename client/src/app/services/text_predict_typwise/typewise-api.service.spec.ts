@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { TypewiseAPIService } from './typewise-api.service';
-
 describe('TypewiseAPIService', () => {
   let service: TypewiseAPIService;
 

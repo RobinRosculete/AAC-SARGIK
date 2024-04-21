@@ -1,13 +1,5 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonModal } from '@ionic/angular';
-import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
-import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
-import {
-  CameraPreview,
-  CameraPreviewOptions,
-  CameraPreviewPictureOptions,
-} from '@capacitor-community/camera-preview';
-import { Camera } from '@capacitor/camera';
 import {
   ImageCroppedEvent,
   ImageCropperComponent,
@@ -15,18 +7,24 @@ import {
 } from 'ngx-image-cropper';
 import { SharedService } from '../shared.service';
 import { KeyboardService } from '../keyboard.service';
-
 import { switchMap } from 'rxjs';
-
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
+import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 @Component({
   selector: 'app-vsd',
   templateUrl: './vsd.component.html',
   styleUrls: ['./vsd.component.css'],
 })
-export class VsdComponent implements OnInit {
+export class VsdComponent {
+  //Methods not implememnted
+  stopCamera() {
+    throw new Error('Method not implemented.');
+  }
   saveImageToGallery() {
     throw new Error('Method not implemented.');
   }
+
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('textModal') textModal!: IonModal;
   @ViewChild('cropper') cropper!: ImageCropperComponent;
@@ -44,27 +42,19 @@ export class VsdComponent implements OnInit {
   protected croppedImage: any = '';
   protected aiSelectedText: string = '';
   protected file: File | null = null;
-
-  //Used to get coordinates from cropper
   cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
   constructor(
-    private textPredictionApiService: TextPredictionApiService,
-    private objectDetectionService: ObjectDetectionService,
-
     private sharedService: SharedService,
-
-    private keyboardService: KeyboardService
+    private keyboardService: KeyboardService,
+    private textPredictionApiService: TextPredictionApiService,
+    private objectDetectionService: ObjectDetectionService
   ) {}
 
   ngOnInit(): void {
     this.sharedService.openVSDModal$.subscribe(() => {
       this.openModal();
     });
-  }
-
-  speakText(text: string): void {
-    this.keyboardService.speakText(text);
   }
 
   ngAfterViewInit(): void {
@@ -75,7 +65,10 @@ export class VsdComponent implements OnInit {
     this.modal.present();
   }
 
-  //Method tho get the classes of a image and return generated text based on the image!
+  speakText(text: string): void {
+    this.keyboardService.speakText(text);
+  }
+
   getImagePrediction(image: string) {
     this.generatedTexts = [
       'No Generated Text, Classes not detected in the image.',
@@ -83,9 +76,7 @@ export class VsdComponent implements OnInit {
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
     const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
-    console.log(imageFile);
 
-    //Calling api's for object detection and text generation
     this.objectDetectionService
       .getObjectDetection(imageFile)
       .pipe(
@@ -100,7 +91,7 @@ export class VsdComponent implements OnInit {
         this.generatedTexts = sentences;
       });
   }
-  //Function used to convert Base 64 string to File object
+
   dataURItoBlob(dataURI: string): Blob {
     const byteString = atob(dataURI.split(',')[1]);
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -114,9 +105,7 @@ export class VsdComponent implements OnInit {
     return new Blob([intArray], { type: mimeString });
   }
 
-  //Used to open the ai text generation modal
   openTextModal() {
-    // Check if myImage is available
     if (this.myImage) {
       this.textModal.present();
     } else {
@@ -124,59 +113,36 @@ export class VsdComponent implements OnInit {
     }
   }
 
-  //Used to select one of the 3 text genertae by the ai
   selectText(text: string) {
     this.aiSelectedText = text;
     this.textModal.dismiss();
   }
 
-  public startCamera(): void {
-    const cameraPreviewOptions: CameraPreviewOptions = {
-      position: 'rear',
-      parent: 'cameraPreview',
-      className: 'cameraPreview',
-    };
-    CameraPreview.start(cameraPreviewOptions);
-    this.cameraActive = true;
-  }
-
   cancel() {
     this.modal.dismiss(null, 'cancel');
-    this.stopCamera();
-  }
-
-  async stopCamera() {
-    await CameraPreview.stop();
-    this.cameraActive = false;
   }
 
   async captureImage() {
-    const cameraPreviewPictureOptions: CameraPreviewPictureOptions = {
-      quality: 90,
-    };
-    const result = await CameraPreview.capture(cameraPreviewPictureOptions);
-    this.myImage = `data:image/jpeg;base64,${result.value}`;
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+      quality: 100,
+    });
+
+    this.myImage = `data:image/jpeg;base64,${capturedPhoto.base64String}`;
     this.photoCaptured = true;
-    this.croppedImage = null;
-    this.stopCamera();
   }
 
   retakePhoto() {
     this.myImage = '';
-
     this.croppedImage = null;
     this.photoCaptured = false;
     this.aiSelectedText = '';
   }
 
-  flipCamera() {
-    CameraPreview.flip();
-  }
-
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
-
   imageCropped(event: ImageCroppedEvent) {
     this.cropperPosition = event.cropperPosition;
     if (event.blob) {
@@ -189,24 +155,19 @@ export class VsdComponent implements OnInit {
   }
 
   editPhoto() {
+    this.photoCaptured = true;
     if (this.croppedImage) {
       this.myImage = this.croppedImage;
-    } else if (this.myImage) {
-      this.myImage = this.myImage;
     }
-    this.photoCaptured = true;
     this.croppingMode = true;
   }
 
   confirmCropping() {
-    console.log('Cropper Position:', this.cropperPosition);
     if (this.croppedImage) {
       this.myImage = this.croppedImage;
       this.croppingMode = false;
     }
   }
-
-  //Method used to manage image uplaod after new image has been selected
   onFileSelected(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
