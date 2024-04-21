@@ -127,51 +127,7 @@ namespace server.Controllers
             }
         }
 
-        // POST api/values
-        [HttpPost("users/save-bounding-box")]
-        public async Task<IActionResult> SaveBoundingBox(BoundingBoxDTO boundingBoxDTO)
-        {
-            if (boundingBoxDTO == null ||
-                boundingBoxDTO.imageID < 0 ||
-                boundingBoxDTO.xMin < 0 || boundingBoxDTO.xMax < 0 ||
-                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0 ||
-                string.IsNullOrWhiteSpace(boundingBoxDTO.label))
-            {
-                return BadRequest("Invalid input.");
-            }
-
-            try
-            {
-                var image = await _db.Images.FirstOrDefaultAsync(i => i.ImageId == boundingBoxDTO.imageID);
-                if (image == null)
-                {
-                    return NotFound("Image Does not Exist int DB");
-                }
-
-                var boundinBox = new BoundingBox
-                {
-                    ImageId = image.ImageId,
-                    XMin = boundingBoxDTO.xMin,
-                    YMin = boundingBoxDTO.yMin,
-                    XMax = boundingBoxDTO.xMax,
-                    YMax = boundingBoxDTO.yMax,
-                    Label = boundingBoxDTO.label,
-                    Message = boundingBoxDTO.message
-                };
-                _db.BoundingBoxes.Add(boundinBox);
-                await _db.SaveChangesAsync();
-
-                return Ok("Succesfully Saved Bounding Box in Database");
-
-            }
-            catch (Exception ex)
-            {
-
-                // Handle exceptions
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
+ 
         //Api to Download Images From Blob Storage
         // GET api/values/5
         [HttpGet]

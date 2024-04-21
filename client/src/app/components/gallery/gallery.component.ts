@@ -20,6 +20,7 @@ import {
   CropperPosition,
 } from 'ngx-image-cropper';
 import { SharedService } from '../shared.service';
+import { BoundingBox } from 'src/app/models/boundbox.interface';
 
 @Component({
   selector: 'app-gallery',
@@ -36,11 +37,14 @@ export class GalleryComponent {
   protected croppedImage: any = '';
   cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
   showImageCropper: boolean = false;
+  showInputBox: boolean = false;
   showRedBox: boolean = false;
+  cropperButtons: boolean = true;
   redBoxLeft: number = 0;
   redBoxTop: number = 0;
   redBoxWidth: number = 0;
   redBoxHeight: number = 0;
+  boundingBoxInput: string = '';
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -168,17 +172,11 @@ export class GalleryComponent {
     this.croppedImage = null;
   }
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-  }
-
   toggleImageCropper() {
     this.showImageCropper = !this.showImageCropper;
   }
 
   getPosition(cropperPosition: any, index: number) {
-    // Here, you can access the `cropperPosition` and do whatever you need with it
-    console.log('Cropper position:', cropperPosition);
     // You can also store it in a variable for later use
     this.cropperCoor.x1 = cropperPosition.cropperPosition.x1;
     this.cropperCoor.x2 = cropperPosition.cropperPosition.x2;
@@ -190,20 +188,47 @@ export class GalleryComponent {
   }
 
   showBox() {
-    console.log(this.cropperCoor);
-    // Assuming you have variables for x and y coordinates
-    const x: number = this.cropperCoor.x1;
-    const y: number = this.cropperCoor.y1;
-    const boxWidth: number = this.cropperCoor.x2 - this.cropperCoor.x1; // Example width of the box
-    const boxHeight: number = this.cropperCoor.y2 - this.cropperCoor.y1; // Example height of the box
-
     // Set the position and size of the red box based on the coordinates
-    this.redBoxLeft = x;
-    this.redBoxTop = y;
-    this.redBoxWidth = boxWidth;
-    this.redBoxHeight = boxHeight;
+    this.redBoxLeft = this.cropperCoor.x1;
+    this.redBoxTop = this.cropperCoor.y1;
+    this.redBoxWidth = this.cropperCoor.x2 - this.cropperCoor.x1; //Calculating the width of the box
+    this.redBoxHeight = this.cropperCoor.y2 - this.cropperCoor.y1; //Calculating the height of the box
 
     // Show the red box
+    this.cropperButtons = false;
+    this.showImageCropper = true;
     this.showRedBox = true;
+    this.showInputBox = true;
+  }
+
+  sendBoundingBoxInfo(imageID: number) {
+    // Initialize a new BoundingBoxDTO object
+    let boundBox: BoundingBox = {
+      imageID: imageID,
+      xMin: this.cropperCoor.x1,
+      yMin: this.cropperCoor.y1,
+      xMax: this.cropperCoor.x2,
+      yMax: this.cropperCoor.y2,
+      label: 'no label',
+      message: this.boundingBoxInput,
+    };
+
+    // Send the bounding box information to the server
+    this.blobAPI.saveBoundingBox(boundBox).subscribe(
+      (response) => {
+        console.log('Bounding box information saved successfully:', response);
+      },
+      (error) => {
+        console.error('Error saving bounding box information:', error);
+      }
+    );
+    this.resetBoundingBox();
+  }
+  resetBoundingBox(): void {
+    this.cropperCoor.x1 = 0;
+    this.cropperCoor.y1 = 0;
+    this.cropperCoor.x2 = 0;
+    this.cropperCoor.y2 = 0;
+    this.boundingBoxInput = '';
   }
 }

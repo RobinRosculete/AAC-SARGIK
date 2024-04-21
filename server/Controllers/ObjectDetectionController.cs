@@ -8,11 +8,7 @@ namespace server.Controllers
     [ApiController]
     public class ObjectDetectionController : ControllerBase
     {
-        // Load class names corresponding to COCO dataset
-        private string[] cocoClassNames = new string[]
-        {
-            // Your class names here...
-        };
+
 
         // POST api/<ObjectDetection>/detectImage
         [HttpPost("detectImage")]
