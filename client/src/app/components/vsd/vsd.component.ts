@@ -11,6 +11,8 @@ import { switchMap } from 'rxjs';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
+import { BlobApiService } from 'src/app/services/blob/blob-api.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-vsd',
   templateUrl: './vsd.component.html',
@@ -19,9 +21,6 @@ import { ObjectDetectionService } from 'src/app/services/object_detection/object
 export class VsdComponent {
   //Methods not implememnted
   stopCamera() {
-    throw new Error('Method not implemented.');
-  }
-  saveImageToGallery() {
     throw new Error('Method not implemented.');
   }
 
@@ -34,24 +33,29 @@ export class VsdComponent {
   protected cameraActive: boolean = false;
   protected photoCaptured: boolean = false;
   protected croppingMode: boolean = false;
+
   private imageClasses: string[] = [];
   protected generatedTexts: string[] = [
     'No Generated Text, Classes not detected in the image.',
   ];
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
-  protected aiSelectedText: string = '';
-  protected file: File | null = null;
-  cropperPosition: CropperPosition = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+  private googleID: string = '';
+
+  protected caption: string = '';
 
   constructor(
     private sharedService: SharedService,
     private keyboardService: KeyboardService,
     private textPredictionApiService: TextPredictionApiService,
-    private objectDetectionService: ObjectDetectionService
+    private objectDetectionService: ObjectDetectionService,
+    private blobApiService: BlobApiService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.googleID = this.getUserIdFromToken();
     this.sharedService.openVSDModal$.subscribe(() => {
       this.openModal();
     });
@@ -114,7 +118,7 @@ export class VsdComponent {
   }
 
   selectText(text: string) {
-    this.aiSelectedText = text;
+    this.caption = text;
     this.textModal.dismiss();
   }
 
@@ -137,14 +141,13 @@ export class VsdComponent {
     this.myImage = '';
     this.croppedImage = null;
     this.photoCaptured = false;
-    this.aiSelectedText = '';
+    this.caption = '';
   }
 
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
   imageCropped(event: ImageCroppedEvent) {
-    this.cropperPosition = event.cropperPosition;
     if (event.blob) {
       const reader = new FileReader();
       reader.readAsDataURL(event.blob);
@@ -175,5 +178,49 @@ export class VsdComponent {
       this.myImage = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
+  // Function to upload an image with a caption using the BlobApiService
+  saveImageToGallery(): void {
+    if (!this.caption.trim()) {
+      console.error('Caption is required.');
+      return;
+    }
+
+    const timestamp = new Date().getTime(); // Generate a unique timestamp
+    const randomId = Math.random().toString(36).substr(2, 9);
+    const imageName = `${timestamp}-${randomId}.png`; // Use timestamp and random id in the image name
+    const imageBlob = this.dataURItoBlob(this.myImage);
+    const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
+
+    this.blobApiService
+      .uploadImage(imageFile, this.googleID, this.caption)
+      .subscribe(
+        (response) => {
+          console.log('Image uploaded successfully:', response);
+          this.caption = '';
+
+          // Refresh the page by navigating back to the current route
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['gallery']);
+            });
+        },
+        (error) => {
+          console.error('Error uploading image:', error);
+        }
+      );
+  }
+
+  //Function to get the user token from local storage
+  getUserIdFromToken(): string {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedToken = JSON.parse(atob(base64));
+      return decodedToken.unique_name;
+    }
+    return '';
   }
 }

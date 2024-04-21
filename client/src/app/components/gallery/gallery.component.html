@@ -43,7 +43,7 @@
 
 <!-- Modal for displaying image and cropper -->
 <ng-container *ngFor="let modal of modals">
-  <ion-modal (willDismiss)="onWillDismiss($event, modal.index)">
+  <ion-modal #modal (ionModalWillDismiss)="onWillDismiss($event, modal.index)">
     <ng-template>
       <ion-content>
         <!-- Image displayed in modal -->
@@ -90,15 +90,15 @@
 
         <!-- Buttons for cropping and confirmation -->
         <div style="text-align: center" *ngIf="cropperButtons">
+          <ion-button class="center" (click)="toggleImageCropper()">
+            <p>Add Hot Spot</p>
+          </ion-button>
           <ion-button
             class="center"
             (click)="readCaption(images[modal.index].caption)"
           >
             <ion-icon name="volume-high-outline" slot="start"></ion-icon>
             <p>{{ images[modal.index].caption }}</p>
-          </ion-button>
-          <ion-button class="center" (click)="toggleImageCropper()">
-            <p>Toggle Cropper</p>
           </ion-button>
           <ion-button class="center" (click)="showBox()">
             <p>Confirm</p>
@@ -116,10 +116,10 @@
               class="ion-align-self-center"
               (click)="sendBoundingBoxInfo(images[modal.index].imageID)"
             >
-              <ion-button> Send </ion-button>
+              <ion-button> Save </ion-button>
             </ion-col>
             <ion-col class="ion-align-self-center">
-              <ion-button> Back </ion-button>
+              <ion-button> Go Back </ion-button>
             </ion-col>
             <ion-col class="ion-align-self-center"> </ion-col>
           </ion-row>

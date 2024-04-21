@@ -1,24 +1,12 @@
-import {
-  Component,
-  ViewChildren,
-  QueryList,
-  ElementRef,
-  Renderer2,
-} from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
-import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 import { Image } from 'src/app/models/image.interfacce';
 import { LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import {
-  ImageCroppedEvent,
-  LoadedImage,
-  CropperPosition,
-} from 'ngx-image-cropper';
 import { SharedService } from '../shared.service';
 import { BoundingBox } from 'src/app/models/boundbox.interface';
 
@@ -35,7 +23,7 @@ export class GalleryComponent {
   protected caption: string = '';
   protected modals: { index: number; name: string }[] = [];
   protected croppedImage: any = '';
-  protected cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
+  protected cropperCoordinates: any = { x1: 0, y1: 0, w: 0, h: 0 };
   protected showImageCropper: boolean = false;
   protected showInputBox: boolean = false;
   protected showRedBox: boolean = false;
@@ -53,10 +41,7 @@ export class GalleryComponent {
   constructor(
     protected blobAPI: BlobApiService,
     private router: Router,
-    private objectDetectionService: ObjectDetectionService,
     private loadingCtrl: LoadingController,
-    private ELEM: ElementRef,
-    private renderer: Renderer2,
     private sharedService: SharedService
   ) {}
 
@@ -102,35 +87,6 @@ export class GalleryComponent {
     this.file = <File>event.target.files[0];
   }
 
-  uploadImageWithCaption(): void {
-    if (!this.file) {
-      console.error('No file selected.');
-      return;
-    }
-    if (!this.caption.trim()) {
-      console.error('Caption is required.');
-      return;
-    }
-
-    this.blobAPI.uploadImage(this.file, this.googleID, this.caption).subscribe(
-      (response) => {
-        console.log('Image uploaded successfully:', response);
-        this.file = null;
-        this.caption = '';
-
-        // Refresh the page by navigating back to the current route
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['gallery']);
-          });
-      },
-      (error) => {
-        console.error('Error uploading image:', error);
-      }
-    );
-  }
-
   openModal(index: number): void {
     const modal = this.ionModals.toArray()[index];
     if (modal) {
@@ -154,11 +110,14 @@ export class GalleryComponent {
     }
   }
 
-  onWillDismiss(event: Event, index: number): void {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
+  onWillDismiss(event: CustomEvent<OverlayEventDetail>, index: number): void {
+    if (event.detail.role === 'confirm') {
+      // Reset the cropping state
       this.resetCropping();
     }
+    // Reset the modal state
+    this.modals[index].index = -1;
+    this.modals[index].name = '';
   }
 
   async selectImage() {
@@ -180,21 +139,20 @@ export class GalleryComponent {
 
   getPosition(cropperPosition: any, index: number) {
     // You can also store it in a variable for later use
-    this.cropperCoor.x1 = cropperPosition.cropperPosition.x1;
-    this.cropperCoor.x2 = cropperPosition.cropperPosition.x2;
-    this.cropperCoor.y1 = cropperPosition.cropperPosition.y1;
-    this.cropperCoor.y2 = cropperPosition.cropperPosition.y2;
-    this.cropperCoor.w = cropperPosition.cropperPosition.y1;
-    this.cropperCoor.h = cropperPosition.cropperPosition.y2;
-    console.log(typeof this.cropperCoor.x1);
+    this.cropperCoordinates.x1 = cropperPosition.cropperPosition.x1;
+    this.cropperCoordinates.x2 = cropperPosition.cropperPosition.x2;
+    this.cropperCoordinates.y1 = cropperPosition.cropperPosition.y1;
+    this.cropperCoordinates.y2 = cropperPosition.cropperPosition.y2;
+    this.cropperCoordinates.w = cropperPosition.cropperPosition.y1;
+    this.cropperCoordinates.h = cropperPosition.cropperPosition.y2;
   }
   //Function to show bounding Box
   showBox() {
     // Set the position and size of the red box based on the coordinates
-    this.redBoxLeft = this.cropperCoor.x1;
-    this.redBoxTop = this.cropperCoor.y1;
-    this.redBoxWidth = this.cropperCoor.x2 - this.cropperCoor.x1; //Calculating the width of the box
-    this.redBoxHeight = this.cropperCoor.y2 - this.cropperCoor.y1; //Calculating the height of the box
+    this.redBoxLeft = this.cropperCoordinates.x1;
+    this.redBoxTop = this.cropperCoordinates.y1;
+    this.redBoxWidth = this.cropperCoordinates.x2 - this.cropperCoordinates.x1; //Calculating the width of the box
+    this.redBoxHeight = this.cropperCoordinates.y2 - this.cropperCoordinates.y1; //Calculating the height of the box
 
     // Show the red box
     this.cropperButtons = false;
@@ -207,10 +165,10 @@ export class GalleryComponent {
     // Initialize a new BoundingBoxDTO object
     let boundBox: BoundingBox = {
       imageID: imageID,
-      xMin: this.cropperCoor.x1,
-      yMin: this.cropperCoor.y1,
-      xMax: this.cropperCoor.x2,
-      yMax: this.cropperCoor.y2,
+      xMin: this.cropperCoordinates.x1,
+      yMin: this.cropperCoordinates.y1,
+      xMax: this.cropperCoordinates.x2,
+      yMax: this.cropperCoordinates.y2,
       label: 'no label',
       message: this.boundingBoxInput,
     };
@@ -227,10 +185,10 @@ export class GalleryComponent {
   }
   //Function used ti reset coordinates of bonding box
   resetCropping(): void {
-    this.cropperCoor.x1 = 0;
-    this.cropperCoor.y1 = 0;
-    this.cropperCoor.x2 = 0;
-    this.cropperCoor.y2 = 0;
+    this.cropperCoordinates.x1 = 0;
+    this.cropperCoordinates.y1 = 0;
+    this.cropperCoordinates.x2 = 0;
+    this.cropperCoordinates.y2 = 0;
     this.boundingBoxInput = '';
     this.showImageCropper = false;
     this.showRedBox = false;
