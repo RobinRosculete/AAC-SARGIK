@@ -1,4 +1,4 @@
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList, ElementRef, Renderer2  } from '@angular/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
@@ -9,7 +9,6 @@ import { Image } from 'src/app/models/image.interfacce';
 import { LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-gallery',
@@ -34,7 +33,8 @@ export class GalleryComponent {
     private router: Router,
     private objectDetectionService: ObjectDetectionService,
     private loadingCtrl: LoadingController,
-    private sanitizer: DomSanitizer
+    private ELEM: ElementRef,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
@@ -178,5 +178,10 @@ loadImageFailed() {
     // show message
 }
 
+displayCropper() {
+  const modalImage = this.ELEM.nativeElement.querySelector('p');
+
+    this.renderer.addClass(modalImage, 'hide');
+}
 
 }

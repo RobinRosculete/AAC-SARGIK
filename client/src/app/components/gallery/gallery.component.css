@@ -84,3 +84,7 @@ ion-item {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+.hide {
+  display: none;
+}
