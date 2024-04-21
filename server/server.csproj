@@ -28,6 +28,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.67.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="YoloV8" Version="2.0.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.17.3" />
   </ItemGroup>
 
   <ItemGroup>

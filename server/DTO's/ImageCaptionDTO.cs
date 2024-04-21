@@ -2,8 +2,9 @@
 namespace server.DTOs;
 	public class ImageCaptionDTO
 	{
-	public string ImgUri { get; set; }
-	public string ImgCaption { get; set; }
+    public int ImageID{ get; set; }
+    public string ImageUri { get; set; }
+	public string ImageCaption { get; set; }
 	
 	}
  

@@ -1,3 +1,5 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 /* Add styling for the header */
 nav {
   display: flex;
@@ -57,7 +59,7 @@ ion-button {
 
 @media all and (max-width: 1200px) {
   nav {
-    flex-wrap: wrap;
+    flex-wrap:wrap;
     margin-top: 23px;
   }
   .icon-container {
@@ -70,6 +72,8 @@ ion-button {
     order: 1;
   }
   .profile-icon {
-    order: 2;
+
+    order:2;
+
   }
 }

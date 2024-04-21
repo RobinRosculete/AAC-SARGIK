@@ -25,6 +25,7 @@ namespace server.Controllers
         {
             try
             {
+                
                 // Ensure that an image file is provided
                 if (file == null || file.Length == 0)
                 {
@@ -32,20 +33,21 @@ namespace server.Controllers
                 }
 
                 // Load the YOLOv8 model
-                using var predictor = new YoloV8("../server/MLModels/yolov8n-oiv7.onnx");
+                const string model_path = "../server/MLModels/yolov8s-coco.onnx";
+                using var predictor = new YoloV8(model_path);
 
                 // Perform object detection on the provided image file
                 var result = await predictor.DetectAsync(file.OpenReadStream());
 
-                // Parse the JSON data
-                var jsonString = JsonConvert.SerializeObject(result);
-                var detectionResult = JsonConvert.DeserializeObject<DetectionResult>(jsonString);
+                // Extract class names from the detected objects
+                HashSet<string> classNames = new HashSet<string>();
+                foreach (var box in result.Boxes)
+                {
+                    classNames.Add(box.Class?.Name ?? "Unknown");
+                }
 
-                // Extract class name from the first detected object
-                string? className = detectionResult?.Boxes?.Count > 0 ? detectionResult.Boxes[0].Class?.Name : "Unknown";
-
-                // Return the class name
-                return Ok(className);
+                // Return the array of unique class names
+                return Ok(classNames.ToList());
             }
             catch (Exception ex)
             {
@@ -54,27 +56,5 @@ namespace server.Controllers
             }
         }
 
-        // Define class to represent the detection result
-        public class DetectionResult
-        {
-            public List<Box>? Boxes { get; set; }
-            // Other properties as needed...
-        }
-
-        // Define class to represent a detected object
-        public class Box
-        {
-            public ClassInfo? Class { get; set; }
-            public float Confidence { get; set; }
-            // Other properties as needed...
-        }
-
-        // Define class to represent class information
-        public class ClassInfo
-        {
-            public int Id { get; set; }
-            public string? Name { get; set; }
-            // Other properties as needed...
-        }
     }
 }
