@@ -35,7 +35,14 @@
     <ion-modal (willDismiss)="onWillDismiss($event, modal.index)">
       <ng-template>
         <ion-content>
-          <ion-img draggable="false" *ngIf="images[modal.index].imageUrl && !showImageCropper" (dragstart)="(false)" class="modal-image" id="modal-image" [src]="images[modal.index].imageUrl"></ion-img>
+          <ion-img
+            draggable="false"
+            *ngIf="images[modal.index].imageUrl && !showImageCropper"
+            (dragstart)="(false)"
+            class="modal-image"
+            id="modal-image"
+            [src]="images[modal.index].imageUrl"
+          ></ion-img>
           <image-cropper
             *ngIf="images[modal.index].imageUrl && showImageCropper"
             [imageURL]="images[modal.index].imageUrl"
@@ -43,12 +50,16 @@
             [maintainAspectRatio]="true"
             [aspectRatio]="4 / 3"
             format="png"
-            (imageLoaded)="imageLoaded($event)"
-            (cropperReady)="cropperReady()"
-            (loadImageFailed)="loadImageFailed()"
             (imageCropped)="getPosition($event, modal.index)"
           ></image-cropper>
-          <ion-button class="red-box bounding-box" *ngIf="showRedBox" [style.left.px]="redBoxLeft" [style.top.px]="redBoxTop" [style.width.px]="redBoxWidth" [style.height.px]="redBoxHeight"></ion-button>
+          <ion-button
+            class="red-box bounding-box"
+            *ngIf="showRedBox"
+            [style.left.px]="redBoxLeft"
+            [style.top.px]="redBoxTop"
+            [style.width.px]="redBoxWidth"
+            [style.height.px]="redBoxHeight"
+          ></ion-button>
           <div style="text-align: center">
             <ion-button
               class="center"
@@ -69,4 +80,3 @@
     </ion-modal>
   </ng-container>
 </ion-content>
-

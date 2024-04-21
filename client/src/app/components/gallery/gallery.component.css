@@ -6,6 +6,7 @@ ion-img {
   border-radius: 20px; /* Round corners */
   size: 6;
   overflow: hidden; /* Hide overflow content to round corners */
+  aspect-ratio: 16/9;
 }
 
 ion-col {
@@ -77,85 +78,6 @@ ion-modal ion-toolbar {
   padding-bottom: var(--ion-padding, 0px);
 }
 
-:host {
-  --padding-start: 0px;
-  --inner-padding-end: 0px;
-  --inner-border-width: 0 0 0;
-}
-
-ion-item {
-  --padding-end: 0px;
-  --padding-start: 0px;
-  --inner-padding-end: 0px;
-}
-
-.unselectable {
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
-ion-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  text-align: center;
-}
-p {
-  margin-top: 5px;
-}
-.plain-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.image-button {
-  color: black;
-  --background: none;
-  --box-shadow: none;
-}
-ion-button:active {
-  color: #fff;
-}
-:host {
-  --image-size: 400px; /* Change this value to adjust the size of the images */
-}
-
-ion-col ion-img {
-  width: var(--image-size);
-  height: var(--image-size);
-}
-
-ion-modal {
-  --height: 50%;
-  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-ion-modal::part(backdrop) {
-  background: rgba(209, 213, 219);
-  opacity: 1;
-}
-
-ion-modal ion-toolbar {
-  --background: rgb(14 116 144);
-  --color: white;
-}
-
-.ion-padding {
-  --padding-start: var(--ion-padding, 0px);
-  --padding-end: var(--ion-padding, 0px);
-  --padding-top: var(--ion-padding, 0px);
-  --padding-bottom: var(--ion-padding, 0px);
-  --padding-right: var(--ion-padding, 0px);
-  padding-inline-start: var(--ion-padding, 0px);
-  padding-inline-end: var(--ion-padding, 0px);
-  padding-top: var(--ion-padding, 0px);
-  padding-bottom: var(--ion-padding, 0px);
-}
 :host {
   --padding-start: 0px;
   --inner-padding-end: 0px;

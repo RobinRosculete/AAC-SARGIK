@@ -172,16 +172,6 @@ export class GalleryComponent {
     this.imageChangedEvent = event;
   }
 
-  imageLoaded(image: LoadedImage) {
-    // show cropper
-  }
-  cropperReady() {
-    // cropper ready
-  }
-  loadImageFailed() {
-    // show message
-  }
-
   toggleImageCropper() {
     this.showImageCropper = !this.showImageCropper;
   }

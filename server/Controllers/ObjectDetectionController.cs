@@ -1,11 +1,6 @@
 ﻿using Compunet.YoloV8;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+
 
 namespace server.Controllers
 {

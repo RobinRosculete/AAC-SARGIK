@@ -9,13 +9,8 @@ using OpenAI_API.Chat;
 using OpenAI_API.Models;
 using server.DTOs;
 using System.Text.RegularExpressions;
-using System.Text.RegularExpressions;
 namespace server.Controllers;
 
-
-
-//[Authorize]
-[Route("api/[controller]")]
 
 //[Authorize]
 [Route("api/[controller]")]
@@ -91,7 +86,6 @@ namespace server.Controllers;
             // Creating a chat completion of the input query (input text)
             var result = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
             {
-                Model = Model.ChatGPTTurbo, // Specifying Model
                 Model = Model.ChatGPTTurbo, // Specifying Model
                 Temperature = 0.1,
                 MaxTokens = 10,  // Max tokens to be predicted
