@@ -8,7 +8,7 @@ import { ObjectDetectionService } from 'src/app/services/object_detection/object
 import { Image } from 'src/app/models/image.interfacce';
 import { LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { ImageCroppedEvent, LoadedImage, CropperPosition } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-gallery',
@@ -23,7 +23,13 @@ export class GalleryComponent {
   protected caption: string = '';
   protected modals: { index: number; name: string }[] = [];
   protected croppedImage: any = '';
-  protected cropperPosition: any; // Adjust the type as per your needs
+  cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
+  showImageCropper: boolean = false;
+  showRedBox: boolean = false;
+  redBoxLeft: number = 0;
+  redBoxTop: number = 0;
+  redBoxWidth: number = 0;
+  redBoxHeight: number = 0;
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -160,10 +166,39 @@ export class GalleryComponent {
     // show message
 }
 
-displayCropper() {
-  const modalImage = this.ELEM.nativeElement.querySelector('p');
-
-    this.renderer.addClass(modalImage, 'hide');
+toggleImageCropper() {
+  this.showImageCropper = !this.showImageCropper;
 }
 
+getPosition(cropperPosition: any, index: number) {
+  // Here, you can access the `cropperPosition` and do whatever you need with it
+  console.log("Cropper position:", cropperPosition);
+  // You can also store it in a variable for later use
+  this.cropperCoor.x1 = cropperPosition.cropperPosition.x1;
+  this.cropperCoor.x2 = cropperPosition.cropperPosition.x2;
+  this.cropperCoor.y1 = cropperPosition.cropperPosition.y1;
+  this.cropperCoor.y2 = cropperPosition.cropperPosition.y2;
+  this.cropperCoor.w = cropperPosition.cropperPosition.y1;
+  this.cropperCoor.h = cropperPosition.cropperPosition.y2;
+  console.log(typeof this.cropperCoor.x1)
+}
+
+showBox() {
+
+  console.log(this.cropperCoor)
+  // Assuming you have variables for x and y coordinates
+  const x: number = this.cropperCoor.x1;
+  const y: number = this.cropperCoor.y1;
+  const boxWidth: number = this.cropperCoor.x2 - this.cropperCoor.x1; // Example width of the box
+  const boxHeight: number = this.cropperCoor.y2 - this.cropperCoor.y1; // Example height of the box
+
+  // Set the position and size of the red box based on the coordinates
+  this.redBoxLeft = x;
+  this.redBoxTop = y;
+  this.redBoxWidth = boxWidth;
+  this.redBoxHeight = boxHeight;
+
+  // Show the red box
+  this.showRedBox = true;
+}
 }

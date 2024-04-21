@@ -85,6 +85,13 @@ ion-item {
   -ms-user-select: none;
 }
 
-.hide {
-  display: none;
+.red-box {
+  position: absolute;
+  border: 2px solid red;
+  background-color: transparent;
+}
+
+.bounding-box {
+  --background: none;
+  --box-shadow: none;
 }
