@@ -128,14 +128,15 @@ namespace server.Controllers
         }
 
         [HttpPost("users/save-bounding-box")]
-        public async Task<IActionResult> SaveBoundingBox([FromBody]  BoundingBoxDTO boundingBoxDTO)
+        public async Task<IActionResult> SaveBoundingBox([FromBody] BoundingBoxDTO boundingBoxDTO)
         {
             Console.WriteLine("jdfsalkjflkdsjfl;kaajdlkjflak;jaldks;jfalk");
             Console.WriteLine(boundingBoxDTO);
             if (boundingBoxDTO == null ||
                 boundingBoxDTO.imageID < 0 ||
                 boundingBoxDTO.xMin < 0 || boundingBoxDTO.xMax < 0 ||
-                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0
+                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0 ||
+                boundingBoxDTO.label.Length <=0  || boundingBoxDTO.message.Length<=0
                 )
             {
                 return BadRequest("Invalid input.");
