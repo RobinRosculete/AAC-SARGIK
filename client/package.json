@@ -30,7 +30,7 @@
     "@capacitor/camera": "5.0.9",
     "@capacitor/core": "next",
     "@capacitor/filesystem": "5.2.1",
-    "@capacitor/ios": "next",
+    "@capacitor/ios": "^6.0.0-rc.2",
     "@capacitor/preferences": "5.0.7",
     "@codetrix-studio/capacitor-google-auth": "3.4.0-rc.0",
     "@ionic-native/core": "^5.36.0",

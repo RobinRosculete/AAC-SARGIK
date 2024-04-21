@@ -13,9 +13,6 @@ import { IonicModule } from '@ionic/angular';
 import { VsdComponent } from './components/vsd/vsd.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { File } from '@ionic-native/file/ngx';
-import 'hammerjs';
-
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 @NgModule({
