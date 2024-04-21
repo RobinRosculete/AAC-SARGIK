@@ -9,6 +9,7 @@ import { Image } from 'src/app/models/image.interfacce';
 import { LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { ImageCroppedEvent, LoadedImage, CropperPosition } from 'ngx-image-cropper';
+import { BoundingBox } from 'src/app/models/boundbox.interface';
 
 @Component({
   selector: 'app-gallery',
@@ -25,11 +26,14 @@ export class GalleryComponent {
   protected croppedImage: any = '';
   cropperCoor: any = { x1: 0, y1: 0, w: 0, h: 0 };
   showImageCropper: boolean = false;
+  showInputBox: boolean = false;
   showRedBox: boolean = false;
+  cropperButtons: boolean = true;
   redBoxLeft: number = 0;
   redBoxTop: number = 0;
   redBoxWidth: number = 0;
   redBoxHeight: number = 0;
+  boundingBoxInput: string = '';
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -152,20 +156,6 @@ export class GalleryComponent {
     this.croppedImage = null;
   }
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-  }
-
-  imageLoaded(image: LoadedImage) {
-    // show cropper
-  }
-  cropperReady() {
-    // cropper ready
-  }
-  loadImageFailed() {
-    // show message
-}
-
 toggleImageCropper() {
   this.showImageCropper = !this.showImageCropper;
 }
@@ -199,6 +189,34 @@ showBox() {
   this.redBoxHeight = boxHeight;
 
   // Show the red box
+  this.cropperButtons = false
+  this.showImageCropper = true;
   this.showRedBox = true;
+  this.showInputBox = true;
+}
+
+sendBoundingBoxInfo(imageID: number) {
+  // Initialize a new BoundingBoxDTO object
+  let boundBox: BoundingBox = {
+    imageID: imageID,
+    xMin: this.cropperCoor.x1,
+    yMin: this.cropperCoor.y1,
+    xMax: this.cropperCoor.x2,
+    yMax: this.cropperCoor.y2,
+    label: "no label",
+    message: this.boundingBoxInput,
+  };
+
+  console.log(boundBox);
+
+  // Send the bounding box information to the server
+  this.blobAPI.saveBoundingBox(boundBox).subscribe(
+    (response) => {
+      console.log('Bounding box information saved successfully:', response);
+    },
+    (error) => {
+      console.error('Error saving bounding box information:', error);
+    }
+  );
 }
 }

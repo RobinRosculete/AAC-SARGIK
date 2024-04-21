@@ -7,10 +7,10 @@ namespace server.DTOs;
 	public int imageID{ get; set; }
 
     //Coordointes of Bounding Box
-    public int xMin { get; set; }
-    public int yMin { get; set; }
-    public int xMax { get; set; }
-    public int yMax { get; set; }
+    public float xMin { get; set; }
+    public float yMin { get; set; }
+    public float xMax { get; set; }
+    public float yMax { get; set; }
 
     //Label of object in Bounding Box
     public string label { get; set; }

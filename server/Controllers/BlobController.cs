@@ -127,15 +127,16 @@ namespace server.Controllers
             }
         }
 
-        // POST api/values
         [HttpPost("users/save-bounding-box")]
-        public async Task<IActionResult> SaveBoundingBox(BoundingBoxDTO boundingBoxDTO)
+        public async Task<IActionResult> SaveBoundingBox([FromBody]  BoundingBoxDTO boundingBoxDTO)
         {
+            Console.WriteLine("jdfsalkjflkdsjfl;kaajdlkjflak;jaldks;jfalk");
+            Console.WriteLine(boundingBoxDTO);
             if (boundingBoxDTO == null ||
                 boundingBoxDTO.imageID < 0 ||
                 boundingBoxDTO.xMin < 0 || boundingBoxDTO.xMax < 0 ||
-                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0 ||
-                string.IsNullOrWhiteSpace(boundingBoxDTO.label))
+                boundingBoxDTO.yMin < 0 || boundingBoxDTO.yMax < 0
+                )
             {
                 return BadRequest("Invalid input.");
             }
@@ -161,7 +162,7 @@ namespace server.Controllers
                 _db.BoundingBoxes.Add(boundinBox);
                 await _db.SaveChangesAsync();
 
-                return Ok("Succesfully Saved Bounding Box in Database");
+                return Ok(new { message = "Successfully saved bounding box in the database." });
 
             }
             catch (Exception ex)

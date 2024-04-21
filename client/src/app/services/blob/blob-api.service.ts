@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { Observable } from 'rxjs';
 import { Image } from 'src/app/models/image.interfacce'; // Import the Image interface
+import { BoundingBox } from 'src/app/models/boundbox.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,11 @@ export class BlobApiService {
       googleUserId +
       '/upload-image';
     return this.http.post<any>(url, formData);
+  }
+
+  saveBoundingBox(boundBox: BoundingBox): Observable<any> {
+    let url = environment.SERVER_URL + '/api/Blob/users/save-bounding-box';
+    console.log("From service", boundBox);
+    return this.http.post<any>(url, boundBox);
   }
 }

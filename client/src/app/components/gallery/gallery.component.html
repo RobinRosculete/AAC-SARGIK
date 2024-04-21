@@ -37,13 +37,10 @@
             [maintainAspectRatio]="true"
             [aspectRatio]="4 / 3"
             format="png"
-            (imageLoaded)="imageLoaded($event)"
-            (cropperReady)="cropperReady()"
-            (loadImageFailed)="loadImageFailed()"
             (imageCropped)="getPosition($event, modal.index)"
           ></image-cropper>
           <ion-button class="red-box bounding-box" *ngIf="showRedBox" [style.left.px]="redBoxLeft" [style.top.px]="redBoxTop" [style.width.px]="redBoxWidth" [style.height.px]="redBoxHeight"></ion-button>
-          <div style="text-align: center">
+          <div style="text-align: center" *ngIf="cropperButtons">
             <ion-button
               class="center"
               (click)="readCaption(images[modal.index].caption)"
@@ -58,6 +55,36 @@
               <p>Confirm</p>
             </ion-button>
           </div>
+          <ion-grid *ngIf="images[modal.index].imageUrl && showInputBox">
+            <ion-input
+              placeholder="Enter Text"
+              [(ngModel)]="boundingBoxInput"
+            ></ion-input>
+            <ion-row class="ion-justify-content-center">
+              <!-- <ion-col class="ion-align-self-center">
+                <ion-button
+                  (click)="openTextModal()"
+                  id="generate-caption"
+                  expand="block"
+                >
+                  <ion-icon name="logo-ionitron"></ion-icon>
+                  &nbsp;A.I. Text Generation
+                </ion-button>
+              </ion-col> -->
+              <ion-col class="ion-align-self-center" (click)="sendBoundingBoxInfo(images[modal.index].imageID)">
+                <ion-button>
+                  Send
+                </ion-button>
+              </ion-col>
+              <ion-col class="ion-align-self-center">
+                <ion-button>
+                  Back
+                </ion-button>
+              </ion-col>
+              <ion-col class="ion-align-self-center">
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-content>
       </ng-template>
     </ion-modal>

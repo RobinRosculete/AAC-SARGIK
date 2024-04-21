@@ -9,13 +9,13 @@ public partial class BoundingBox
 
     public int ImageId { get; set; }
 
-    public int XMin { get; set; }
+    public float XMin { get; set; }
 
-    public int YMin { get; set; }
+    public float YMin { get; set; }
 
-    public int XMax { get; set; }
+    public float XMax { get; set; }
 
-    public int YMax { get; set; }
+    public float YMax { get; set; }
 
     public string? Label { get; set; }
 
