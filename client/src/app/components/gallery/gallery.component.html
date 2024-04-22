@@ -79,51 +79,47 @@
         ></image-cropper>
 
         <!-- Red box for bounding box selection -->
-        <ion-button
+        <span
           class="red-box bounding-box"
           *ngIf="showRedBox"
           [style.left.px]="redBoxLeft"
           [style.top.px]="redBoxTop"
           [style.width.px]="redBoxWidth"
           [style.height.px]="redBoxHeight"
-        ></ion-button>
+        ></span>
 
         <!-- Buttons for cropping and confirmation -->
         <div style="text-align: center" *ngIf="cropperButtons">
           <ion-button class="center" (click)="toggleImageCropper()">
-            <p>Add Hot Spot</p>
+            <p>{{ hotspotButton }}</p>
           </ion-button>
           <ion-button
             class="center"
             (click)="readCaption(images[modal.index].caption)"
+            *ngIf="speakerButton"
           >
             <ion-icon name="volume-high-outline" slot="start"></ion-icon>
             <p>{{ images[modal.index].caption }}</p>
           </ion-button>
-          <ion-button class="center" (click)="showBox()">
+          <ion-button class="center" *ngIf="confirmButton" (click)="showBox()">
             <p>Confirm</p>
           </ion-button>
         </div>
 
         <!-- Input box for entering text -->
-        <ion-grid *ngIf="images[modal.index].imageUrl && showInputBox">
+        <div *ngIf="showBoundingBoxButtons">
           <ion-input
             placeholder="Enter Text"
             [(ngModel)]="boundingBoxInput"
           ></ion-input>
-          <ion-row class="ion-justify-content-center">
-            <ion-col
-              class="ion-align-self-center"
-              (click)="sendBoundingBoxInfo(images[modal.index].imageID)"
-            >
-              <ion-button> Save </ion-button>
-            </ion-col>
-            <ion-col class="ion-align-self-center">
-              <ion-button> Go Back </ion-button>
-            </ion-col>
-            <ion-col class="ion-align-self-center"> </ion-col>
-          </ion-row>
-        </ion-grid>
+          <br>
+          <div style="text-align: center">
+            <ion-button
+            (click)="sendBoundingBoxInfo(images[modal.index].imageID)" 
+            > Save </ion-button>
+            <ion-button (click)="goBackToDrawing()"> Go Back </ion-button>
+          </div>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>

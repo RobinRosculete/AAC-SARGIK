@@ -34,6 +34,12 @@ export class GalleryComponent {
   protected redBoxHeight: number = 0;
   protected boundingBoxInput: string = '';
   protected boundingBoxes: BoundingBox[] = [];
+  protected confirmButton: boolean = false;
+  protected hotspotButton: string = 'Add Hot Spot';
+  protected speakerButton: boolean = true;
+  protected showBoundingBoxButtons: boolean = false;
+  protected clickedImageWidth: number = 0;
+  protected clickedImageHeight: number = 0;
 
   @ViewChildren(IonModal) ionModals!: QueryList<IonModal>;
   imageChangedEvent: any = '';
@@ -95,6 +101,12 @@ export class GalleryComponent {
     }
   }
 
+  getImageWidth(img: any){
+    //or however you get a handle to the IMG
+    var width = img.clientWidth;
+    var height = img.clientHeight;
+  }
+
   cancel(index: number): void {
     const modal = this.ionModals.toArray()[index];
     if (modal) {
@@ -135,6 +147,9 @@ export class GalleryComponent {
 
   toggleImageCropper() {
     this.showImageCropper = !this.showImageCropper;
+    this.confirmButton = !this.confirmButton;
+    this.speakerButton = !this.speakerButton
+    this.hotspotButton = this.hotspotButton === 'Add Hot Spot' ? 'Back' : 'Add Hot Spot';
   }
 
   getPosition(cropperPosition: any, index: number) {
@@ -156,9 +171,11 @@ export class GalleryComponent {
 
     // Show the red box
     this.cropperButtons = false;
-    this.showImageCropper = true;
+    this.showImageCropper = false;
     this.showRedBox = true;
     this.showInputBox = true;
+
+    this.showBoundingBoxButtons = true;
   }
 
   sendBoundingBoxInfo(imageID: number) {
@@ -206,5 +223,13 @@ export class GalleryComponent {
         console.error('Error getting bounding boxes:', error);
       }
     );
+  }
+
+  goBackToDrawing() {
+    this.showImageCropper = true;
+    this.showRedBox = false;
+    this.showInputBox = false;
+    this.cropperButtons = true;
+    this.showBoundingBoxButtons = false;
   }
 }

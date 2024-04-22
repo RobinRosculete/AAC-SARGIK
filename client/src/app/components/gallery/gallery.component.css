@@ -117,3 +117,8 @@ ion-item {
   height: auto;
   aspect-ratio: 16 / 9;
 }
+
+ion-modal {
+  --modal-width: auto;
+  --modal-height: auto;
+}
