@@ -14,15 +14,15 @@ namespace server.Controllers;
 
 //[Authorize]
 [Route("api/[controller]")]
-    [ApiController]
-    public class TextPredictionController : ControllerBase
-    {
-        private readonly IConfiguration _configuration;
+[ApiController]
+public class TextPredictionController : ControllerBase
+{
+    private readonly IConfiguration _configuration;
 
-        public TextPredictionController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+    public TextPredictionController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     //APi endpoint to acces GPT API
     [HttpPost]
@@ -78,7 +78,8 @@ namespace server.Controllers;
         if (!(string.IsNullOrEmpty(query.text)))
         {
             // Create a new OpenAiAPI object, requires API KEY
-            OpenAIAPI api = new OpenAIAPI();
+            string apiKey = _configuration["GPT-API-KEY"];
+            OpenAIAPI api = new OpenAIAPI(apiKey);
 
             // Extract the word from the query text
             var word = query.text;
@@ -114,4 +115,3 @@ namespace server.Controllers;
     }
 
 }
-
