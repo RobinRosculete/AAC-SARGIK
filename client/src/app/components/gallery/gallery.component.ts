@@ -139,12 +139,11 @@ export class GalleryComponent {
 
   getPosition(cropperPosition: any, index: number) {
     // You can also store it in a variable for later use
+    console.log(cropperPosition);
     this.cropperCoordinates.x1 = cropperPosition.cropperPosition.x1;
     this.cropperCoordinates.x2 = cropperPosition.cropperPosition.x2;
     this.cropperCoordinates.y1 = cropperPosition.cropperPosition.y1;
     this.cropperCoordinates.y2 = cropperPosition.cropperPosition.y2;
-    this.cropperCoordinates.w = cropperPosition.cropperPosition.y1;
-    this.cropperCoordinates.h = cropperPosition.cropperPosition.y2;
   }
   //Function to show bounding Box
   showBox() {

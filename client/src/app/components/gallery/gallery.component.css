@@ -110,10 +110,10 @@ ion-item {
 }
 
 .modal-image {
-  display: block;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
+  width: auto; /* Reset width to auto */
+  height: auto; /* Reset height to auto */
+  max-width: 100%; /* Ensure image does not exceed modal width */
+  max-height: 100%; /* Ensure image does not exceed modal height */
+  object-fit: contain; /* Maintain aspect ratio and fit inside container */
+  border-radius: 10px; /* Round corners */
 }

@@ -72,9 +72,6 @@
           *ngIf="images[modal.index].imageUrl && showImageCropper"
           [imageURL]="images[modal.index].imageUrl"
           [imageChangedEvent]="imageChangedEvent"
-          [maintainAspectRatio]="true"
-          [aspectRatio]="4 / 3"
-          format="png"
           (imageCropped)="getPosition($event, modal.index)"
         ></image-cropper>
 

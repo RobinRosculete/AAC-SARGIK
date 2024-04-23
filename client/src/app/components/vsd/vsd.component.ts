@@ -36,7 +36,9 @@ export class VsdComponent {
 
   private imageClasses: string[] = [];
   protected generatedTexts: string[] = [
-    'No Generated Text, Classes not detected in the image.',
+    'I want to eat the apple',
+    'I like the red apple',
+    'I am hungry for the apple',
   ];
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
@@ -75,7 +77,9 @@ export class VsdComponent {
 
   getImagePrediction(image: string) {
     this.generatedTexts = [
-      'No Generated Text, Classes not detected in the image.',
+      'I want to eat the apple',
+      'I like the red apple',
+      'I am hungry for the apple',
     ];
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
