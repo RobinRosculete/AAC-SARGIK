@@ -117,3 +117,8 @@ ion-item {
   object-fit: contain; /* Maintain aspect ratio and fit inside container */
   border-radius: 10px; /* Round corners */
 }
+
+ion-modal {
+  --modal-width: auto;
+  --modal-height: auto;
+}
