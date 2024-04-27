@@ -35,11 +35,7 @@ export class VsdComponent {
   protected croppingMode: boolean = false;
 
   private imageClasses: string[] = [];
-  protected generatedTexts: string[] = [
-    'I want to eat the apple',
-    'I like the red apple',
-    'I am hungry for the apple',
-  ];
+  protected generatedTexts: string[] = [''];
   protected imageChangedEvent: any = '';
   protected croppedImage: any = '';
 
@@ -76,11 +72,7 @@ export class VsdComponent {
   }
 
   getImagePrediction(image: string) {
-    this.generatedTexts = [
-      'I want to eat the apple',
-      'I like the red apple',
-      'I am hungry for the apple',
-    ];
+    this.generatedTexts = [''];
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
     const imageFile = new File([imageBlob], imageName, { type: 'image/png' });

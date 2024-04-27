@@ -109,11 +109,13 @@
             placeholder="Enter Text"
             [(ngModel)]="boundingBoxInput"
           ></ion-input>
-          <br>
+          <br />
           <div style="text-align: center">
             <ion-button
-            (click)="sendBoundingBoxInfo(images[modal.index].imageID)" 
-            > Save </ion-button>
+              (click)="sendBoundingBoxInfo(images[modal.index].imageID)"
+            >
+              Save
+            </ion-button>
             <ion-button (click)="goBackToDrawing()"> Go Back </ion-button>
           </div>
         </div>
