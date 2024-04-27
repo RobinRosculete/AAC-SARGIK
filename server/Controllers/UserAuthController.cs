@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 namespace server.Controllers;
 
-
+    
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase

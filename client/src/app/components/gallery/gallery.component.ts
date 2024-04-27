@@ -185,6 +185,17 @@ export class GalleryComponent {
     this.showBoundingBoxButtons = true;
   }
 
+  //Method to present notification message to the user when saving ore deleting a image is loaded
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 4000,
+      position: 'top',
+    });
+    await toast.present();
+  }
+
+  //Method to send bounding box information to the database
   sendBoundingBoxInfo(imageID: number): void {
     // Initialize a new BoundingBoxDTO object
     let boundBox: BoundingBox = {
@@ -203,12 +214,7 @@ export class GalleryComponent {
         console.log('Bounding box information saved successfully:', response);
 
         // Show a toast notification
-        const toast = await this.toastController.create({
-          message: 'Bounding box information saved successfully',
-          duration: 4000,
-          position: 'top',
-        });
-        await toast.present();
+        await this.presentToast('Bounding box information saved successfully');
 
         // Find the index of the modal matching the current image
         const index = this.images.findIndex(

@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 namespace server.Controllers;
 
 
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class TextPredictionController : ControllerBase
