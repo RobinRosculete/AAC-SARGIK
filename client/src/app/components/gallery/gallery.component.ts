@@ -3,7 +3,6 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
-
 import { Image } from 'src/app/models/image.interfacce';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
@@ -106,12 +105,6 @@ export class GalleryComponent {
         this.resetSettings();
       });
     }
-  }
-
-  getImageWidth(img: any) {
-    //or however you get a handle to the IMG
-    var width = img.clientWidth;
-    var height = img.clientHeight;
   }
 
   cancel(index: number): void {

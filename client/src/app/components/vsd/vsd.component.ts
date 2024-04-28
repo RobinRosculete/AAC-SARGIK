@@ -1,18 +1,15 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonModal } from '@ionic/angular';
-import {
-  ImageCroppedEvent,
-  ImageCropperComponent,
-  CropperPosition,
-} from 'ngx-image-cropper';
+import { IonModal, ToastController } from '@ionic/angular';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { SharedService } from '../shared.service';
 import { KeyboardService } from '../keyboard.service';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { TextPredictionApiService } from 'src/app/services/text_prediction_custom/text-prediction-api.service';
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-vsd',
   templateUrl: './vsd.component.html',
@@ -40,7 +37,6 @@ export class VsdComponent {
   protected croppedImage: any = '';
 
   private googleID: string = '';
-
   protected caption: string = '';
 
   constructor(
@@ -49,7 +45,8 @@ export class VsdComponent {
     private textPredictionApiService: TextPredictionApiService,
     private objectDetectionService: ObjectDetectionService,
     private blobApiService: BlobApiService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +69,7 @@ export class VsdComponent {
   }
 
   getImagePrediction(image: string) {
-    this.generatedTexts = [''];
+    this.generatedTexts = [];
     const imageName = 'name.png';
     const imageBlob = this.dataURItoBlob(image);
     const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
@@ -81,6 +78,13 @@ export class VsdComponent {
       .getObjectDetection(imageFile)
       .pipe(
         switchMap((classes) => {
+          if (classes.length === 0) {
+            return of({
+              sentences: [
+                'No classes were detected. Please try again or retake photo',
+              ],
+            });
+          }
           this.imageClasses = classes;
           return this.textPredictionApiService.getGeneratedText(
             this.imageClasses
@@ -178,7 +182,7 @@ export class VsdComponent {
   // Function to upload an image with a caption using the BlobApiService
   saveImageToGallery(): void {
     if (!this.caption.trim()) {
-      console.error('Caption is required.');
+      this.presentToast('Caption is required.', 'danger');
       return;
     }
 
@@ -201,9 +205,14 @@ export class VsdComponent {
             .then(() => {
               this.router.navigate(['gallery']);
             });
+          this.presentToast(
+            'Successfully Saved Image to the gallery.',
+            'success'
+          );
         },
         (error) => {
           console.error('Error uploading image:', error);
+          this.presentToast('Error uploading image', 'danger');
         }
       );
   }
@@ -218,5 +227,15 @@ export class VsdComponent {
       return decodedToken.unique_name;
     }
     return '';
+  }
+  //Method to present notification message to the user when saving ore deleting a image is loaded
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: color,
+    });
+    await toast.present();
   }
 }
