@@ -180,7 +180,7 @@ export class VsdComponent {
     reader.readAsDataURL(file);
   }
   // Function to upload an image with a caption using the BlobApiService
-  saveImageToGallery(): void {
+  async saveImageToGallery() {
     if (!this.caption.trim()) {
       this.presentToast('Caption is required.', 'danger');
       return;

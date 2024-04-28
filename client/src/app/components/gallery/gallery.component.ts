@@ -179,17 +179,35 @@ export class GalleryComponent {
   }
 
   //Method to present notification message to the user when saving ore deleting a image is loaded
-  async presentToast(message: string) {
+  async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 4000,
       position: 'top',
+      color: color,
     });
     await toast.present();
   }
 
   //Method to send bounding box information to the database
   sendBoundingBoxInfo(imageID: number): void {
+    //Checking for input text
+    if (!this.boundingBoxInput.trim()) {
+      this.presentToast(
+        'Please provide a message for the bounding box',
+        'danger'
+      );
+      return;
+    }
+    // Checking if cropperCoordinates are valid
+    if (
+      !this.cropperCoordinates ||
+      !this.isValidCoordinates(this.cropperCoordinates)
+    ) {
+      this.presentToast('Invalid cropper coordinates', 'danger');
+      return;
+    }
+
     // Initialize a new BoundingBoxDTO object
     let boundBox: BoundingBox = {
       imageID: imageID,
@@ -207,7 +225,10 @@ export class GalleryComponent {
         console.log('Bounding box information saved successfully:', response);
 
         // Show a toast notification
-        await this.presentToast('Bounding box information saved successfully');
+        await this.presentToast(
+          'Bounding box information saved successfully',
+          'success'
+        );
 
         // Find the index of the modal matching the current image
         const index = this.images.findIndex(
@@ -219,6 +240,7 @@ export class GalleryComponent {
       },
       (error) => {
         console.error('Error saving bounding box information:', error);
+        this.presentToast('Error saving bounding box information', 'danger');
       }
     );
   }
@@ -294,5 +316,18 @@ export class GalleryComponent {
     this.clickedImageWidth = 0;
     this.clickedImageHeight = 0;
     // Reset other settings as needed
+  }
+
+  //Function to check if coordinates are valid
+  isValidCoordinates(coordinates: any): boolean {
+    return (
+      coordinates &&
+      coordinates.x1 != null &&
+      coordinates.y1 != null &&
+      coordinates.x2 != null &&
+      coordinates.y2 != null &&
+      coordinates.x1 < coordinates.x2 &&
+      coordinates.y1 < coordinates.y2
+    );
   }
 }
