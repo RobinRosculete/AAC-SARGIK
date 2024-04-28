@@ -42,6 +42,10 @@
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-self-center">
             <ion-img [src]="croppedImage ? croppedImage : myImage"></ion-img>
+            <ion-button (click)="speakText(this.caption)" expand="block">
+              {{ caption }} &nbsp;
+              <ion-icon name="volume-high-outline"></ion-icon>
+            </ion-button>
           </ion-col>
         </ion-row>
         <ion-input placeholder="Enter Text" [(ngModel)]="caption"></ion-input>
