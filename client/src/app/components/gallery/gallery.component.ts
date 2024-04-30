@@ -3,9 +3,8 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
-import { Router } from '@angular/router';
 import { Image } from 'src/app/models/image.interfacce';
-import { LoadingController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { SharedService } from '../shared.service';
 import { BoundingBox } from 'src/app/models/boundbox.interface';
@@ -46,11 +45,13 @@ export class GalleryComponent {
 
   constructor(
     protected blobAPI: BlobApiService,
-    private router: Router,
     private loadingCtrl: LoadingController,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+
+    private toastController: ToastController
   ) {}
 
+  //Used for opening the VSD MOdel to allow user tyo upload image to the gallery
   openVSDModal() {
     this.sharedService.openVSDModal();
   }
@@ -74,10 +75,12 @@ export class GalleryComponent {
     }, 100);
   }
 
+  //User to read the caption od the images
   readCaption(caption: string): void {
     TextToSpeech.speak({ text: caption });
   }
 
+  //Getting user toke from local storage for http requests
   getUserIdFromToken(): string {
     const token = localStorage.getItem('token');
     if (token) {
@@ -98,13 +101,10 @@ export class GalleryComponent {
     if (modal) {
       this.modals[index].index = index;
       modal.present();
+      modal.onDidDismiss().then(() => {
+        this.resetSettings();
+      });
     }
-  }
-
-  getImageWidth(img: any){
-    //or however you get a handle to the IMG
-    var width = img.clientWidth;
-    var height = img.clientHeight;
   }
 
   cancel(index: number): void {
@@ -145,21 +145,22 @@ export class GalleryComponent {
     this.croppedImage = null;
   }
 
+  // Method for managing the ImageCropper menu
   toggleImageCropper() {
     this.showImageCropper = !this.showImageCropper;
     this.confirmButton = !this.confirmButton;
-    this.speakerButton = !this.speakerButton
-    this.hotspotButton = this.hotspotButton === 'Add Hot Spot' ? 'Back' : 'Add Hot Spot';
+    this.speakerButton = !this.speakerButton;
+    this.hotspotButton =
+      this.hotspotButton === 'Add Hot Spot' ? 'Back' : 'Add Hot Spot';
   }
 
   getPosition(cropperPosition: any, index: number) {
     // You can also store it in a variable for later use
+    console.log(cropperPosition);
     this.cropperCoordinates.x1 = cropperPosition.cropperPosition.x1;
     this.cropperCoordinates.x2 = cropperPosition.cropperPosition.x2;
     this.cropperCoordinates.y1 = cropperPosition.cropperPosition.y1;
     this.cropperCoordinates.y2 = cropperPosition.cropperPosition.y2;
-    this.cropperCoordinates.w = cropperPosition.cropperPosition.y1;
-    this.cropperCoordinates.h = cropperPosition.cropperPosition.y2;
   }
   //Function to show bounding Box
   showBox() {
@@ -174,11 +175,39 @@ export class GalleryComponent {
     this.showImageCropper = false;
     this.showRedBox = true;
     this.showInputBox = true;
-
     this.showBoundingBoxButtons = true;
   }
 
-  sendBoundingBoxInfo(imageID: number) {
+  //Method to present notification message to the user when saving ore deleting a image is loaded
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 4000,
+      position: 'top',
+      color: color,
+    });
+    await toast.present();
+  }
+
+  //Method to send bounding box information to the database
+  sendBoundingBoxInfo(imageID: number): void {
+    //Checking for input text
+    if (!this.boundingBoxInput.trim()) {
+      this.presentToast(
+        'Please provide a message for the bounding box',
+        'danger'
+      );
+      return;
+    }
+    // Checking if cropperCoordinates are valid
+    if (
+      !this.cropperCoordinates ||
+      !this.isValidCoordinates(this.cropperCoordinates)
+    ) {
+      this.presentToast('Invalid cropper coordinates', 'danger');
+      return;
+    }
+
     // Initialize a new BoundingBoxDTO object
     let boundBox: BoundingBox = {
       imageID: imageID,
@@ -192,14 +221,42 @@ export class GalleryComponent {
 
     // Send the bounding box information to the server
     this.blobAPI.saveBoundingBox(boundBox).subscribe(
-      (response) => {
+      async (response) => {
         console.log('Bounding box information saved successfully:', response);
+
+        // Show a toast notification
+        await this.presentToast(
+          'Bounding box information saved successfully',
+          'success'
+        );
+
+        // Find the index of the modal matching the current image
+        const index = this.images.findIndex(
+          (image) => image.imageID === imageID
+        );
+
+        // Reopen the modal
+        this.reopenModal(index);
       },
       (error) => {
         console.error('Error saving bounding box information:', error);
+        this.presentToast('Error saving bounding box information', 'danger');
       }
     );
   }
+
+  //method to return to main page of modal after saving bounding box information
+  reopenModal(index: number): void {
+    const modal = this.ionModals.toArray()[index];
+    if (modal) {
+      modal.dismiss(null, 'confirm');
+      setTimeout(() => {
+        this.openModal(index);
+        this.getBoundingBoxes(this.images[index].imageID);
+      }, 500);
+    }
+  }
+
   //Function used ti reset coordinates of bonding box
   resetCropping(): void {
     this.cropperCoordinates.x1 = 0;
@@ -231,5 +288,46 @@ export class GalleryComponent {
     this.showInputBox = false;
     this.cropperButtons = true;
     this.showBoundingBoxButtons = false;
+  }
+
+  //reseating all setting to default when user exits modal
+  resetSettings(): void {
+    this.myImage = null;
+    this.caption = '';
+    this.croppedImage = '';
+    this.modals.forEach((modal) => {
+      modal.index = -1;
+      modal.name = '';
+    });
+    this.showImageCropper = false;
+    this.showInputBox = false;
+    this.showRedBox = false;
+    this.cropperButtons = true;
+    this.redBoxLeft = 0;
+    this.redBoxTop = 0;
+    this.redBoxWidth = 0;
+    this.redBoxHeight = 0;
+    this.boundingBoxInput = '';
+    this.boundingBoxes = [];
+    this.confirmButton = false;
+    this.hotspotButton = 'Add Hot Spot';
+    this.speakerButton = true;
+    this.showBoundingBoxButtons = false;
+    this.clickedImageWidth = 0;
+    this.clickedImageHeight = 0;
+    // Reset other settings as needed
+  }
+
+  //Function to check if coordinates are valid
+  isValidCoordinates(coordinates: any): boolean {
+    return (
+      coordinates &&
+      coordinates.x1 != null &&
+      coordinates.y1 != null &&
+      coordinates.x2 != null &&
+      coordinates.y2 != null &&
+      coordinates.x1 < coordinates.x2 &&
+      coordinates.y1 < coordinates.y2
+    );
   }
 }

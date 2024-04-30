@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.DTOs;
 using server.Models;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class BoundingBoxController : Controller
     {

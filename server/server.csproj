@@ -42,4 +42,9 @@
     <Folder Include="Services\" />
     </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MLModels\yolov8s-coco.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

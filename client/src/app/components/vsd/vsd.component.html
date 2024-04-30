@@ -105,6 +105,13 @@
     <ion-content>
       <ion-list>
         <ion-item
+          *ngIf="generatedTexts.length === 0 || generatedTexts === undefined"
+        >
+          <ion-icon color="secondary" name="logo-ionitron"></ion-icon>
+          <ion-label>&nbsp; Please wait, the A.I. is thinking.</ion-label>
+          <ion-spinner color="secondary"></ion-spinner>
+        </ion-item>
+        <ion-item
           *ngFor="let text of generatedTexts"
           (click)="selectText(text)"
         >
