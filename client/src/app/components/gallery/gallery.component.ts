@@ -8,6 +8,7 @@ import { ToastController, LoadingController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { SharedService } from '../shared.service';
 import { BoundingBox } from 'src/app/models/boundbox.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gallery',
@@ -47,7 +48,7 @@ export class GalleryComponent {
     protected blobAPI: BlobApiService,
     private loadingCtrl: LoadingController,
     private sharedService: SharedService,
-
+    private router: Router,
     private toastController: ToastController
   ) {}
 
@@ -225,7 +226,7 @@ export class GalleryComponent {
         console.log('Bounding box information saved successfully:', response);
 
         // Show a toast notification
-        await this.presentToast(
+        this.presentToast(
           'Bounding box information saved successfully',
           'success'
         );
@@ -286,11 +287,26 @@ export class GalleryComponent {
   //Calling APi to delete the image and the bounding Boxes
   deleteImageWithBoundingBoxes(imageId: number): void {
     this.blobAPI.deleteImageWithBoundingBox(imageId).subscribe(
-      (response) => {
-        console.log(response);
+      async (response) => {
+        // Refreshing the gallery page
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['gallery']);
+          });
+        // Closing the modal
+        const index = this.images.findIndex(
+          (image) => image.imageID === imageId
+        );
+        const modal = this.ionModals.toArray()[index];
+        if (modal) {
+          await modal.dismiss(null, 'confirm');
+        }
+        this.presentToast('Image was  deleted successfully', 'success');
       },
       (error) => {
         console.error('Error getting bounding boxes:', error);
+        this.presentToast('Error deleting image', 'danger');
       }
     );
   }
