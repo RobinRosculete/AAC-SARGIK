@@ -9,9 +9,11 @@
   aspect-ratio: 16/9;
 } */
 
+ion-grid {
+  --ion-grid-columns: 3;
+}
+
 ion-col {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   padding: 10px;
   text-align: center;
@@ -121,4 +123,10 @@ ion-item {
 ion-modal {
   --modal-width: auto;
   --modal-height: auto;
+}
+
+@media all and (max-width: 1200px) {
+  ion-grid {
+    --ion-grid-columns: 2;
+  }
 }
