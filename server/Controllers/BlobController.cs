@@ -8,7 +8,7 @@ using server.Services;
 
 namespace server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class BlobController : Controller
     {
