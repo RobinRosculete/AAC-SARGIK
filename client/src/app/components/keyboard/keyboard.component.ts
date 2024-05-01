@@ -118,17 +118,11 @@ export class KeyboardComponent {
   onChange = (input: string) => {
     this.userInput = input;
 
-    $(document).on('click', '.addproduct', function () {
-      // your function here
-  });
-
-    if (input = ''){
       var elem = document.getElementById('emoji-id');
       if (elem){
-        this.leftCount += 1.2;
+        this.leftCount += 1;
         elem.style.left = this.leftCount+"%";
       }
-    }
 
 
     console.log(this.leftCount)
@@ -150,7 +144,7 @@ export class KeyboardComponent {
 
     var elem = document.getElementById('emoji-id');
     if (elem){
-      this.leftCount = this.leftCount + (1.2 * (suggestion.length - lastWord.length));
+      this.leftCount = this.leftCount + (1 * (suggestion.length - lastWord.length));
       elem.style.left = this.leftCount+"%";
     }
 
@@ -164,6 +158,14 @@ export class KeyboardComponent {
     if (button.includes('{') && button.includes('}')) {
       this.handleLayoutChange(button);
     }
+    if (button.includes('{bksp}')) {
+      var elem = document.getElementById('emoji-id');
+      if (elem && this.leftCount > 1){
+        this.leftCount -= 2;
+        elem.style.left = this.leftCount+"%";
+      }
+    }
+
   };
   handleLayoutChange = (button: string) => {
     let currentLayout = this.keyboard.options.layoutName;

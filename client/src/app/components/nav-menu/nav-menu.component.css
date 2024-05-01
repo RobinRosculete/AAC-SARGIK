@@ -42,6 +42,11 @@ h1 {
 /* Styling for individual buttons */
 ion-button {
   margin: 0 15px 15px 0; /* Add space between buttons horizontally and vertically */
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+ion-button:hover {
+  transform: scale(1.05);
 }
 
 /* Align the profile button to the top and add margin */
