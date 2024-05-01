@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using Azure;
+using Azure.Identity;
 using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using server.DTOs;
 
 namespace server.Services;
@@ -140,24 +142,35 @@ public class BlobFileService
         return null;
     }
 
-    public async Task<BlobResponseDTO> DeleteAsync(string blobFilename)
+    public async Task<BlobResponseDTO> DeleteAsync(string blobUri)
     {
         try
         {
-            BlobClient file = _filesContainer.GetBlobClient(blobFilename);
-            await file.DeleteAsync();
+            //creating a new blob client to delete the specific image based on image uri
+            var credential = new StorageSharedKeyCredential(_storageAccount, _key);
+            var blobClient = new BlobClient(new Uri(blobUri),credential);
 
-            return new BlobResponseDTO { Error = false, Status = $"File:{blobFilename} has been successfully deleted." };
+            if (!await blobClient.ExistsAsync())
+            {
+                return new BlobResponseDTO { Error = true, Status = $"Error: Blob {blobUri} does not exist." };
+            }
+
+            await blobClient.DeleteAsync();
+
+            return new BlobResponseDTO { Error = false, Status = $"File:{blobUri} has been successfully deleted." };
         }
-        catch (RequestFailedException ex) { 
+        catch (RequestFailedException ex)
+        {
             Console.WriteLine($"Error: {ex.Message}");
-            return new BlobResponseDTO { Error = true, Status = $"Error: Failed to delete {blobFilename}." };
+            return new BlobResponseDTO { Error = true, Status = $"Error: Failed to delete {blobUri}." };
         }
-        catch (Exception ex) { 
+        catch (Exception ex)
+        {
             Console.WriteLine($"Error: {ex.Message}");
-            return new BlobResponseDTO { Error = true, Status = $"Error: Failed to delete {blobFilename}." };
+            return new BlobResponseDTO { Error = true, Status = $"Error: Failed to delete {blobUri}." };
         }
     }
+
 
     //Helper Function to chek if uploaded file is a image
     private bool IsImage(IFormFile file)
