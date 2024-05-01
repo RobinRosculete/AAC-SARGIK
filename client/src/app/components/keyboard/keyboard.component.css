@@ -4,17 +4,17 @@ ul {
 /* New styling for the emoji display */
 .emoji-display {
   position: absolute;
-  bottom: 78%; /* Adjust this value as needed */
-  left: 15%;
-  transform: translateX(-50%);
+  bottom: 78%;
+  /* left: 15%; */
+  /* transform: translateX(-50%); */
   font-size: 2.5em;
   background-color: #31c6d7;
   color: #ffffff;
   padding: 10px 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure it is above the keyboard */
-  display: none; /* Initially hidden */
+  z-index: 1000;
+  display: none;
 }
 
 /* Triangle styles */

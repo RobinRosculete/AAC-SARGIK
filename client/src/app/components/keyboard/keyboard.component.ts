@@ -18,6 +18,7 @@ export class KeyboardComponent {
   protected suggestions: string[] = [];
   protected suggestionSet = new Set<string>();
   protected gptEmoji: string = '';
+  protected leftCount: number = 0;
   // Define the emojiMap property
   emojiMap: { [key: string]: string } = emojiMap;
 
@@ -116,6 +117,22 @@ export class KeyboardComponent {
   //Handles any press on keyboard
   onChange = (input: string) => {
     this.userInput = input;
+
+    $(document).on('click', '.addproduct', function () {
+      // your function here
+  });
+
+    if (input = ''){
+      var elem = document.getElementById('emoji-id');
+      if (elem){
+        this.leftCount += 1.2;
+        elem.style.left = this.leftCount+"%";
+      }
+    }
+
+
+    console.log(this.leftCount)
+
     if (this.userInput) {
       this.getEmoji(this.userInput);
     }
@@ -123,10 +140,20 @@ export class KeyboardComponent {
   };
   //Funciton to complete prediciton to update real text
   CompletePrediction(suggestion: any) {
+    
     let words = this.userInput.split(' ');
+    let lastWord = words[words.length - 1];
+
     words[words.length - 1] = suggestion;
     this.userInput = words.join(' ');
     this.keyboard.setInput(this.userInput);
+
+    var elem = document.getElementById('emoji-id');
+    if (elem){
+      this.leftCount = this.leftCount + (1.2 * (suggestion.length - lastWord.length));
+      elem.style.left = this.leftCount+"%";
+    }
+
     //this.clearSuggestions;
   }
   //Handles Key Commands

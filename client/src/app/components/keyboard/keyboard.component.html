@@ -1,9 +1,7 @@
-<div class="emoji-display" [ngClass]="{ 'has-emoji': gptEmoji }">
-  {{ gptEmoji }}
-</div>
-
-
 <div class="wrapper" style="text-align: center">
+  <span class="emoji-display" id="emoji-id" [ngClass]="{ 'has-emoji': gptEmoji }">
+    {{ gptEmoji }}
+  </span>
   <input
     (input)="onInputChange($event)"
     inputmode="none"
