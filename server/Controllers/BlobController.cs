@@ -4,10 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using server.DTOs;
 using server.Models;
 using server.Services;
-using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+
 
 namespace server.Controllers
 {
@@ -16,11 +13,13 @@ namespace server.Controllers
     public class BlobController : Controller
     {
         private readonly BlobFileService _blobFileService;
+        private readonly DbService _dbService;
         private readonly AacSargikDbContext _db;
 
-        public BlobController(BlobFileService blobFileService, AacSargikDbContext db)
+        public BlobController(AacSargikDbContext db, BlobFileService blobFileService,DbService dbService)
         {
             _blobFileService = blobFileService;
+            _dbService = dbService;
             _db = db;
         }
 
@@ -82,7 +81,7 @@ namespace server.Controllers
         [HttpPost("users/{googleUserId}/upload-image")]
         public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId, string caption)
         {
-            //Inpuy error checking
+            //Input error checking
             if (file == null || file.Length == 0)
             {
                 return BadRequest("No file uploaded.");
@@ -146,15 +145,23 @@ namespace server.Controllers
             }
         }
 
-        // Api to Delete Images/filse given a file name
+        // Api to Delete Images from blob and also all database associated information for that Image (Bouding Boxes and labes)
         // DELETE api/values/5
-        [HttpDelete]
-        [Route("fileName")]
-        public async Task<IActionResult> DeleteImage(string fileName)
+        [HttpDelete("images/{imageId}")]
+        public async Task<IActionResult> DeleteImage(int imageID)
         {
             try
             {
-                var result = await _blobFileService.DeleteAsync(fileName);
+
+                //Storing the imageUri Before Deletging
+                string imageUri = _dbService.GetImageUriById(imageID);
+
+                //Deleting image from db and Bounding Boxes of the image
+                _dbService.DeleteImageAndBoundingBoxes(imageID);
+
+                //Deletging Image From blob Storage
+                var result = await _blobFileService.DeleteAsync(imageUri);
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -162,5 +169,7 @@ namespace server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }

@@ -101,6 +101,14 @@
           <ion-button class="center" *ngIf="confirmButton" (click)="showBox()">
             <p>Confirm</p>
           </ion-button>
+
+          <ion-button
+            class="center"
+            *ngIf="!confirmButton"
+            (click)="deleteImageWithBoundingBoxes(images[modal.index].imageID)"
+          >
+            <p>Delete Image</p>
+          </ion-button>
         </div>
 
         <!-- Input box for entering text -->

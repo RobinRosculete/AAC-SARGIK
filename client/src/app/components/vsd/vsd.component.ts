@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonModal, ToastController } from '@ionic/angular';
+import { IonModal, LoadingController, ToastController } from '@ionic/angular';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { SharedService } from '../shared.service';
 import { KeyboardService } from '../keyboard.service';
@@ -9,6 +9,7 @@ import { TextPredictionApiService } from 'src/app/services/text_prediction_custo
 import { ObjectDetectionService } from 'src/app/services/object_detection/object-detection.service';
 import { BlobApiService } from 'src/app/services/blob/blob-api.service';
 import { Router } from '@angular/router';
+import { LoadingService } from 'src/app/services/loading/loading-service.service';
 
 @Component({
   selector: 'app-vsd',
@@ -46,7 +47,8 @@ export class VsdComponent {
     private objectDetectionService: ObjectDetectionService,
     private blobApiService: BlobApiService,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -186,6 +188,8 @@ export class VsdComponent {
       return;
     }
 
+    const loading = await this.loadingService.presentLoading('Saving image...');
+
     const timestamp = new Date().getTime(); // Generate a unique timestamp
     const randomId = Math.random().toString(36).substr(2, 9);
     const imageName = `${timestamp}-${randomId}.png`; // Use timestamp and random id in the image name
@@ -195,22 +199,21 @@ export class VsdComponent {
     this.blobApiService
       .uploadImage(imageFile, this.googleID, this.caption)
       .subscribe(
-        (response) => {
-          console.log('Image uploaded successfully:', response);
-          this.caption = '';
-
+        async (response) => {
+          await this.loadingService.dismissLoading(loading);
           // Refresh the page by navigating back to the current route
+          this.presentToast(
+            'Successfully Saved Image to the gallery.',
+            'success'
+          );
           this.router
             .navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
               this.router.navigate(['gallery']);
             });
-          this.presentToast(
-            'Successfully Saved Image to the gallery.',
-            'success'
-          );
         },
-        (error) => {
+        async (error) => {
+          await this.loadingService.dismissLoading(loading);
           console.error('Error uploading image:', error);
           this.presentToast('Error uploading image', 'danger');
         }

@@ -37,6 +37,7 @@ optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnec
 serverVersion));
 
 builder.Services.AddSingleton<BlobFileService>();
+builder.Services.AddScoped<DbService>();
 
 // Allowing all Origins to acces API for development
 // Change in production environment for security reasons.
