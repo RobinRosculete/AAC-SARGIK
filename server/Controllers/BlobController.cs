@@ -147,8 +147,7 @@ namespace server.Controllers
 
         // Api to Delete Images from blob and also all database associated information for that Image (Bouding Boxes and labes)
         // DELETE api/values/5
-        [HttpDelete]
-        [Route("fileName")]
+        [HttpDelete("images/{imageId}")]
         public async Task<IActionResult> DeleteImage(int imageID)
         {
             try
