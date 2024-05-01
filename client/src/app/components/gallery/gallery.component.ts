@@ -270,11 +270,24 @@ export class GalleryComponent {
     this.cropperButtons = true;
   }
 
+  //Calling APi to get all bounding Boxes coordinates of a image
   getBoundingBoxes(imageId: number): void {
     this.blobAPI.getBoundingBox(imageId).subscribe(
       (response) => {
         this.boundingBoxes = response;
         console.log(this.boundingBoxes);
+      },
+      (error) => {
+        console.error('Error getting bounding boxes:', error);
+      }
+    );
+  }
+
+  //Calling APi to delete the image and the bounding Boxes
+  deleteImageWithBoundingBoxes(imageId: number): void {
+    this.blobAPI.deleteImageWithBoundingBox(imageId).subscribe(
+      (response) => {
+        console.log(response);
       },
       (error) => {
         console.error('Error getting bounding boxes:', error);

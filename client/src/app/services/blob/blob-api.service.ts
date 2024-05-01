@@ -50,4 +50,10 @@ export class BlobApiService {
     let url = `${environment.SERVER_URL}/api/BoundingBox/images/${imageId}/bounding-boxes`;
     return this.http.get<any>(url);
   }
+
+  //Calling api to delete image and Bounding Box of the image
+  deleteImageWithBoundingBox(imageId: number): Observable<any> {
+    let url = `${environment.SERVER_URL}/api/Blob/images/${imageId}`;
+    return this.http.delete<any>(url);
+  }
 }
