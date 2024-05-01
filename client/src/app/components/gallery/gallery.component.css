@@ -1,13 +1,13 @@
-/* ion-img {
+ion-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Maintain aspect ratio and cover the entire space 
-  border: solid 1px rgb(66, 173, 226); /* Blue border line 
-  border-radius: 20px; /* Round corners 
+  object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+  border: solid 1px rgb(66, 173, 226); /* Blue border line */
+  border-radius: 20px; /* Round corners */
   size: 6;
-  overflow: hidden; /* Hide overflow content to round corners 
+  overflow: hidden; /* Hide overflow content to round corners */
   aspect-ratio: 16/9;
-} */
+}
 
 ion-col {
   display: flex;
