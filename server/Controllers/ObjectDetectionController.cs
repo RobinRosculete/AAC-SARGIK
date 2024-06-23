@@ -27,7 +27,8 @@ namespace server.Controllers
 
                 // Load the YOLOv8 model
                 const string model_path = "./MLModels/yolov8s-coco.onnx";
-                using var predictor = new YoloV8(model_path);
+
+                using var predictor = YoloV8Predictor.Create(model_path);
 
                 // Perform object detection on the provided image file
                 var result = await predictor.DetectAsync(file.OpenReadStream());
