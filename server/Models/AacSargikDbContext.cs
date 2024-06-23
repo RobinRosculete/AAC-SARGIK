@@ -23,18 +23,21 @@ public partial class AacSargikDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false);
-        IConfiguration configuration = builder.Build();
-
-        string connectionString = configuration.GetConnectionString("DefaultConnection");
-        if (connectionString == null)
+        if (!optionsBuilder.IsConfigured)
         {
-            throw new InvalidOperationException("Connection string is null.");
+            IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false);
+            IConfiguration configuration = builder.Build();
+
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+            if (connectionString == null)
+            {
+                throw new InvalidOperationException("Connection string is null.");
+            }
+
+            var serverVersion = Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql");
+
+            optionsBuilder.UseMySql(connectionString, serverVersion);
         }
-
-        var serverVersion = Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql");
-
-        optionsBuilder.UseMySql(connectionString, serverVersion);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
