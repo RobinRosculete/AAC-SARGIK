@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class BoundingBoxController : Controller
     {
