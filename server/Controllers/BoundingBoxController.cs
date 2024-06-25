@@ -24,6 +24,11 @@ namespace server.Controllers
         [HttpGet("images/{imageId}/bounding-boxes")]
         public async Task<IActionResult> GetBoundingBoxesForImage(int imageId)
         {
+            if (imageId <= 0)
+            {
+
+                return BadRequest("Invalid image ID.");
+            }
             try
             {
                 var boundingBoxes = await _db.BoundingBoxes
