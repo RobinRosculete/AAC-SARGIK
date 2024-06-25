@@ -77,7 +77,7 @@ namespace server.Controllers
                 _db.BoundingBoxes.Add(boundinBox);
                 await _db.SaveChangesAsync();
 
-                return Ok(new { message = "Successfully saved bounding box in the database." });
+                return Ok("Successfully saved bounding box in the database.");
 
             }
             catch (Exception ex)
