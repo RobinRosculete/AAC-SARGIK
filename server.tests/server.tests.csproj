@@ -29,4 +29,10 @@
   <ItemGroup>
     <ProjectReference Include="..\server\server.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="TestImages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestImages\" />
+  </ItemGroup>
 </Project>

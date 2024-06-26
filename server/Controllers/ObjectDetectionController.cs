@@ -23,7 +23,6 @@ namespace server.Controllers
             }
             try
             {
-
                 // Load the YOLOv8 model
                 const string model_path = "./MLModels/yolov8s-coco.onnx";
 
