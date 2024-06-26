@@ -16,14 +16,13 @@ namespace server.Controllers
         [HttpPost("detectImage")]
         public async Task<IActionResult> DetectImage(IFormFile file)
         {
+            // Ensure that an image file is provided
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No image file provided.");
+            }
             try
             {
-                
-                // Ensure that an image file is provided
-                if (file == null || file.Length == 0)
-                {
-                    return BadRequest("No image file provided.");
-                }
 
                 // Load the YOLOv8 model
                 const string model_path = "./MLModels/yolov8s-coco.onnx";
