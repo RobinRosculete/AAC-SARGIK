@@ -13,7 +13,7 @@ namespace server.Controllers
 
 
         // POST api/<ObjectDetection>/detectImage
-        [HttpPost("detectImage")]
+        [HttpPost("image")]
         public async Task<IActionResult> DetectImage(IFormFile file)
         {
             // Ensure that an image file is provided

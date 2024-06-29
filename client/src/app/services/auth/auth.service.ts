@@ -31,7 +31,7 @@ export class AuthService {
 
   //Function Used to make http request to the server to login and retrieve JWT token
   login(item: UserModel): Observable<UserLoginResponse> {
-    var url = environment.SERVER_URL + '/api/User/LoginWithGoogle';
+    var url = environment.SERVER_URL + '/api/User/login/google';
     return this.http.post<UserLoginResponse>(url, item);
   }
 

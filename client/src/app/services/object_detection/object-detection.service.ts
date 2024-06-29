@@ -10,7 +10,7 @@ export class ObjectDetectionService {
   constructor(private http: HttpClient) {}
 
   getObjectDetection(image: File): Observable<string[]> {
-    const url = environment.SERVER_URL + '/api/ObjectDetection/detectImage';
+    const url = environment.SERVER_URL + '/api/ObjectDetection/image';
 
     const formData = new FormData();
     formData.append('file', image);
