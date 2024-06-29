@@ -26,7 +26,7 @@ namespace server.Controllers;
         }
 
         // API to store new Users in DB and return JWT token 
-        [HttpPost("[action]")]
+        [HttpPost("login/google")]
         public async Task<IActionResult> LoginWithGoogle([FromBody] LoginDTO userdata)
         {
             
