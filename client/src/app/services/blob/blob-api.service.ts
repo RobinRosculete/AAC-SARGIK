@@ -30,10 +30,7 @@ export class BlobApiService {
     formData.append('caption', caption);
 
     let url =
-      environment.SERVER_URL +
-      '/api/Blob/users/' +
-      googleUserId +
-      '/upload-image';
+      environment.SERVER_URL + '/api/Blob/users/' + googleUserId + '/images';
     return this.http.post<any>(url, formData);
   }
 

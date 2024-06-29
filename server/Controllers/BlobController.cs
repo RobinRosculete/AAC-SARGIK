@@ -78,7 +78,7 @@ namespace server.Controllers
 
         // API endpoint to store the user image with a specific caption
         // POST api/values
-        [HttpPost("users/{googleUserId}/upload-image")]
+        [HttpPost("users/{googleUserId}/images")]
         public async Task<IActionResult> UploadImage(IFormFile file, string googleUserId, string caption)
         {
             //Input error checking
