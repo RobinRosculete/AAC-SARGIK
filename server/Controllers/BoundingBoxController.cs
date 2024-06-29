@@ -44,7 +44,7 @@ namespace server.Controllers
         }
 
 
-        [HttpPost("users/save-bounding-box")]
+        [HttpPost("users/bounding-box")]
         public async Task<IActionResult> SaveBoundingBox([FromBody] BoundingBoxDTO boundingBoxDTO)
         {
             if (boundingBoxDTO == null ||
@@ -77,7 +77,7 @@ namespace server.Controllers
                 _db.BoundingBoxes.Add(boundinBox);
                 await _db.SaveChangesAsync();
 
-                return Ok("Successfully saved bounding box in the database.");
+                return Ok(new { message = "Successfully saved bounding box in the database." });
 
             }
             catch (Exception ex)

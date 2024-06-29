@@ -131,7 +131,7 @@ namespace server.Controllers
         //Api to Download Images From Blob Storage
         // GET api/values/5
         [HttpGet]
-        [Route("fileName")]
+        [Route("file-name")]
         public async Task<IActionResult> DownloadImage(string fileName)
         {
             try

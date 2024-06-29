@@ -35,11 +35,10 @@ export class BlobApiService {
   }
 
   //Calling api to save a bounding box of an image
-  saveBoundingBox(boundBox: BoundingBox): Observable<any> {
-    let url =
-      environment.SERVER_URL + '/api/BoundingBox/users/save-bounding-box';
+  saveBoundingBox(boundingBox: BoundingBox): Observable<any> {
+    let url = environment.SERVER_URL + '/api/BoundingBox/users/bounding-box';
 
-    return this.http.post<any>(url, boundBox);
+    return this.http.post<any>(url, boundingBox);
   }
 
   //Calling api to get all bounding boxes of an image
